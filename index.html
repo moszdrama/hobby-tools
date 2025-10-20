@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
+        body {
+            font-family: 'Google Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-4xl w-full">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
+            แอปพลิเคชัน
+        </h1>
+
+        <div id="app-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- App cards will be injected here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Array of app data
+        const apps = [
+            /*{
+                name: "เครื่องคิดเลข",
+                icon: "➕",
+                description: "เครื่องมือคำนวณพื้นฐานสำหรับทุกวัน",
+                url: "app1.html"
+            },
+            {
+                name: "บันทึกประจำวัน",
+                icon: "📝",
+                description: "จดบันทึกความคิดและกิจกรรมของคุณ",
+                url: "#"
+            },
+            {
+                name: "พยากรณ์อากาศ",
+                icon: "☀️",
+                description: "ตรวจสอบสภาพอากาศปัจจุบันและในอนาคต",
+                url: "#"
+            },
+            {
+                name: "นาฬิกาปลุก",
+                icon: "⏰",
+                description: "ตั้งเวลาปลุกและเตือนความจำ",
+                url: "#"
+            },
+            {
+                name: "รายการสิ่งที่ต้องทำ",
+                icon: "✅",
+                description: "จัดระเบียบงานของคุณอย่างมีประสิทธิภาพ",
+                url: "#"
+            },
+            {
+                name: "เครื่องเล่นเพลง",
+                icon: "🎶",
+                description: "เพลิดเพลินกับเพลงโปรดของคุณ",
+                url: "#"
+            },
+            {
+                name: "แกลเลอรีรูปภาพ",
+                icon: "🖼️",
+                description: "ดูและจัดการรูปภาพของคุณ",
+                url: "#"
+            },
+            {
+                name: "เครื่องมือแปลงหน่วย",
+                icon: "🔄",
+                description: "แปลงหน่วยต่างๆ อย่างรวดเร็ว",
+                url: "#"
+            },*/
+            {
+                name: "เครื่องคำนวณการหารค่าใช้จ่าย",
+                icon: "💲",
+                description: "เครื่องคำนวณการหารค่าใช้จ่าย (Split Wise) แบบแยกรายบิล และแยกบุคคล",
+                url: "split-wise.html"
+            },
+            {
+                name: "คำนวณวันชำระ",
+                icon: "📅",
+                description: "เครื่องมือคำนวณวันชำระเงิน",
+                url: "calculate-payment-date.html"
+            },
+            
+        ];
+
+        // Get the grid container
+        const appGrid = document.getElementById('app-grid');
+
+        // Function to create an app card
+        function createAppCard(app) {
+            const card = document.createElement('a');
+            card.href = app.url;
+            card.className = "flex flex-col items-center p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1";
+            
+            card.innerHTML = `
+                <div class="text-5xl mb-4">
+                    ${app.icon}
+                </div>
+                <h3 class="text-xl font-medium text-gray-900 text-center mb-2">
+                    ${app.name}
+                </h3>
+                <p class="text-sm text-gray-500 text-center">
+                    ${app.description}
+                </p>
+            `;
+
+            return card;
+        }
+
+        // Loop through the apps array and add cards to the grid
+        apps.forEach(app => {
+            appGrid.appendChild(createAppCard(app));
+        });
+    </script>
+</body>
+</html>
