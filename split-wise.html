@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>โปรแกรมคำนวณการหารค่าใช้จ่าย</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- เพิ่มไลบรารี html2canvas เพื่อแปลงส่วนของหน้าเว็บเป็นรูปภาพ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Google Sans', sans-serif;
             background-color: #f7f9fb;
         }
         .card {
@@ -21,6 +23,11 @@
         .editable-name-container:hover .editable-name,
         .editable-name-container:hover .edit-icon {
             color: #4f46e5; /* primary color */
+        }
+        /* Styling for the target area to be captured, ensuring background is white */
+        #results {
+            background-color: white; 
+            /* padding ถูกรวมอยู่ใน p-6/p-8 แล้ว */
         }
     </style>
     <script>
@@ -124,15 +131,17 @@
         </button>
     </div>
 
-    <!-- Results Section -->
-    <div id="results" class="hidden">
+    <!-- Results Section (Target for Image Capture) -->
+    <div id="results" class="hidden rounded-xl border border-gray-100 bg-white p-6 md:p-8">
+        
+        <h2 class="text-2xl font-bold text-center text-primary mb-6">สรุปผลการหารค่าใช้จ่าย</h2>
         
         <!-- Summary & Balance -->
-        <div class="card bg-white p-6 rounded-xl border border-gray-100 mb-8">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
                 <svg class="w-6 h-6 mr-2 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 3. สรุปยอดรวมและยอดคงเหลือ
-            </h2>
+            </h3>
             <div class="mb-4 space-y-2">
                 <p id="total-summary" class="text-lg font-medium text-gray-700"></p>
                 <p id="share-summary" class="text-xl font-bold text-secondary"></p>
@@ -145,16 +154,26 @@
         </div>
 
         <!-- Settlement Plan -->
-        <div class="card bg-white p-6 rounded-xl border border-gray-100">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
                 <svg class="w-6 h-6 mr-2 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2h-1a2 2 0 00-2 2v3a2 2 0 002 2h1c1.657 0 3-.895 3-2s-1.343-2-3-2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                 4. แผนการชำระหนี้ที่ง่ายที่สุด
-            </h2>
+            </h3>
             <div id="settlement-plan" class="space-y-3">
                 <!-- Settlement plan details will be injected here -->
             </div>
         </div>
+        
+        <!-- REMOVED SHARE/DOWNLOAD BUTTON FROM HERE -->
 
+    </div>
+
+    <!-- NEW DOWNLOAD BUTTON CONTAINER (แยกออกมาต่างหาก) -->
+    <div id="download-button-container" class="flex justify-center mb-8 pt-4 hidden">
+        <button onclick="shareResultsAsImage()" class="bg-indigo-500 text-white text-md font-bold px-6 py-3 rounded-xl hover:bg-indigo-700 transition duration-150 transform hover:scale-105 shadow-md shadow-indigo-300 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            ดาวน์โหลดสรุปผลเป็นรูปภาพ PNG
+        </button>
     </div>
 
     <!-- Message/Error Box -->
@@ -169,12 +188,11 @@
     // State Variables
     let people = ['Your name', 'Tak', 'Top'];
     let expenses = [
-        // Updated initial expenses to use 'Your name'
         { desc: 'ค่าอาหาร', payer: 'Your name', amount: 500, participants: ['Your name', 'Tak', 'Top'] }, 
-        { desc: 'ค่าร้านสะดวกซื้อ', payer: 'Top', amount: 120, participants: ['Your name', 'Tak', 'Top'] } // Assuming all participate initially
+        { desc: 'ค่าร้านสะดวกซื้อ', payer: 'Top', amount: 120, participants: ['Your name', 'Tak', 'Top'] }
     ];
 
-    // Utility function for showing temporary messages (instead of alert)
+    // Utility function for showing temporary messages (insteadจาก alert)
     function showMessage(msg, type = 'info') {
         const box = document.getElementById('message-box');
         box.textContent = msg;
@@ -197,6 +215,52 @@
         }, 3000);
     }
 
+    // --- Share Functionality ---
+    async function shareResultsAsImage() {
+        const resultsEl = document.getElementById('results');
+        
+        if (resultsEl.classList.contains('hidden')) {
+            showMessage('กรุณาคำนวณผลลัพธ์ก่อนดาวน์โหลด', 'error');
+            return;
+        }
+
+        try {
+            // Temporarily add a white background to the body for clean capture, then revert.
+            const originalBg = document.body.style.backgroundColor;
+            document.body.style.backgroundColor = 'white';
+
+            // Use html2canvas to capture the target element (#results)
+            const canvas = await html2canvas(resultsEl, {
+                scale: 2, // Increase scale for higher resolution
+                useCORS: true,
+                backgroundColor: '#ffffff', // Explicitly set background to white
+            });
+
+            // Revert body background color
+            document.body.style.backgroundColor = originalBg;
+
+            // Convert canvas to image URL
+            const imageURL = canvas.toDataURL('image/png');
+
+            // Create a temporary link element for download
+            const link = document.createElement('a');
+            link.href = imageURL;
+            link.download = `SplitWise_Summary_${new Date().toISOString().slice(0, 10)}.png`;
+
+            // Append to body, click, and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showMessage('ดาวน์โหลดภาพสรุปผลสำเร็จ!', 'success');
+
+        } catch (error) {
+            console.error('Error capturing and downloading image:', error);
+            showMessage('เกิดข้อผิดพลาดในการดาวน์โหลดรูปภาพ', 'error');
+        }
+    }
+
+
     // --- Reset Functionality ---
     function resetAll() {
         // Clear expenses
@@ -204,8 +268,9 @@
         // Reset people to only the initial person
         people = [...INITIAL_PEOPLE]; 
         
-        // Hide results and re-render/recalculate
+        // Hide results and download button, and re-render/recalculate
         document.getElementById('results').classList.add('hidden');
+        document.getElementById('download-button-container').classList.add('hidden');
         renderPeople();
         calculateSplit();
         showMessage('เริ่มต้นใหม่แล้ว! รายการค่าใช้จ่ายถูกล้าง และเหลือเพียงชื่อของคุณ', 'success');
@@ -465,12 +530,19 @@
     // --- Core Calculation Logic ---
 
     function calculateSplit() {
+        
+        const resultsEl = document.getElementById('results');
+        const downloadBtnContainerEl = document.getElementById('download-button-container');
+
         // Hide results if no data
         if (people.length === 0 || expenses.length === 0) {
-            document.getElementById('results').classList.add('hidden');
+            resultsEl.classList.add('hidden');
+            downloadBtnContainerEl.classList.add('hidden'); // ซ่อนปุ่มดาวน์โหลดด้วย
             return;
         }
-        document.getElementById('results').classList.remove('hidden');
+        
+        resultsEl.classList.remove('hidden');
+        downloadBtnContainerEl.classList.remove('hidden'); // แสดงปุ่มดาวน์โหลด
 
         let totalExpense = 0;
         let paidMap = {}; // Tracks how much each person paid
@@ -562,8 +634,6 @@
         }
 
         // --- Render Results ---
-        // Note: The concept of "share per person" no longer applies simply, 
-        // but we can calculate the average amount owed (Total Owed / Total People) for context
         const averageOwed = people.length > 0 ? totalExpense / people.length : 0;
         
         renderSummary(totalExpense, averageOwed);
@@ -653,7 +723,7 @@
         renderPeople();
         calculateSplit();
 
-        resetAll();
+        resetAll(); // Ensure starting fresh with only initial person
     });
 </script>
 
