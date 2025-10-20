@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมคำนวณการหารค่าใช้จ่าย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        .card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 4, 0, 0.05);
+        }
+        .container-fluid {
+            min-height: 100vh;
+        }
+        /* Custom class to handle the hover state for name + icon */
+        .editable-name-container:hover .editable-name,
+        .editable-name-container:hover .edit-icon {
+            color: #4f46e5; /* primary color */
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5',
+                        'secondary': '#10b981',
+                        'danger': '#ef4444',
+                        'background': '#f7f9fb',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="p-4 md:p-8">
+
+<div id="app" class="max-w-4xl mx-auto container-fluid">
+    <!-- ปุ่มสำหรับกลับไปหน้าหลัก -->
+    <a href="index.html" class="fixed top-4 left-4 z-50 px-4 py-2 bg-gray-200 text-gray-700 font-semibold rounded-full shadow-md hover:bg-gray-300 transition-colors">
+        &larr; กลับหน้าหลัก
+    </a>
+    
+    <h1 class="text-3xl font-bold text-center text-primary mb-8 mt-14">
+        เครื่องคำนวณการหารค่าใช้จ่าย (Split Wise)
+    </h1>
+
+    <!-- Initial Data Setup (Input for People and Expenses) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        
+        <!-- People Section -->
+        <div class="card bg-white p-6 rounded-xl border border-gray-100">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2a3 3 0 015.356-1.857M7 20h4m-4 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.224-0m-2.26 1.956A2.001 2.001 0 0015 18v-1a2 2 0 00-2-2h-2a2 2 0 00-2 2v1a2.001 2.001 0 001.036 1.76l2.164 1.25"></path></svg>
+                1. รายชื่อบุคคล (คลิกที่ชื่อเพื่อแก้ไข)
+            </h2>
+            <div id="people-list" class="space-y-2 mb-4">
+                <!-- People input rows will be injected here -->
+            </div>
+            <div class="flex space-x-2">
+                <input type="text" id="new-person-name" placeholder="ชื่อใหม่ (เช่น Joy)" class="flex-grow p-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                <button onclick="addPerson()" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-600 transition duration-150 flex-shrink-0">
+                    + เพิ่ม
+                </button>
+            </div>
+        </div>
+
+        <!-- Expenses Section -->
+        <div class="card bg-white p-6 rounded-xl border border-gray-100">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.485 0-4 1.515-4 4s1.515 4 4 4 4-1.515 4-4-1.515-4-4-4z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13h1m16 0h1M12 3v1m0 16v1M5.636 5.636l.707.707M17.657 17.657l.707.707M5.636 17.636l.707-.707M17.657 5.657l.707-.707"></path></svg>
+                2. บันทึกค่าใช้จ่าย
+            </h2>
+            
+            <div id="expenses-list" class="space-y-2 mb-4 border-b pb-4">
+                <div class="grid grid-cols-4 gap-2 mb-2 text-sm font-medium text-gray-500">
+                    <span>รายการ</span>
+                    <span>ผู้จ่าย</span>
+                    <span class="truncate">ผู้ร่วมหาร</span>
+                    <span class="text-right">จำนวนเงิน</span>
+                </div>
+                <!-- Expense rows will be injected here -->
+            </div>
+
+            <!-- New Expense Input Form -->
+            <div class="flex flex-col space-y-3 p-3 border border-dashed rounded-lg bg-gray-50">
+                <input type="text" id="expense-desc" placeholder="รายการ (เช่น ค่าอาหาร)" class="p-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                
+                <div class="flex space-x-2">
+                    <select id="expense-payer" class="flex-grow p-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                        <option value="">เลือกผู้จ่าย</option>
+                    </select>
+                    <input type="number" id="expense-amount" placeholder="จำนวนเงิน" min="0" class="w-1/3 p-2 border border-gray-300 rounded-lg text-right focus:ring-primary focus:border-primary">
+                </div>
+
+                <!-- Participants Checkboxes -->
+                <div>
+                    <h4 class="text-sm font-semibold mb-1 text-gray-700">ผู้ร่วมหาร:</h4>
+                    <div id="participants-checkboxes" class="flex flex-wrap gap-x-4 gap-y-1 p-2 bg-white rounded-lg border border-gray-200">
+                        <!-- Checkboxes will be rendered here -->
+                    </div>
+                </div>
+
+                <button onclick="addExpense()" class="bg-secondary text-white px-4 py-2 rounded-lg font-semibold hover:bg-emerald-600 transition duration-150">
+                    + เพิ่มค่าใช้จ่าย
+                </button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Calculation Button -->
+    <div class="flex justify-center mb-8 space-x-4">
+        <button onclick="resetAll()" class="bg-danger/80 text-white text-lg font-bold px-6 py-3 rounded-xl hover:bg-danger transition duration-150 transform hover:scale-105 shadow-lg shadow-danger/50">
+            เริ่มใหม่ทั้งหมด 🗑️
+        </button>
+        <button onclick="calculateSplit()" class="bg-primary text-white text-lg font-bold px-8 py-3 rounded-xl hover:bg-indigo-600 transition duration-150 transform hover:scale-105 shadow-lg shadow-primary/50">
+            คำนวณการหารค่าใช้จ่าย 🚀
+        </button>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results" class="hidden">
+        
+        <!-- Summary & Balance -->
+        <div class="card bg-white p-6 rounded-xl border border-gray-100 mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                3. สรุปยอดรวมและยอดคงเหลือ
+            </h2>
+            <div class="mb-4 space-y-2">
+                <p id="total-summary" class="text-lg font-medium text-gray-700"></p>
+                <p id="share-summary" class="text-xl font-bold text-secondary"></p>
+            </div>
+
+            <h3 class="font-semibold mt-6 mb-2 text-gray-700 border-b pb-1">ยอดคงเหลือ (ยอดที่จ่ายไป - ส่วนแบ่งที่ต้องรับผิดชอบ)</h3>
+            <div id="balance-summary" class="space-y-1">
+                <!-- Balance details will be injected here -->
+            </div>
+        </div>
+
+        <!-- Settlement Plan -->
+        <div class="card bg-white p-6 rounded-xl border border-gray-100">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2h-1a2 2 0 00-2 2v3a2 2 0 002 2h1c1.657 0 3-.895 3-2s-1.343-2-3-2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                4. แผนการชำระหนี้ที่ง่ายที่สุด
+            </h2>
+            <div id="settlement-plan" class="space-y-3">
+                <!-- Settlement plan details will be injected here -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Message/Error Box -->
+    <div id="message-box" class="fixed bottom-4 right-4 bg-yellow-100 text-yellow-800 p-3 rounded-lg shadow-xl hidden"></div>
+
+</div>
+
+<script>
+    // Constants for initial state and the protected first person
+    const INITIAL_PEOPLE = ['Your name']; 
+    
+    // State Variables
+    let people = ['Your name', 'Tak', 'Top'];
+    let expenses = [
+        // Updated initial expenses to use 'Your name'
+        { desc: 'ค่าอาหาร', payer: 'Your name', amount: 500, participants: ['Your name', 'Tak', 'Top'] }, 
+        { desc: 'ค่าร้านสะดวกซื้อ', payer: 'Top', amount: 120, participants: ['Your name', 'Tak', 'Top'] } // Assuming all participate initially
+    ];
+
+    // Utility function for showing temporary messages (instead of alert)
+    function showMessage(msg, type = 'info') {
+        const box = document.getElementById('message-box');
+        box.textContent = msg;
+        box.className = `fixed bottom-4 right-4 p-3 rounded-xl shadow-xl transition-all duration-300 ease-in-out block`;
+        
+        switch (type) {
+            case 'success':
+                box.classList.add('bg-secondary/20', 'text-secondary');
+                break;
+            case 'error':
+                box.classList.add('bg-danger/20', 'text-danger');
+                break;
+            default:
+                box.classList.add('bg-primary/20', 'text-primary');
+        }
+
+        setTimeout(() => {
+            box.classList.remove('block');
+            box.classList.add('hidden');
+        }, 3000);
+    }
+
+    // --- Reset Functionality ---
+    function resetAll() {
+        // Clear expenses
+        expenses = [];
+        // Reset people to only the initial person
+        people = [...INITIAL_PEOPLE]; 
+        
+        // Hide results and re-render/recalculate
+        document.getElementById('results').classList.add('hidden');
+        renderPeople();
+        calculateSplit();
+        showMessage('เริ่มต้นใหม่แล้ว! รายการค่าใช้จ่ายถูกล้าง และเหลือเพียงชื่อของคุณ', 'success');
+    }
+
+    // --- People Management ---
+
+    function renderPeople() {
+        const listEl = document.getElementById('people-list');
+        const payerSelectEl = document.getElementById('expense-payer');
+        const participantsCheckboxesEl = document.getElementById('participants-checkboxes');
+        
+        listEl.innerHTML = '';
+        payerSelectEl.innerHTML = '<option value="">เลือกผู้จ่าย</option>';
+        participantsCheckboxesEl.innerHTML = '';
+
+        people.forEach((name, index) => {
+            const isInitialPerson = (name === INITIAL_PEOPLE[0]); // Check if it's the protected name
+
+            // 1. Render list item for people (editable)
+            listEl.innerHTML += `
+                <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg" id="person-row-${index}">
+                    <span class="font-medium text-gray-700 cursor-pointer transition duration-100 flex items-center editable-name-container" 
+                          onclick="startEdit(${index}, '${name.replace(/'/g, "\\'")}')" 
+                          id="person-name-display-${index}">
+                        <span class="editable-name">${name}</span>
+                        <svg class="w-4 h-4 ml-2 text-gray-400 edit-icon transition duration-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    </span>
+                    <div id="person-actions-${index}" class="flex space-x-1">
+                        ${!isInitialPerson ? `
+                            <button onclick="removePerson('${name.replace(/'/g, "\\'")}')" class="text-danger hover:bg-danger/10 p-1 rounded-full transition duration-150" aria-label="ลบ ${name}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        ` : '<span class="w-6 h-4"></span>'} <!-- Placeholder for alignment for the protected name -->
+                    </div>
+                </div>
+            `;
+            // 2. Render select option for payer
+            payerSelectEl.innerHTML += `<option value="${name}">${name}</option>`;
+            
+            // 3. Render checkbox for participants (default checked)
+            participantsCheckboxesEl.innerHTML += `
+                <div class="flex items-center">
+                    <input type="checkbox" id="check-${name}" value="${name}" checked class="form-checkbox h-4 w-4 text-primary rounded border-gray-300 focus:ring-primary">
+                    <label for="check-${name}" class="ml-1 text-sm text-gray-700">${name}</label>
+                </div>
+            `;
+        });
+
+        // Trigger re-render of expenses list to update payer names if any changed
+        renderExpenses();
+    }
+
+    // Function to start the inline editing mode
+    function startEdit(index, oldName) {
+        const row = document.getElementById(`person-row-${index}`);
+        const displaySpan = document.getElementById(`person-name-display-${index}`);
+        const actionsDiv = document.getElementById(`person-actions-${index}`);
+
+        if (!row || !displaySpan || !actionsDiv) return;
+        
+        // Remove existing elements for replacement
+        displaySpan.remove();
+
+        // 1. Create and insert input field
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `person-edit-input-${index}`;
+        input.value = oldName;
+        input.className = 'flex-grow p-1 border border-primary rounded-lg focus:ring-primary focus:border-primary text-sm mr-2';
+        // Add Enter key listener for saving
+        input.onkeydown = (event) => {
+            if (event.key === 'Enter') {
+                saveEdit(index, oldName);
+            }
+        };
+
+        // Insert input field before action buttons
+        row.insertBefore(input, actionsDiv);
+
+        // 2. Change buttons: Remove -> Save/Cancel
+        actionsDiv.innerHTML = `
+            <button onclick="saveEdit(${index}, '${oldName.replace(/'/g, "\\'")}')" class="text-secondary hover:bg-secondary/10 p-1 rounded-full transition duration-150" aria-label="บันทึก">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </button>
+            <button onclick="cancelEdit(${index})" class="text-gray-500 hover:bg-gray-200 p-1 rounded-full transition duration-150" aria-label="ยกเลิก">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        `;
+
+        // Focus on the new input field
+        input.focus();
+    }
+
+    // Function to revert to display mode
+    function cancelEdit(index) {
+        renderPeople();
+        showMessage('ยกเลิกการแก้ไข', 'info');
+    }
+
+    // Function to save the edited name
+    function saveEdit(index, oldName) {
+        const input = document.getElementById(`person-edit-input-${index}`);
+        const newName = input.value.trim();
+
+        if (!newName) {
+            showMessage('ชื่อต้องไม่ว่างเปล่า', 'error');
+            return;
+        }
+
+        if (newName === oldName) {
+            renderPeople();
+            showMessage('ไม่มีการเปลี่ยนแปลงชื่อ', 'info');
+            return;
+        }
+        
+        // Check for duplicates (excluding the current person's old name)
+        if (people.filter((p, i) => i !== index).includes(newName)) {
+            showMessage('ชื่อนี้มีอยู่แล้ว โปรดเลือกชื่ออื่น', 'error');
+            return;
+        }
+
+        // 1. Update the people array
+        people[index] = newName;
+
+        // 2. Update expenses paid by/participated by the old name
+        expenses = expenses.map(exp => {
+            // Update Payer
+            if (exp.payer === oldName) {
+                exp.payer = newName;
+            }
+            // Update Participants
+            exp.participants = exp.participants.map(p => p === oldName ? newName : p);
+
+            return exp;
+        });
+
+        // 3. Re-render everything and recalculate
+        renderPeople();
+        calculateSplit();
+        showMessage(`เปลี่ยนชื่อจาก '${oldName}' เป็น '${newName}' สำเร็จ`, 'success');
+    }
+
+    function addPerson() {
+        const input = document.getElementById('new-person-name');
+        let name = input.value.trim();
+
+        // Capitalize first letter for consistency
+        if (name) {
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+        }
+
+        if (name && !people.includes(name)) {
+            people.push(name);
+            input.value = '';
+            renderPeople();
+            calculateSplit(); // Recalculate if people change
+        } else if (name) {
+            showMessage('ชื่อนี้มีอยู่แล้ว', 'error');
+        } else {
+            showMessage('กรุณาป้อนชื่อ', 'error');
+        }
+    }
+
+    function removePerson(name) {
+        if (name === INITIAL_PEOPLE[0]) {
+            showMessage('ไม่สามารถลบชื่อเริ่มต้น ("Your name") ได้', 'error');
+            return;
+        }
+
+        // Check if the person has paid for or is participating in any existing expenses
+        const isInvolved = expenses.some(exp => exp.payer === name || exp.participants.includes(name));
+        if (isInvolved) {
+             showMessage(`ไม่สามารถลบ ${name} ได้ เนื่องจากมีค่าใช้จ่ายที่เกี่ยวข้อง`, 'error');
+             return;
+        }
+
+        people = people.filter(p => p !== name);
+        renderPeople();
+        calculateSplit(); // Recalculate if people change
+    }
+
+    // --- Expense Management ---
+
+    function renderExpenses() {
+        const listEl = document.getElementById('expenses-list');
+        listEl.innerHTML = '';
+        const header = `
+            <div class="grid grid-cols-4 gap-2 text-sm font-medium text-gray-500 py-1 border-b">
+                <span class="truncate">รายการ</span>
+                <span class="truncate">ผู้จ่าย</span>
+                <span class="truncate">ผู้ร่วมหาร</span>
+                <span class="text-right">จำนวนเงิน</span>
+            </div>
+        `;
+        listEl.innerHTML = header;
+
+        expenses.forEach((exp, index) => {
+            // Format participants list
+            const participantsText = exp.participants.join(', ');
+
+            listEl.innerHTML += `
+                <div class="grid grid-cols-4 gap-2 items-center p-2 bg-gray-50 rounded-lg text-sm mt-1">
+                    <span class="truncate">${exp.desc}</span>
+                    <span class="truncate font-medium">${exp.payer}</span>
+                    <span class="truncate text-xs text-gray-600">${participantsText}</span>
+                    <div class="flex justify-end items-center">
+                        <span class="font-semibold mr-2">${exp.amount.toFixed(2)}</span>
+                        <button onclick="removeExpense(${index})" class="text-danger hover:bg-danger/10 p-1 rounded-full transition duration-150" aria-label="ลบรายการ">
+                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function addExpense() {
+        const descInput = document.getElementById('expense-desc');
+        const payerSelect = document.getElementById('expense-payer');
+        const amountInput = document.getElementById('expense-amount');
+        const participantCheckboxes = document.querySelectorAll('#participants-checkboxes input[type="checkbox"]:checked');
+
+        const desc = descInput.value.trim();
+        const payer = payerSelect.value;
+        const amount = parseFloat(amountInput.value);
+        const participants = Array.from(participantCheckboxes).map(cb => cb.value);
+
+        if (!desc || !payer || isNaN(amount) || amount <= 0) {
+            showMessage('กรุณากรอก รายการ, ผู้จ่าย และ จำนวนเงิน ให้ถูกต้อง', 'error');
+            return;
+        }
+
+        if (participants.length === 0) {
+            showMessage('กรุณาเลือกผู้ร่วมหารอย่างน้อย 1 คน', 'error');
+            return;
+        }
+
+        expenses.push({ desc, payer, amount, participants });
+        
+        // Clear inputs and reset checkboxes
+        descInput.value = '';
+        payerSelect.value = '';
+        amountInput.value = '';
+        document.querySelectorAll('#participants-checkboxes input[type="checkbox"]').forEach(cb => cb.checked = true); // Reset to all checked
+
+        renderExpenses();
+        calculateSplit(); // Recalculate when expense changes
+    }
+
+    function removeExpense(index) {
+        expenses.splice(index, 1);
+        renderExpenses();
+        calculateSplit(); // Recalculate when expense changes
+    }
+
+    // --- Core Calculation Logic ---
+
+    function calculateSplit() {
+        // Hide results if no data
+        if (people.length === 0 || expenses.length === 0) {
+            document.getElementById('results').classList.add('hidden');
+            return;
+        }
+        document.getElementById('results').classList.remove('hidden');
+
+        let totalExpense = 0;
+        let paidMap = {}; // Tracks how much each person paid
+        let owedMap = {}; // Tracks how much each person owes in total (their combined shares)
+        
+        // Initialize maps
+        people.forEach(p => {
+            paidMap[p] = 0;
+            owedMap[p] = 0;
+        });
+
+        // 1. Process all expenses dynamically
+        expenses.forEach(exp => {
+            totalExpense += exp.amount;
+            
+            // 1.1 Update Paid Map
+            if (paidMap.hasOwnProperty(exp.payer)) {
+                paidMap[exp.payer] += exp.amount;
+            }
+
+            // 1.2 Update Owed Map (Only for participants)
+            const numParticipants = exp.participants.length;
+            if (numParticipants > 0) {
+                const sharePerParticipant = exp.amount / numParticipants;
+                exp.participants.forEach(p => {
+                    if (owedMap.hasOwnProperty(p)) {
+                        owedMap[p] += sharePerParticipant;
+                    }
+                });
+            }
+        });
+
+        // 2. Calculate Net Balance (Paid - Owed)
+        let balanceMap = {}; 
+        let creditors = []; 
+        let debtors = [];   
+
+        people.forEach(p => {
+            const netBalance = paidMap[p] - owedMap[p]; // Net Balance
+            balanceMap[p] = netBalance;
+
+            const personData = { name: p, balance: netBalance };
+
+            // We use a small epsilon (0.01) for floating point comparison
+            if (netBalance > 0.01) { // Creditor (must be paid back)
+                creditors.push(personData);
+            } else if (netBalance < -0.01) { // Debtor (must pay)
+                // Balance is negative, use it as is for calculation, but push the object
+                debtors.push(personData);
+            }
+        });
+
+        // 3. Simple Debt Settlement Algorithm (Who pays whom)
+        creditors.sort((a, b) => b.balance - a.balance);
+        debtors.sort((a, b) => a.balance - b.balance); 
+
+        let settlements = [];
+
+        while (debtors.length > 0 && creditors.length > 0) {
+            let debtor = debtors[0];
+            let creditor = creditors[0];
+
+            // debtor.balance is negative, creditor.balance is positive
+            const debtAmount = Math.abs(debtor.balance);
+            const creditAmount = creditor.balance;
+
+            const payment = Math.min(debtAmount, creditAmount);
+
+            // Record the settlement
+            settlements.push({
+                from: debtor.name,
+                to: creditor.name,
+                amount: payment
+            });
+
+            // Update balances
+            debtor.balance += payment; 
+            creditor.balance -= payment; 
+
+            // Check if debtor is fully paid off (within tolerance)
+            if (debtor.balance >= -0.01) {
+                debtors.shift();
+            }
+
+            // Check if creditor is fully paid off (within tolerance)
+            if (creditor.balance <= 0.01) {
+                creditors.shift();
+            }
+        }
+
+        // --- Render Results ---
+        // Note: The concept of "share per person" no longer applies simply, 
+        // but we can calculate the average amount owed (Total Owed / Total People) for context
+        const averageOwed = people.length > 0 ? totalExpense / people.length : 0;
+        
+        renderSummary(totalExpense, averageOwed);
+        renderBalanceSummary(balanceMap, owedMap);
+        renderSettlementPlan(settlements);
+    }
+
+    // --- Rendering Functions ---
+
+    function formatCurrency(amount) {
+        return amount.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderSummary(totalExpense, averageOwed) {
+        document.getElementById('total-summary').innerHTML = `
+            ค่าใช้จ่ายทั้งหมด: <span class="text-gray-900 font-bold">${formatCurrency(totalExpense)}</span> บาท
+        `;
+        document.getElementById('share-summary').innerHTML = `
+            เฉลี่ยส่วนที่ต้องรับผิดชอบต่อคน: <span class="text-secondary font-extrabold">${formatCurrency(averageOwed)}</span> บาท (ค่าเฉลี่ยรวมทุกรายการ)
+        `;
+    }
+
+    function renderBalanceSummary(balanceMap, owedMap) {
+        const balanceEl = document.getElementById('balance-summary');
+        balanceEl.innerHTML = '';
+
+        people.forEach(name => {
+            const balance = balanceMap[name];
+            const owed = owedMap[name] || 0;
+            const paid = (balance + owed) || 0; // paid = balance + owed
+
+            let statusText;
+            let statusClass;
+
+            if (balance > 0.01) {
+                statusText = `จ่ายเกิน: ได้รับคืน ${formatCurrency(balance)}`;
+                statusClass = 'text-green-600 font-bold';
+            } else if (balance < -0.01) {
+                statusText = `จ่ายขาด: ต้องจ่าย ${formatCurrency(Math.abs(balance))}`;
+                statusClass = 'text-red-600 font-bold';
+            } else {
+                statusText = 'ยอดคงเหลือเป็นศูนย์';
+                statusClass = 'text-gray-500';
+            }
+
+            balanceEl.innerHTML += `
+                <div class="grid grid-cols-4 gap-4 border-b border-gray-100 py-1 text-sm">
+                    <span class="font-medium col-span-1">${name}</span>
+                    <span class="text-right text-gray-700">จ่ายไป: ${formatCurrency(paid)}</span>
+                    <span class="text-right text-gray-700">รับผิดชอบ: ${formatCurrency(owed)}</span>
+                    <span class="text-right ${statusClass} font-bold">${statusText}</span>
+                </div>
+            `;
+        });
+    }
+
+    function renderSettlementPlan(settlements) {
+        const settlementEl = document.getElementById('settlement-plan');
+        settlementEl.innerHTML = '';
+
+        if (settlements.length === 0) {
+            settlementEl.innerHTML = '<p class="text-center text-gray-500 italic">ไม่มีการชำระหนี้ที่ต้องทำ</p>';
+            return;
+        }
+
+        settlements.forEach(s => {
+            settlementEl.innerHTML += `
+                <div class="flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
+                    <div class="text-base font-semibold text-gray-800">
+                        <span class="text-danger font-extrabold">${s.from}</span>
+                        <span class="text-gray-500 ml-1 mr-1">ต้องจ่ายให้</span>
+                        <span class="text-secondary font-extrabold">${s.to}</span>
+                    </div>
+                    <div class="text-xl font-black text-primary">
+                        ${formatCurrency(s.amount)} บาท
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+
+    // --- Initialization ---
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Set up initial state from user request
+        renderPeople();
+        calculateSplit();
+
+        resetAll();
+    });
+</script>
+
+</body>
+</html>
