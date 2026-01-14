@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจับฉลากของขวัญแบบ Chain Reaction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="max-w-3xl mx-auto">
+        <!-- ปุ่มสำหรับกลับไปหน้าหลัก -->
+        <a href="index.html" class="fixed top-4 left-4 z-50 px-4 py-2 bg-gray-200 text-gray-700 font-semibold rounded-full shadow-md hover:bg-gray-300 transition-colors">
+            &larr; กลับหน้าหลัก
+        </a>
+        <header class="flex flex-col md:flex-row items-center justify-center text-center my-10 relative gap-4">
+            <div class="flex-1">
+                <h1 class="text-3xl font-bold text-red-600 uppercase tracking-wide">Gift Chain Reaction</h1>
+                <p class="text-gray-500 italic">"ใครโดนจับ คนนั้นจับต่อ"</p>
+            </div>
+            
+            <button onclick="hardReset()" class="md:absolute md:right-0 md:top-0 text-gray-400 hover:text-red-600 transition text-sm flex items-center gap-1 bg-gray-100 md:bg-transparent px-3 py-1 rounded-full md:p-0">
+                <i class="fas fa-sync-alt"></i> ล้างข้อมูลใหม่
+            </button>
+        </header>
+
+        <!-- Rule Alert Section -->
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r-xl shadow-sm">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wider">กติกาการจับฉลาก</h3>
+                    <div class="mt-2 text-xs text-blue-700 space-y-1">
+                        <p>• <strong>ระบบลูกโซ่:</strong> เมื่อคุณจับได้ชื่อใคร คนนั้นจะเป็นคนลุกขึ้นมาจับลำดับถัดไป</p>
+                        <p>• <strong>เงื่อนไขความปลอดภัย:</strong> ระบบจะป้องกันไม่ให้จับได้ชื่อตัวเอง และ <u>ห้ามคนในกลุ่มเดียวกันจับกัน</u></p>
+                        <p>• <strong>บันทึกสถานะ:</strong> หากปิดหน้าเว็บ ข้อมูลจะยังอยู่ที่เดิม สามารถเล่นต่อได้ทันที</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Phase -->
+        <div id="setupArea" class="space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1 uppercase">ชื่อผู้ร่วมสนุก</label>
+                        <input type="text" id="nameInput" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none" placeholder="ชื่อเล่น...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1 uppercase">กลุ่ม / สังกัด</label>
+                        <input type="text" id="groupInput" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none" placeholder="เช่น บ้าน1, แผนก IT">
+                    </div>
+                </div>
+                <button onclick="addPerson()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl transition">เพิ่มรายชื่อ</button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 text-xs font-bold text-gray-400 uppercase">ลำดับ</th>
+                                <th class="p-4 text-xs font-bold text-gray-400 uppercase">ชื่อ</th>
+                                <th class="p-4 text-xs font-bold text-gray-400 uppercase">กลุ่ม</th>
+                                <th class="p-4"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberList"></tbody>
+                    </table>
+                </div>
+                <div id="noData" class="p-8 text-center text-gray-400">ยังไม่มีรายชื่อ</div>
+            </div>
+
+            <button onclick="prepareGame()" id="startBtn" class="w-full bg-slate-800 text-white py-4 rounded-2xl font-bold text-lg hover:bg-black transition hidden shadow-lg">
+                เริ่มจับฉลาก!
+            </button>
+        </div>
+
+        <!-- Game Phase -->
+        <div id="gameArea" class="hidden space-y-8">
+            <div class="text-center">
+                <div class="inline-block bg-yellow-100 text-yellow-800 px-4 py-1 rounded-full text-sm font-bold mb-4">
+                    ความคืบหน้า: จับไปแล้ว <span id="progress">0</span> จาก <span id="totalCount">0</span> คน
+                </div>
+                
+                <div id="activePlayerCard" class="bg-white p-8 rounded-3xl shadow-xl border-4 border-red-500 max-w-sm mx-auto pulse-animation">
+                    <p class="text-gray-400 text-sm uppercase font-bold mb-2">ถึงคิวจับของ...</p>
+                    <h2 id="activeName" class="text-4xl font-bold text-gray-800 mb-1">---</h2>
+                    <p id="activeGroup" class="text-red-500 font-medium italic"></p>
+                    
+                    <button onclick="performDraw()" id="drawBtn" class="mt-8 w-full bg-red-600 text-white py-4 rounded-2xl font-bold text-xl hover:bg-red-700 shadow-lg transition">
+                        คลิกเพื่อจับฉลาก
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 class="font-bold text-gray-700 mb-4 border-b pb-2 flex justify-between items-center">
+                    <span>ลำดับการจับ (Chain History)</span>
+                    <i class="fas fa-link text-gray-300"></i>
+                </h3>
+                <div id="historyLog" class="space-y-3"></div>
+            </div>
+            
+            <div class="text-center">
+                <button onclick="hardReset()" class="text-gray-400 hover:text-red-600 transition text-sm underline">
+                    ยกเลิกเกมนี้และล้างข้อมูลใหม่
+                </button>
+            </div>
+        </div>
+
+        <!-- Completion Screen -->
+        <div id="finishArea" class="hidden text-center space-y-6 py-12">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-3xl font-bold text-gray-800">จับครบทุกคนแล้ว!</h2>
+            <p class="text-gray-500">ทุกคนได้ของขวัญเรียบร้อยแล้ว</p>
+            <button onclick="hardReset()" class="bg-slate-800 text-white px-8 py-3 rounded-xl font-bold hover:bg-black transition">เริ่มใหม่ทั้งหมด</button>
+        </div>
+    </div>
+
+    <!-- Reveal Modal -->
+    <div id="revealModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden p-6">
+        <div class="bg-white w-full max-w-md rounded-3xl p-8 text-center">
+            <p id="modalGiver" class="text-gray-500 mb-2 font-bold text-lg"></p>
+            <p class="text-sm text-gray-400 uppercase tracking-widest mb-6">คุณจับได้ของขวัญของ...</p>
+            
+            <div class="bg-red-50 py-10 rounded-2xl border-2 border-red-100 mb-8 shadow-inner">
+                <h3 id="modalReceiver" class="text-4xl font-black text-red-600">---</h3>
+                <p id="modalReceiverGroup" class="text-gray-500 italic mt-2"></p>
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-xl mb-6">
+                <p class="text-xs text-blue-600 font-bold uppercase mb-1">คนต่อไปที่ต้องลุกมาจับคือ</p>
+                <p id="nextTurnName" class="text-lg font-bold text-blue-900 italic">...</p>
+            </div>
+            
+            <button onclick="closeModal()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-lg hover:bg-black transition shadow-lg">
+                เข้าใจแล้ว ส่งต่อเครื่องให้เพื่อน
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let members = [];           
+        let remainingGivers = [];    
+        let remainingReceivers = []; 
+        let activeGiver = null;      
+        let finalResults = [];       
+        let isGameRunning = false;   
+
+        const STORAGE_KEY = 'gift_draw_chain_state_v2';
+
+        window.onload = function() {
+            loadAllState();
+        };
+
+        function saveAllState() {
+            const state = {
+                members,
+                remainingGivers,
+                remainingReceivers,
+                activeGiver,
+                finalResults,
+                isGameRunning
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function loadAllState() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) {
+                updateUI();
+                return;
+            }
+
+            const state = JSON.parse(saved);
+            members = state.members || [];
+            remainingGivers = state.remainingGivers || [];
+            remainingReceivers = state.remainingReceivers || [];
+            activeGiver = state.activeGiver || null;
+            finalResults = state.finalResults || [];
+            isGameRunning = state.isGameRunning || false;
+
+            if (isGameRunning) {
+                document.getElementById('setupArea').classList.add('hidden');
+                
+                if (finalResults.length === members.length) {
+                    document.getElementById('finishArea').classList.remove('hidden');
+                } else {
+                    document.getElementById('gameArea').classList.remove('hidden');
+                    document.getElementById('totalCount').innerText = members.length;
+                    refreshActiveCard();
+                }
+                
+                const log = document.getElementById('historyLog');
+                log.innerHTML = '';
+                [...finalResults].reverse().forEach(res => {
+                    const entry = document.createElement('div');
+                    entry.className = "flex items-center text-sm p-3 bg-white rounded-lg border border-gray-100 shadow-sm";
+                    entry.innerHTML = `<span class="w-24 font-bold text-gray-700 text-right">${res.giver.name}</span> <i class="fas fa-arrow-right mx-3 text-red-300 scale-75"></i> <span class="font-bold text-red-600">${res.receiver.name}</span>`;
+                    log.appendChild(entry);
+                });
+            } else {
+                updateUI();
+            }
+        }
+
+        function hardReset() {
+            if (confirm("คุณต้องการล้างข้อมูลทั้งหมด และเริ่มรายชื่อใหม่ใช่หรือไม่?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function addPerson() {
+            const nameEl = document.getElementById('nameInput');
+            const groupEl = document.getElementById('groupInput');
+            const name = nameEl.value.trim();
+            const group = groupEl.value.trim() || 'ทั่วไป';
+            
+            if (!name) return;
+            
+            members.push({ 
+                id: 'id_' + Math.random().toString(36).substr(2, 9), 
+                name, 
+                group 
+            });
+            nameEl.value = '';
+            nameEl.focus();
+            updateUI();
+            saveAllState();
+        }
+
+        function removePerson(id) {
+            members = members.filter(m => m.id !== id);
+            updateUI();
+            saveAllState();
+        }
+
+        function updateUI() {
+            const list = document.getElementById('memberList');
+            const noData = document.getElementById('noData');
+            const startBtn = document.getElementById('startBtn');
+            
+            list.innerHTML = '';
+            noData.style.display = members.length === 0 ? 'block' : 'none';
+            startBtn.style.display = members.length >= 2 ? 'block' : 'none';
+
+            members.forEach((m, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-4 text-gray-400 font-mono text-sm">${i+1}</td>
+                    <td class="p-4 font-bold text-gray-700">${m.name}</td>
+                    <td class="p-4 text-sm text-gray-500 italic">${m.group}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="removePerson('${m.id}')" class="text-red-300 hover:text-red-500 px-2 transition"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
+        }
+
+        function prepareGame() {
+            const groupCounts = {};
+            members.forEach(m => groupCounts[m.group] = (groupCounts[m.group] || 0) + 1);
+            const maxGroupSize = Math.max(...Object.values(groupCounts));
+            
+            if (maxGroupSize > members.length / 2) {
+                alert(`ไม่สามารถเริ่มเกมได้: มีคนในกลุ่มเดียวกัน (${maxGroupSize} คน) มากกว่าครึ่งหนึ่งของทั้งหมด (${members.length} คน) ทำให้เป็นไปไม่ได้ที่จะจับไขว้กลุ่มกันทุกคน`);
+                return;
+            }
+
+            remainingGivers = JSON.parse(JSON.stringify(members));
+            remainingReceivers = JSON.parse(JSON.stringify(members));
+            
+            const firstIdx = Math.floor(Math.random() * remainingGivers.length);
+            activeGiver = remainingGivers.splice(firstIdx, 1)[0];
+            isGameRunning = true;
+
+            document.getElementById('setupArea').classList.add('hidden');
+            document.getElementById('gameArea').classList.remove('hidden');
+            document.getElementById('totalCount').innerText = members.length;
+            
+            refreshActiveCard();
+            saveAllState();
+        }
+
+        function refreshActiveCard() {
+            if (!activeGiver) return;
+            document.getElementById('activeName').innerText = activeGiver.name;
+            document.getElementById('activeGroup').innerText = `กลุ่ม: ${activeGiver.group}`;
+            document.getElementById('progress').innerText = finalResults.length;
+        }
+
+        function performDraw() {
+            const candidates = remainingReceivers.filter(r => 
+                r.id !== activeGiver.id && r.group !== activeGiver.group
+            );
+
+            if (candidates.length === 0) {
+                alert("ขออภัย! เกิดสภาวะทางตันทางคณิตศาสตร์ ระบบจำเป็นต้องเริ่มจับใหม่เฉพาะส่วนของการจับคู่ เพื่อความถูกต้อง");
+                remainingGivers = JSON.parse(JSON.stringify(members));
+                remainingReceivers = JSON.parse(JSON.stringify(members));
+                finalResults = [];
+                const firstIdx = Math.floor(Math.random() * remainingGivers.length);
+                activeGiver = remainingGivers.splice(firstIdx, 1)[0];
+                document.getElementById('historyLog').innerHTML = '';
+                refreshActiveCard();
+                saveAllState();
+                return;
+            }
+
+            const receiver = candidates[Math.floor(Math.random() * candidates.length)];
+            finalResults.push({ giver: activeGiver, receiver });
+            remainingReceivers = remainingReceivers.filter(r => r.id !== receiver.id);
+
+            document.getElementById('modalGiver').innerText = activeGiver.name;
+            document.getElementById('modalReceiver').innerText = receiver.name;
+            document.getElementById('modalReceiverGroup').innerText = `(${receiver.group})`;
+            
+            const log = document.getElementById('historyLog');
+            const entry = document.createElement('div');
+            entry.className = "flex items-center text-sm p-3 bg-white rounded-lg border border-gray-100 shadow-sm animate-fade-in";
+            entry.innerHTML = `<span class="w-24 font-bold text-gray-700 text-right">${activeGiver.name}</span> <i class="fas fa-arrow-right mx-3 text-red-300 scale-75"></i> <span class="font-bold text-red-600">${receiver.name}</span>`;
+            log.prepend(entry);
+
+            const nextGiverFromRemaining = remainingGivers.find(g => g.id === receiver.id);
+
+            if (nextGiverFromRemaining) {
+                activeGiver = nextGiverFromRemaining;
+                remainingGivers = remainingGivers.filter(g => g.id !== receiver.id);
+                document.getElementById('nextTurnName').innerText = activeGiver.name;
+            } else if (remainingGivers.length > 0) {
+                const newIdx = Math.floor(Math.random() * remainingGivers.length);
+                activeGiver = remainingGivers.splice(newIdx, 1)[0];
+                document.getElementById('nextTurnName').innerText = `${activeGiver.name} (เริ่มวงใหม่)`;
+            } else {
+                activeGiver = null;
+                document.getElementById('nextTurnName').innerText = "สิ้นสุดการจับฉลาก";
+            }
+
+            saveAllState();
+            document.getElementById('revealModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('revealModal').classList.add('hidden');
+            if (activeGiver) {
+                refreshActiveCard();
+            } else {
+                document.getElementById('gameArea').classList.add('hidden');
+                document.getElementById('finishArea').classList.remove('hidden');
+            }
+            saveAllState();
+        }
+    </script>
+</body>
+</html>
