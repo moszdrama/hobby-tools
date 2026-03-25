@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คำนวณวันชำระ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
         body {
@@ -27,8 +28,8 @@
                 <input type="number" id="installments" min="1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div>
-                <label for="dueDate" class="block text-sm font-medium text-gray-700">วันดิววันแรก</label>
-                <input type="date" id="dueDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <label for="firstDueDate" class="block text-sm font-medium text-gray-700">วันดิววันแรก</label>
+                <input type="text" id="firstDueDate" placeholder="เลือกวันที่..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             </div>
         </div>
         <button onclick="calculateDates()" class="w-full mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
@@ -39,7 +40,18 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#firstDueDate", {
+                locale: 'th',
+                dateFormat: "Y-m-d",
+                defaultDate: new Date(),
+            });
+        });
+
         function isWeekend(date) {
             const day = date.getDay();
             return day === 0 || day === 6; // Sunday = 0, Saturday = 6
@@ -63,16 +75,18 @@
 
         function calculateDates() {
             const installments = parseInt(document.getElementById('installments').value);
-            const dueDateInput = document.getElementById('dueDate').value;
+            const fp = document.getElementById('firstDueDate')._flatpickr;
+            const selectedDate = fp.selectedDates[0];
+
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = ''; // Clear previous results
 
-            if (!installments || !dueDateInput) {
+            if (!installments || !selectedDate) {
                 resultsDiv.innerHTML = '<p class="text-red-500 font-semibold">กรุณากรอกข้อมูลให้ครบถ้วน</p>';
                 return;
             }
 
-            const initialDueDate = new Date(dueDateInput);
+            const initialDueDate = new Date(selectedDate);
 
             // Calculate start date
             let startDate = new Date(initialDueDate);
