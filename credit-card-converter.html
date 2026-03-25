@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Expense to JSON Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f7f9fb;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white mt-14 p-8 rounded-xl shadow-lg w-full max-w-2xl border border-gray-200">
+
+        <!-- ปุ่มสำหรับกลับไปหน้าหลัก -->
+        <a href="index.html" class="fixed top-4 left-4 z-50 px-4 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 transition-colors">
+            &larr; กลับหน้าหลัก
+        </a>
+        
+        <h1 class="text-3xl font-bold text-center text-primary mb-8">
+            แปลงรายการบัตรเครดิตเป็น JSON
+        </h1>
+
+        <p class="text-gray-600 mb-6">กรุณากรอกข้อมูลค่าใช้จ่ายบัตรเครดิตเพื่อแปลงเป็น JSON Object</p>
+
+        <div class="space-y-4">
+            <div>
+                <label for="asOfMonthYears" class="block text-sm font-medium text-gray-700 mb-1">ปี-เดือน (เช่น 2025-07):</label>
+                <input type="text" id="asOfMonthYears" placeholder="ตัวอย่าง: 2025-07" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+
+            <div>
+                <label for="cardName" class="block text-sm font-medium text-gray-700 mb-1">ชื่อบัตร (เช่น KTC, SCB):</label>
+                <input type="text" id="cardName" placeholder="ตัวอย่าง: KTC Platinum" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+
+            <div>
+                <label for="plainTextRaw" class="block text-sm font-medium text-gray-700 mb-1">ข้อมูล Raw Text:</label>
+                <textarea id="plainTextRaw" placeholder="วางข้อมูลค่าใช้จ่ายดิบที่นี่ (แต่ละรายการขึ้นบรรทัดใหม่)" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm" rows="15">28/05/25 28/05/25 Payment-KTB Internet - 5,450.82
+24/05/25 24/05/25 TMN 7-11 BANGKOK TH 40.00
+24/05/25 24/05/25 TMN 7-11 BANGKOK TH 27.00
+24/05/25 24/05/25 TMN 7-11 BANGKOK TH 68.00
+24/05/25 25/05/25 2C2P*MAJOR CINEPLEX BANGKOK TH 540.00
+25/05/25 25/05/25 TMN FAST FOOD BANGKOK TH 60.00
+26/05/25 26/05/25 TMN 7-11 BANGKOK TH 136.00
+29/05/25 29/05/25 TMN 7-11 BANGKOK TH 1.00
+29/05/25 30/05/25 VILLA MARKET-LITTLE WALK BANGKOK TH 152.00
+30/05/25 30/05/25 TMN*LOTUS HYPER BANGKOK TH 134.00
+30/05/25 30/05/25 TMN 7-11 BANGKOK TH 233.00
+01/06/25 02/06/25 ADVANCE MPAY BANGKOK TH 299.00
+05/06/25 05/06/25 TMN 7-11 BANGKOK TH 69.00
+06/06/25 06/06/25 07/10 DLT E-PAY BANGKOK 171.49
+06/06/25 06/06/25 07/10 DLT E-PAY INT00.74% 12.69
+07/06/25 07/06/25 01/04 SPVI I STUDIO SEACON SBANGKOK 1,122.50
+10/06/25 10/06/25 TMN 7-11 BANGKOK TH 68.00
+11/06/25 12/06/25 Google YouTubePremium 650-2530000 US 359.00
+12/06/25 12/06/25 06/10 FC-PUNTHAI-PF1070-LADKRABBANGKOK 59.90
+12/06/25 12/06/25 06/10 FC-PUNTHAI-PF1070-LADKRA INT00.74% 4.43
+13/06/25 13/06/25 TMN 7-11 BANGKOK TH 149.00
+15/06/25 15/06/25 TMN 7-11 BANGKOK TH 66.00
+15/06/25 16/06/25 2C2P*MAJOR CINEPLEX BANGKOK TH 480.00
+16/06/25 16/06/25 TMN 7-11 BANGKOK TH 316.00
+17/06/25 17/06/25 TMN 7-11 BANGKOK TH 60.00
+20/06/25 20/06/25 02/03 GRAND HONDA AUTOMOBILE BANGKOK 576.69
+20/06/25 20/06/25 02/03 GRAND HONDA AUTOMOBILE INT00.74% 12.80
+20/06/25 21/06/25 TOPS-ROBINSON LADKRABANG BANGKOK TH 587.00</textarea>
+            </div>
+        </div>
+
+        <button onclick="convertToJson()" class="w-full mt-6 bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+            แปลงเป็น JSON
+        </button>
+
+        <div class="mt-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">ผลลัพธ์ JSON:</h2>
+            <pre id="output" class="bg-gray-50 p-4 rounded-md text-sm text-gray-800 border border-gray-200 overflow-x-auto min-h-[100px] whitespace-pre-wrap break-all"></pre>
+        </div>
+        
+    </div>
+    <script>
+        function convertToJson() {
+            const asOfMonthYears = document.getElementById('asOfMonthYears').value.trim();
+            const cardName = document.getElementById('cardName').value.trim();
+            const plainTextRaw = document.getElementById('plainTextRaw').value.trim();
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // ล้างผลลัพธ์เก่า
+
+            // ตรวจสอบว่าผู้ใช้กรอกข้อมูลครบถ้วนหรือไม่
+            if (!asOfMonthYears || !cardName || !plainTextRaw) {
+                outputDiv.innerHTML = '<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">กรุณากรอกข้อมูลให้ครบถ้วนทุกช่อง</div>';
+                return;
+            }
+
+            // แยกข้อความดิบออกเป็นแต่ละบรรทัด และกรองบรรทัดว่างออก
+            const lines = plainTextRaw.split('\n').filter(line => line.trim() !== '');
+            const results = [];
+
+            lines.forEach(line => {
+                // Regex ที่ปรับปรุงใหม่:
+                // ^(?:\d{2}\/\d{2}\/\d{2}\s+){1,2} : ตรงกับรูปแบบวันที่ (DD/MM/YY) ที่อาจปรากฏ 1 หรือ 2 ครั้งในตอนต้นบรรทัด
+                // (.*?) : Captures the description (non-greedy), matching anything until the next part of regex.
+                // \s* : Matches optional spaces before the amount part.
+                // (?:(-)\s*)? : Optional non-capturing group for the negative sign.
+                //               If present, it captures '-' into a separate group (match[2]).
+                // ([\d,]+\.\d{2})$ : Captures the numeric part of the amount (digits, comma, dot, 2 digits) at the end of the line.
+                const match = line.match(/^(?:\d{2}\/\d{2}\/\d{2}\s+){1,2}(.*?)\s*(?:(-)\s*)?([\d,]+\.\d{2})$/);
+                
+                if (match) {
+                    let description = match[1].trim();
+                    const negativeSign = match[2]; // This will be '-' if found, otherwise undefined
+                    let amountValue = match[3].trim(); // This will be "5,450.82"
+
+                    // Remove commas and parse to float
+                    amountValue = parseFloat(amountValue.replace(/,/g, ''));
+
+                    // Apply negative sign if it was present in the original string
+                    let amount = negativeSign === '-' ? -amountValue : amountValue;
+
+                    // Handle trailing "TH" or "US" in description
+                    const trailingKeywords = /\s+(?:TH|US)$/i;
+                    if (trailingKeywords.test(description)) {
+                        description = description.replace(trailingKeywords, '').trim();
+                    }
+
+                    results.push({
+                        asOfMonthYears: asOfMonthYears,
+                        cardName: cardName,
+                        description: description,
+                        amount: amount
+                    });
+                } else {
+                    // หากไม่สามารถแยกข้อมูลได้ ให้แจ้งเตือนใน console และเพิ่มรายการที่มีข้อผิดพลาด
+                    console.warn(`ไม่สามารถแยกข้อมูลบรรทัดนี้ได้: ${line}`);
+                    results.push({
+                        asOfMonthYears: asOfMonthYears,
+                        cardName: cardName,
+                        description: `[ERROR] Could not parse: ${line}`,
+                        amount: 0 // กำหนดค่าเริ่มต้นเป็น 0 หรือ null
+                    });
+                }
+            });
+
+            // แสดงผลลัพธ์ในรูปแบบ JSON ที่จัดฟอร์แมตสวยงาม
+            outputDiv.textContent = JSON.stringify(results, null, 2);
+        }
+    </script>
+</body>
+</html>
