@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in Location</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --card: #1a2236;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --success: #10b981;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --border: rgba(0,229,255,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(0,229,255,0.08) 0%, transparent 50%);
+  }
+
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 32px 0 24px;
+  }
+
+  .logo-ring {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 0 24px rgba(0,229,255,0.3), inset 0 0 24px rgba(0,229,255,0.05);
+    animation: pulse-ring 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% { box-shadow: 0 0 24px rgba(0,229,255,0.3), inset 0 0 24px rgba(0,229,255,0.05); }
+    50% { box-shadow: 0 0 40px rgba(0,229,255,0.6), inset 0 0 32px rgba(0,229,255,0.1); }
+  }
+
+  .logo-ring svg { width: 32px; height: 32px; fill: var(--accent); }
+
+  h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .subtitle { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+  /* Card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Location display */
+  .location-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .loc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .loc-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .loc-value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 600;
+    text-align: right;
+    max-width: 65%;
+    word-break: break-all;
+  }
+
+  .loc-value.loading {
+    color: var(--muted);
+    animation: blink 1.2s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Note input */
+  .note-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .note-input::placeholder { color: var(--muted); }
+  .note-input:focus { border-color: var(--accent); }
+
+  /* Checkin button */
+  .btn-checkin {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #00c4e0, #7c3aed);
+    border: none;
+    border-radius: 16px;
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(0,229,255,0.2);
+  }
+
+  .btn-checkin:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,229,255,0.35); }
+  .btn-checkin:active { transform: translateY(0); }
+  .btn-checkin:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-checkin::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    pointer-events: none;
+  }
+
+  /* Status message */
+  .status-msg {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .status-msg.success { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #34d399; display:block; }
+  .status-msg.error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; display:block; }
+
+  /* History */
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .badge {
+    background: rgba(0,229,255,0.15);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .btn-clear {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.2);
+    color: #f87171;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn-clear:hover { background: rgba(239,68,68,0.2); }
+
+  .history-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .history-item {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 16px;
+    position: relative;
+    animation: slideIn 0.3s ease;
+    overflow: hidden;
+  }
+
+  @keyframes slideIn { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+
+  .history-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    border-radius: 3px;
+  }
+
+  .hi-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .hi-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+
+  .hi-index {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .hi-address {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .hi-coords {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hi-coord {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .hi-note {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: rgba(124,58,237,0.1);
+    border-radius: 8px;
+    font-size: 13px;
+    color: #c4b5fd;
+    border-left: 2px solid var(--accent2);
+  }
+
+  .btn-map {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 12px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-map:hover { background: rgba(0,229,255,0.15); }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+  }
+  .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.3; }
+  .empty-state p { font-size: 14px; }
+
+  /* Ripple effect on check-in */
+  .ripple {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0;
+  }
+  .ripple.active {
+    animation: ripple-fade 0.8s ease forwards;
+  }
+  @keyframes ripple-fade {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .ripple-circle {
+    width: 20px; height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: ripple-expand 0.8s ease forwards;
+  }
+  @keyframes ripple-expand {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(80); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="ripple" id="ripple"><div class="ripple-circle"></div></div>
+
+<div class="container">
+  <header>
+    <div class="logo-ring">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    </div>
+    <h1>GeoCheck</h1>
+    <div class="subtitle">บันทึกตำแหน่งของคุณ</div>
+  </header>
+
+  <!-- Location Card -->
+  <div class="card">
+    <div class="card-title">📡 ตำแหน่งปัจจุบัน</div>
+    <div class="location-info">
+      <div class="loc-row">
+        <span class="loc-label">LAT</span>
+        <span class="loc-value loading" id="lat">กำลังดึงข้อมูล...</span>
+      </div>
+      <div class="loc-row">
+        <span class="loc-label">LNG</span>
+        <span class="loc-value loading" id="lng">—</span>
+      </div>
+      <div class="loc-row">
+        <span class="loc-label">ที่อยู่</span>
+        <span class="loc-value loading" id="address">—</span>
+      </div>
+      <div class="loc-row">
+        <span class="loc-label">ความแม่นยำ</span>
+        <span class="loc-value" id="accuracy">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Note Card -->
+  <div class="card">
+    <div class="card-title">📝 บันทึกเพิ่มเติม (ไม่บังคับ)</div>
+    <textarea class="note-input" id="noteInput" rows="2" placeholder="เช่น ร้านกาแฟ, ออฟฟิศ, บ้าน..."></textarea>
+  </div>
+
+  <button class="btn-checkin" id="checkinBtn" onclick="doCheckin()">
+    📍 CHECK-IN ตอนนี้
+  </button>
+
+  <div class="status-msg" id="statusMsg"></div>
+
+  <!-- History Card -->
+  <div class="card" style="margin-top: 28px;">
+    <div class="history-header">
+      <div>
+        <div class="card-title" style="margin-bottom:4px;">🕐 ประวัติ Check-in</div>
+        <span class="badge" id="countBadge">0 ครั้ง</span>
+      </div>
+      <button class="btn-clear" onclick="clearHistory()">ล้างทั้งหมด</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <p>ยังไม่มีประวัติ<br>กด Check-in เพื่อเริ่มต้น</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentLat = null, currentLng = null, currentAccuracy = null;
+
+  // Load history
+  let history = JSON.parse(localStorage.getItem('checkin_history') || '[]');
+
+  // Get location
+  function getLocation() {
+    if (!navigator.geolocation) {
+      document.getElementById('lat').textContent = 'ไม่รองรับ GPS';
+      document.getElementById('lat').classList.remove('loading');
+      return;
+    }
+    navigator.geolocation.watchPosition(
+      pos => {
+        currentLat = pos.coords.latitude;
+        currentLng = pos.coords.longitude;
+        currentAccuracy = pos.coords.accuracy;
+
+        document.getElementById('lat').textContent = currentLat.toFixed(6);
+        document.getElementById('lng').textContent = currentLng.toFixed(6);
+        document.getElementById('accuracy').textContent = `±${Math.round(currentAccuracy)} เมตร`;
+        ['lat','lng','accuracy'].forEach(id => document.getElementById(id).classList.remove('loading'));
+
+        reverseGeocode(currentLat, currentLng);
+      },
+      err => {
+        const el = document.getElementById('lat');
+        el.textContent = err.code === 1 ? 'ไม่อนุญาต GPS' : 'ไม่พบตำแหน่ง';
+        el.classList.remove('loading');
+        document.getElementById('address').textContent = '—';
+        document.getElementById('address').classList.remove('loading');
+      },
+      { enableHighAccuracy: true, maximumAge: 5000 }
+    );
+  }
+
+  async function reverseGeocode(lat, lng) {
+    const el = document.getElementById('address');
+    el.textContent = 'กำลังค้นหา...';
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=th`);
+      const data = await res.json();
+      const addr = data.display_name || 'ไม่พบที่อยู่';
+      el.textContent = addr.length > 60 ? addr.substring(0, 60) + '...' : addr;
+      el.classList.remove('loading');
+      el._fullAddress = data.display_name || '';
+    } catch {
+      el.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      el.classList.remove('loading');
+    }
+  }
+
+  function doCheckin() {
+    if (!currentLat || !currentLng) {
+      showStatus('กรุณารอให้ระบบดึงตำแหน่งก่อน', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('checkinBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ กำลังบันทึก...';
+
+    // Ripple effect
+    const ripple = document.getElementById('ripple');
+    ripple.classList.remove('active');
+    void ripple.offsetWidth;
+    ripple.classList.add('active');
+
+    const note = document.getElementById('noteInput').value.trim();
+    const addrEl = document.getElementById('address');
+    const address = addrEl._fullAddress || addrEl.textContent;
+
+    const entry = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      lat: currentLat,
+      lng: currentLng,
+      accuracy: currentAccuracy,
+      address: address,
+      note: note
+    };
+
+    history.unshift(entry);
+    localStorage.setItem('checkin_history', JSON.stringify(history));
+    document.getElementById('noteInput').value = '';
+
+    renderHistory();
+    showStatus(`✅ Check-in สำเร็จ! ${new Date().toLocaleTimeString('th-TH')}`, 'success');
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = '📍 CHECK-IN ตอนนี้';
+    }, 2000);
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    document.getElementById('countBadge').textContent = `${history.length} ครั้ง`;
+
+    if (history.length === 0) {
+      list.innerHTML = `<div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <p>ยังไม่มีประวัติ<br>กด Check-in เพื่อเริ่มต้น</p>
+      </div>`;
+      return;
+    }
+
+    list.innerHTML = history.map((item, i) => {
+      const d = new Date(item.timestamp);
+      const dateStr = d.toLocaleDateString('th-TH', { day:'2-digit', month:'short', year:'numeric' });
+      const timeStr = d.toLocaleTimeString('th-TH', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+      const addr = item.address && item.address.length > 70 ? item.address.substring(0,70)+'...' : (item.address || 'ไม่ทราบที่อยู่');
+
+      return `<div class="history-item">
+        <div class="hi-top">
+          <div>
+            <div class="hi-time">🕐 ${dateStr} ${timeStr}</div>
+          </div>
+          <div class="hi-index">#${history.length - i}</div>
+        </div>
+        <div class="hi-address">📍 ${addr}</div>
+        <div class="hi-coords">
+          <span class="hi-coord">LAT: ${item.lat.toFixed(6)}</span>
+          <span class="hi-coord">LNG: ${item.lng.toFixed(6)}</span>
+          ${item.accuracy ? `<span class="hi-coord">±${Math.round(item.accuracy)}m</span>` : ''}
+        </div>
+        ${item.note ? `<div class="hi-note">💬 ${item.note}</div>` : ''}
+        <a class="btn-map" href="https://maps.google.com/?q=${item.lat},${item.lng}" target="_blank">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+          เปิดใน Google Maps
+        </a>
+      </div>`;
+    }).join('');
+  }
+
+  function clearHistory() {
+    if (history.length === 0) return;
+    if (confirm('ต้องการลบประวัติทั้งหมดใช่ไหม?')) {
+      history = [];
+      localStorage.removeItem('checkin_history');
+      renderHistory();
+      showStatus('ลบประวัติทั้งหมดแล้ว', 'error');
+    }
+  }
+
+  function showStatus(msg, type) {
+    const el = document.getElementById('statusMsg');
+    el.className = 'status-msg ' + type;
+    el.textContent = msg;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.className = 'status-msg', 3500);
+  }
+
+  // Init
+  getLocation();
+  renderHistory();
+</script>
+</body>
+</html>
