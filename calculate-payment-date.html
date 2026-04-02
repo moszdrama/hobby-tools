@@ -31,6 +31,12 @@
                 <label for="firstDueDate" class="block text-sm font-medium text-gray-700">วันดิววันแรก</label>
                 <input type="text" id="firstDueDate" placeholder="เลือกวันที่..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             </div>
+            <div>
+                <label class="flex items-center mt-4">
+                    <input type="checkbox" id="skipWeekends" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300" checked>
+                    <span class="ml-2 text-sm font-medium text-gray-700">ข้ามวันหยุด (เสาร์-อาทิตย์)</span>
+                </label>
+            </div>
         </div>
         <button onclick="calculateDates()" class="w-full mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
             คำนวณ
@@ -57,10 +63,12 @@
             return day === 0 || day === 6; // Sunday = 0, Saturday = 6
         }
 
-        function getNextWorkingDay(date) {
+        function getNextWorkingDay(date, skipWeekends = true) {
             let nextDate = new Date(date);
-            while (isWeekend(nextDate)) {
-                nextDate.setDate(nextDate.getDate() + 1);
+            if (skipWeekends) {
+                while (isWeekend(nextDate)) {
+                    nextDate.setDate(nextDate.getDate() + 1);
+                }
             }
             return nextDate;
         }
@@ -77,6 +85,7 @@
             const installments = parseInt(document.getElementById('installments').value);
             const fp = document.getElementById('firstDueDate')._flatpickr;
             const selectedDate = fp.selectedDates[0];
+            const skipWeekends = document.getElementById('skipWeekends').checked;
 
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = ''; // Clear previous results
@@ -90,12 +99,12 @@
 
             // Calculate start date
             let startDate = new Date(initialDueDate);
-            startDate = getNextWorkingDay(startDate);
+            startDate = getNextWorkingDay(startDate, skipWeekends);
             
             // Calculate end date
             let endDate = new Date(initialDueDate);
             endDate.setMonth(endDate.getMonth() + installments - 1);
-            endDate = getNextWorkingDay(endDate);
+            endDate = getNextWorkingDay(endDate, skipWeekends);
 
             const startFormatted = formatDate(startDate);
             const endFormatted = formatDate(endDate);
