@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคำนวณค่างวดรถยนต์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <!-- ปุ่มสำหรับกลับไปหน้าหลัก -->
+    <a href="index.html" class="fixed top-4 left-4 z-50 px-4 py-2 bg-white text-gray-700 font-semibold rounded-full shadow-md hover:bg-gray-100 transition-colors border border-gray-200">
+        &larr; กลับหน้าหลัก
+    </a>
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">เครื่องคำนวณค่างวดรถยนต์</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Inputs -->
+            <div class="space-y-4">
+                <div>
+                    <label for="carPrice" class="block text-sm font-medium text-gray-700 mb-1">ราคารถยนต์ (บาท)</label>
+                    <input type="number" id="carPrice" placeholder="เช่น 800000" class="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">เงินดาวน์</label>
+                    <div class="flex space-x-2">
+                        <div class="relative flex-grow">
+                            <input type="number" id="downPaymentValue" placeholder="ระบุจำนวน" class="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                        </div>
+                        <select id="downPaymentType" class="block w-24 px-2 py-3 border border-gray-300 rounded-xl shadow-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="percent">%</option>
+                            <option value="baht">บาท</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="interestRate" class="block text-sm font-medium text-gray-700 mb-1">อัตราดอกเบี้ยต่อปี (%)</label>
+                    <input type="number" id="interestRate" step="0.01" placeholder="เช่น 2.5" class="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                </div>
+
+                <div>
+                    <label for="installments" class="block text-sm font-medium text-gray-700 mb-1">ระยะเวลาผ่อนชำระ (เดือน)</label>
+                    <select id="installments" class="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="12">12 เดือน (1 ปี)</option>
+                        <option value="24">24 เดือน (2 ปี)</option>
+                        <option value="36">36 เดือน (3 ปี)</option>
+                        <option value="48" selected>48 เดือน (4 ปี)</option>
+                        <option value="60">60 เดือน (5 ปี)</option>
+                        <option value="72">72 เดือน (6 ปี)</option>
+                        <option value="84">84 เดือน (7 ปี)</option>
+                    </select>
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="calculate()" class="w-full bg-blue-600 text-white py-4 px-6 rounded-xl font-bold text-lg hover:bg-blue-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all focus:ring-4 focus:ring-blue-200">
+                        คำนวณค่างวด
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="bg-gray-50 p-6 rounded-2xl border border-gray-100 flex flex-col justify-center">
+                <div class="text-center space-y-6">
+                    <div>
+                        <p class="text-gray-500 text-sm mb-1">ค่างวดต่อเดือน (รวม VAT 7%)</p>
+                        <p id="monthlyPaymentVAT" class="text-4xl font-extrabold text-blue-600">฿0.00</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gray-200">
+                        <div class="text-left">
+                            <p class="text-gray-500 text-xs">เงินดาวน์</p>
+                            <p id="resDownPayment" class="font-semibold text-gray-800">฿0.00</p>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-gray-500 text-xs">ยอดจัดไฟแนนซ์</p>
+                            <p id="resLoanAmount" class="font-semibold text-gray-800">฿0.00</p>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-gray-500 text-xs">ดอกเบี้ยรวม</p>
+                            <p id="resTotalInterest" class="font-semibold text-gray-800">฿0.00</p>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-gray-500 text-xs">ค่างวด (ไม่รวม VAT)</p>
+                            <p id="monthlyPaymentNoVAT" class="font-semibold text-gray-800">฿0.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('th-TH', {
+                style: 'currency',
+                currency: 'THB',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function calculate() {
+            const price = parseFloat(document.getElementById('carPrice').value) || 0;
+            const downValue = parseFloat(document.getElementById('downPaymentValue').value) || 0;
+            const downType = document.getElementById('downPaymentType').value;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const months = parseInt(document.getElementById('installments').value);
+
+            let downPayment = 0;
+            if (downType === 'percent') {
+                downPayment = price * (downValue / 100);
+            } else {
+                downPayment = downValue;
+            }
+
+            const loanAmount = price - downPayment;
+            const totalInterest = loanAmount * (interestRate / 100) * (months / 12);
+            const totalPayment = loanAmount + totalInterest;
+            
+            const monthlyNoVAT = totalPayment / months;
+            const monthlyVAT = monthlyNoVAT * 1.07;
+
+            // Update UI
+            document.getElementById('monthlyPaymentVAT').innerText = formatCurrency(monthlyVAT);
+            document.getElementById('resDownPayment').innerText = formatCurrency(downPayment);
+            document.getElementById('resLoanAmount').innerText = formatCurrency(loanAmount);
+            document.getElementById('resTotalInterest').innerText = formatCurrency(totalInterest);
+            document.getElementById('monthlyPaymentNoVAT').innerText = formatCurrency(monthlyNoVAT);
+        }
+
+        // Add event listeners for real-time update (optional)
+        const inputs = ['carPrice', 'downPaymentValue', 'downPaymentType', 'interestRate', 'installments'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', calculate);
+        });
+    </script>
+</body>
+</html>

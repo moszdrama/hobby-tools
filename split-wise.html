@@ -184,6 +184,8 @@
 <script>
     // Constants for initial state and the protected first person
     const INITIAL_PEOPLE = ['Your name']; 
+    const STORAGE_KEY_PEOPLE = 'splitwise_people';
+    const STORAGE_KEY_EXPENSES = 'splitwise_expenses';
     
     // State Variables
     let people = ['Your name', 'Tak', 'Top'];
@@ -191,6 +193,33 @@
         { desc: 'ค่าอาหาร', payer: 'Your name', amount: 500, participants: ['Your name', 'Tak', 'Top'] }, 
         { desc: 'ค่าร้านสะดวกซื้อ', payer: 'Top', amount: 120, participants: ['Your name', 'Tak', 'Top'] }
     ];
+
+    // --- Local Storage Functions ---
+    function saveState() {
+        try {
+            localStorage.setItem(STORAGE_KEY_PEOPLE, JSON.stringify(people));
+            localStorage.setItem(STORAGE_KEY_EXPENSES, JSON.stringify(expenses));
+        } catch (error) {
+            console.error('Error saving state to localStorage:', error);
+        }
+    }
+
+    function loadState() {
+        try {
+            const savedPeople = localStorage.getItem(STORAGE_KEY_PEOPLE);
+            const savedExpenses = localStorage.getItem(STORAGE_KEY_EXPENSES);
+
+            if (savedPeople) {
+                people = JSON.parse(savedPeople);
+            }
+            if (savedExpenses) {
+                expenses = JSON.parse(savedExpenses);
+            }
+        } catch (error) {
+            console.error('Error loading state from localStorage:', error);
+            // If there's an error, keep the default state
+        }
+    }
 
     // Utility function for showing temporary messages (insteadจาก alert)
     function showMessage(msg, type = 'info') {
@@ -267,6 +296,9 @@
         expenses = [];
         // Reset people to only the initial person
         people = [...INITIAL_PEOPLE]; 
+        
+        // Save state
+        saveState();
         
         // Hide results and download button, and re-render/recalculate
         document.getElementById('results').classList.add('hidden');
@@ -408,6 +440,9 @@
             return exp;
         });
 
+        // Save state
+        saveState();
+
         // 3. Re-render everything and recalculate
         renderPeople();
         calculateSplit();
@@ -425,6 +460,7 @@
 
         if (name && !people.includes(name)) {
             people.push(name);
+            saveState();
             input.value = '';
             renderPeople();
             calculateSplit(); // Recalculate if people change
@@ -449,6 +485,7 @@
         }
 
         people = people.filter(p => p !== name);
+        saveState();
         renderPeople();
         calculateSplit(); // Recalculate if people change
     }
@@ -510,6 +547,7 @@
         }
 
         expenses.push({ desc, payer, amount, participants });
+        saveState();
         
         // Clear inputs and reset checkboxes
         descInput.value = '';
@@ -523,6 +561,7 @@
 
     function removeExpense(index) {
         expenses.splice(index, 1);
+        saveState();
         renderExpenses();
         calculateSplit(); // Recalculate when expense changes
     }
@@ -719,12 +758,14 @@
     // --- Initialization ---
 
     document.addEventListener('DOMContentLoaded', () => {
+        // Load state from localStorage first
+        loadState();
+        
         // Set up initial state from user request
         renderPeople();
         calculateSplit();
-
-        resetAll(); // Ensure starting fresh with only initial person
     });
+
 </script>
 
 </body>
