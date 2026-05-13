@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคำนวณสินเชื่อ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <!-- ปุ่มสำหรับกลับไปหน้าหลัก -->
+    <a href="index.html" class="fixed top-4 left-4 z-50 px-4 py-2 bg-white text-gray-700 font-semibold rounded-full shadow-md hover:bg-gray-100 transition-colors border border-gray-200">
+        &larr; กลับหน้าหลัก
+    </a>
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-100">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">เครื่องคำนวณสินเชื่อ</h1>
+        <p class="text-center text-gray-500 mb-8 -mt-6">แบบลดต้นลดดอก (Home/Personal Loan)</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Inputs -->
+            <div class="space-y-4">
+                <div>
+                    <label for="loanAmount" class="block text-sm font-medium text-gray-700 mb-1">วงเงินกู้ (บาท)</label>
+                    <input type="number" id="loanAmount" placeholder="เช่น 1000000" class="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none">
+                </div>
+
+                <div>
+                    <label for="interestRate" class="block text-sm font-medium text-gray-700 mb-1">อัตราดอกเบี้ยต่อปี (%)</label>
+                    <input type="number" id="interestRate" step="0.01" placeholder="เช่น 5.0" class="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none">
+                </div>
+
+                <div>
+                    <label for="loanTerm" class="block text-sm font-medium text-gray-700 mb-1">ระยะเวลาผ่อนชำระ (ปี)</label>
+                    <input type="number" id="loanTerm" placeholder="เช่น 30" class="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none">
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="calculate()" class="w-full bg-emerald-600 text-white py-4 px-6 rounded-xl font-bold text-lg hover:bg-emerald-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all focus:ring-4 focus:ring-emerald-200">
+                        คำนวณสินเชื่อ
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 flex flex-col justify-center">
+                <div class="text-center space-y-6">
+                    <div>
+                        <p class="text-emerald-700 text-sm mb-1">ค่างวดต่อเดือน (ประมาณการ)</p>
+                        <p id="monthlyPayment" class="text-4xl font-extrabold text-emerald-600">฿0.00</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-4 pt-6 border-t border-emerald-200">
+                        <div class="flex justify-between items-center">
+                            <p class="text-emerald-700 text-xs">เงินต้นทั้งหมด</p>
+                            <p id="resPrincipal" class="font-semibold text-gray-800">฿0.00</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-emerald-700 text-xs">ดอกเบี้ยรวมตลอดสัญญา</p>
+                            <p id="resTotalInterest" class="font-semibold text-gray-800">฿0.00</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-emerald-700 text-xs">ยอดชำระรวมทั้งหมด</p>
+                            <p id="resTotalPayment" class="font-bold text-gray-800">฿0.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-xs text-gray-400 text-center">
+            * การคำนวณนี้เป็นการประมาณการเบื้องต้นแบบลดต้นลดดอก (Amortization)
+        </div>
+    </div>
+
+    <script>
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('th-TH', {
+                style: 'currency',
+                currency: 'THB',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function calculate() {
+            const principal = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const annualRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const years = parseFloat(document.getElementById('loanTerm').value) || 0;
+
+            if (principal <= 0 || annualRate <= 0 || years <= 0) {
+                return;
+            }
+
+            const monthlyRate = annualRate / 100 / 12;
+            const numberOfPayments = years * 12;
+
+            // Amortization Formula: M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1 ]
+            const x = Math.pow(1 + monthlyRate, numberOfPayments);
+            const monthlyPayment = (principal * x * monthlyRate) / (x - 1);
+            
+            const totalPayment = monthlyPayment * numberOfPayments;
+            const totalInterest = totalPayment - principal;
+
+            // Update UI
+            document.getElementById('monthlyPayment').innerText = formatCurrency(monthlyPayment);
+            document.getElementById('resPrincipal').innerText = formatCurrency(principal);
+            document.getElementById('resTotalInterest').innerText = formatCurrency(totalInterest);
+            document.getElementById('resTotalPayment').innerText = formatCurrency(totalPayment);
+        }
+
+        // Add event listeners for real-time update
+        const inputs = ['loanAmount', 'interestRate', 'loanTerm'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', calculate);
+        });
+    </script>
+</body>
+</html>
