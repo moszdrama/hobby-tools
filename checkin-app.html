@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoCheck - บันทึกตำแหน่งของคุณ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
         body {
@@ -243,12 +244,23 @@
 
   function clearHistory() {
     if (history.length === 0) return;
-    if (confirm('ต้องการลบประวัติทั้งหมดใช่ไหม?')) {
-      history = [];
-      localStorage.removeItem('checkin_history');
-      renderHistory();
-      showStatus('ลบประวัติทั้งหมดแล้ว', 'error');
-    }
+    Swal.fire({
+      title: 'ยืนยันการลบ',
+      text: 'ต้องการลบประวัติทั้งหมดใช่ไหม?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'ใช่, ลบทั้งหมด',
+      cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        history = [];
+        localStorage.removeItem('checkin_history');
+        renderHistory();
+        showStatus('ลบประวัติทั้งหมดแล้ว', 'error');
+      }
+    });
   }
 
   function showStatus(msg, type) {

@@ -6,6 +6,7 @@
     <title>Internal Phone Directory</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
@@ -205,22 +206,23 @@
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
                 pendingFile = e.target.files[0];
-                confirmModal.style.display = 'flex';
-            }
-        });
-
-        cancelBtn.addEventListener('click', () => {
-            confirmModal.style.display = 'none';
-            fileInput.value = '';
-            pendingFile = null;
-        });
-
-        confirmBtn.addEventListener('click', () => {
-            if (pendingFile) {
-                processFile(pendingFile);
-                confirmModal.style.display = 'none';
-                pendingFile = null;
-                fileInput.value = '';
+                
+                Swal.fire({
+                    title: 'ยืนยันการนำเข้าข้อมูล?',
+                    text: 'การนำเข้าไฟล์ใหม่จะลบข้อมูลปัจจุบันทั้งหมดในระบบ คุณแน่ใจหรือไม่?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'ยืนยันการเปลี่ยนข้อมูล',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        processFile(pendingFile);
+                    }
+                    fileInput.value = '';
+                    pendingFile = null;
+                });
             }
         });
 
@@ -242,11 +244,27 @@
                         }));
                         saveToStorage();
                         renderDirectory(directoryData);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'นำเข้าสำเร็จ',
+                            text: `นำเข้าข้อมูลทั้งหมด ${json.length} รายการเรียบร้อยแล้ว`,
+                            confirmButtonText: 'ตกลง'
+                        });
                     } else {
-                        showMessage("ไม่พบข้อมูลในไฟล์ที่เลือก หรือไฟล์ว่างเปล่า");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่พบข้อมูล',
+                            text: 'ไม่พบข้อมูลในไฟล์ที่เลือก หรือไฟล์ว่างเปล่า',
+                            confirmButtonText: 'ตกลง'
+                        });
                     }
                 } catch (err) {
-                    showMessage("เกิดข้อผิดพลาดในการอ่านไฟล์ โปรดลองใหม่อีกครั้ง");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'เกิดข้อผิดพลาดในการอ่านไฟล์ โปรดลองใหม่อีกครั้ง',
+                        confirmButtonText: 'ตกลง'
+                    });
                 }
             };
             reader.readAsBinaryString(file);
@@ -254,15 +272,33 @@
 
         // Delete Individual Record
         function deleteRecord(id) {
-            if (confirm('ยืนยันการลบข้อมูลพนักงานคนนี้?')) {
-                directoryData = directoryData.filter(item => item.id !== id);
-                saveToStorage();
-                renderDirectory(directoryData);
-                // Also trigger search filter if there's text
-                if (searchInput.value) {
-                    searchInput.dispatchEvent(new Event('input'));
+            Swal.fire({
+                title: 'ยืนยันการลบ?',
+                text: 'ยืนยันการลบข้อมูลพนักงานคนนี้?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'ใช่, ลบข้อมูล',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    directoryData = directoryData.filter(item => item.id !== id);
+                    saveToStorage();
+                    renderDirectory(directoryData);
+                    // Also trigger search filter if there's text
+                    if (searchInput.value) {
+                        searchInput.dispatchEvent(new Event('input'));
+                    }
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ลบสำเร็จ',
+                        text: 'ลบข้อมูลเรียบร้อยแล้ว',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
                 }
-            }
+            });
         }
 
         // Search Filter Handler

@@ -234,10 +234,21 @@
         }
 
         function hardReset() {
-            if (confirm("คุณต้องการล้างข้อมูลทั้งหมด และเริ่มรายชื่อใหม่ใช่หรือไม่?")) {
-                localStorage.removeItem(STORAGE_KEY);
-                location.reload();
-            }
+            Swal.fire({
+                title: 'ยืนยันการล้างข้อมูล?',
+                text: 'คุณต้องการล้างข้อมูลทั้งหมด และเริ่มรายชื่อใหม่ใช่หรือไม่?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'ใช่, ล้างข้อมูล',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem(STORAGE_KEY);
+                    location.reload();
+                }
+            });
         }
 
         function addPerson() {
