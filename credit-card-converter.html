@@ -39,6 +39,11 @@
             </div>
 
             <div>
+                <label for="apiToken" class="block text-sm font-medium text-gray-700 mb-1">API Token (รหัสผ่านสำหรับบันทึก):</label>
+                <input type="password" id="apiToken" placeholder="กรอกรหัสผ่านเพื่อบันทึกข้อมูล" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+
+            <div>
                 <label for="plainTextRaw" class="block text-sm font-medium text-gray-700 mb-1">ข้อมูล Raw Text:</label>
                 <textarea id="plainTextRaw" placeholder="วางข้อมูลค่าใช้จ่ายดิบที่นี่ (แต่ละรายการขึ้นบรรทัดใหม่)" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm" rows="15">28/05/25 28/05/25 Payment-KTB Internet - 5,450.82
 24/05/25 24/05/25 TMN 7-11 BANGKOK TH 40.00
@@ -75,6 +80,10 @@
             แปลงเป็น JSON
         </button>
 
+        <button id="saveBtn" onclick="saveToSheet()" class="hidden w-full mt-2 bg-green-600 text-white font-bold py-3 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+            บันทึกไปยัง Sheet
+        </button>
+
         <div class="mt-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-2">ผลลัพธ์ JSON:</h2>
             <pre id="output" class="bg-gray-50 p-4 rounded-md text-sm text-gray-800 border border-gray-200 overflow-x-auto min-h-[100px] whitespace-pre-wrap break-all"></pre>
@@ -82,12 +91,25 @@
         
     </div>
     <script>
+        let currentResults = [];
+
+        // โหลด API Token จาก localStorage เมื่อเปิดหน้าเว็บ
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedToken = localStorage.getItem('credit_card_api_token');
+            if (savedToken) {
+                document.getElementById('apiToken').value = savedToken;
+            }
+        });
+
         function convertToJson() {
             const asOfMonthYears = document.getElementById('asOfMonthYears').value.trim();
             const cardName = document.getElementById('cardName').value.trim();
             const plainTextRaw = document.getElementById('plainTextRaw').value.trim();
             const outputDiv = document.getElementById('output');
+            const saveBtn = document.getElementById('saveBtn');
+            
             outputDiv.innerHTML = ''; // ล้างผลลัพธ์เก่า
+            saveBtn.classList.add('hidden'); // ซ่อนปุ่มบันทึกก่อน
 
             // ตรวจสอบว่าผู้ใช้กรอกข้อมูลครบถ้วนหรือไม่
             if (!asOfMonthYears || !cardName || !plainTextRaw) {
@@ -120,15 +142,9 @@
                     // Apply negative sign if it was present in the original string
                     let amount = negativeSign === '-' ? -amountValue : amountValue;
 
-                    // Handle trailing "TH" or "US" in description
-                    const trailingKeywords = /\s+(?:TH|US)$/i;
-                    if (trailingKeywords.test(description)) {
-                        description = description.replace(trailingKeywords, '').trim();
-                    }
-
                     results.push({
-                        asOfMonthYears: asOfMonthYears,
-                        cardName: cardName,
+                        month: asOfMonthYears,
+                        card: cardName,
                         description: description,
                         amount: amount
                     });
@@ -136,8 +152,8 @@
                     // หากไม่สามารถแยกข้อมูลได้ ให้แจ้งเตือนใน console และเพิ่มรายการที่มีข้อผิดพลาด
                     console.warn(`ไม่สามารถแยกข้อมูลบรรทัดนี้ได้: ${line}`);
                     results.push({
-                        asOfMonthYears: asOfMonthYears,
-                        cardName: cardName,
+                        month: asOfMonthYears,
+                        card: cardName,
                         description: `[ERROR] Could not parse: ${line}`,
                         amount: 0 // กำหนดค่าเริ่มต้นเป็น 0 หรือ null
                     });
@@ -145,7 +161,68 @@
             });
 
             // แสดงผลลัพธ์ในรูปแบบ JSON ที่จัดฟอร์แมตสวยงาม
-            outputDiv.textContent = JSON.stringify(results, null, 2);
+            currentResults = { items: results };
+            outputDiv.textContent = JSON.stringify(currentResults, null, 2);
+            
+            // แสดงปุ่มบันทึก
+            if (results.length > 0) {
+                saveBtn.classList.remove('hidden');
+            }
+        }
+
+        async function saveToSheet() {
+            const saveBtn = document.getElementById('saveBtn');
+            const apiTokenInput = document.getElementById('apiToken');
+            const apiToken = apiTokenInput.value.trim();
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbzzSeNd1XMEmOXEuZNqTnRqDwM-1d0gMSiPwkyDz0aFmB4Q_xdOwveQ8alBqB4ka8b4vQ/exec';
+            
+            if (!apiToken) {
+                alert('กรุณากรอก API Token เพื่อบันทึกข้อมูล');
+                apiTokenInput.focus();
+                return;
+            }
+
+            if (!currentResults.items || currentResults.items.length === 0) {
+                alert('ไม่มีข้อมูลให้บันทึก');
+                return;
+            }
+
+            // บันทึก Token ลง localStorage
+            localStorage.setItem('credit_card_api_token', apiToken);
+
+            saveBtn.disabled = true;
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'กำลังบันทึก...';
+            saveBtn.classList.replace('bg-green-600', 'bg-gray-400');
+            
+            try {
+                // เพิ่ม authCode เข้าไปใน payload
+                const payload = {
+                    authCode: apiToken,
+                    ...currentResults
+                };
+
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                console.log('Response from Google Sheet:', result);
+                
+                if (result.status === 'success') {
+                    alert(result.message);
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + (result.message || 'ไม่ทราบสาเหตุ'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = originalText;
+                saveBtn.classList.replace('bg-gray-400', 'bg-green-600');
+            }
         }
     </script>
 </body>
