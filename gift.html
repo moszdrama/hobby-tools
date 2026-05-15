@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบจับฉลากของขวัญแบบ Chain Reaction</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>        
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
@@ -293,7 +294,12 @@
             const maxGroupSize = Math.max(...Object.values(groupCounts));
             
             if (maxGroupSize > members.length / 2) {
-                alert(`ไม่สามารถเริ่มเกมได้: มีคนในกลุ่มเดียวกัน (${maxGroupSize} คน) มากกว่าครึ่งหนึ่งของทั้งหมด (${members.length} คน) ทำให้เป็นไปไม่ได้ที่จะจับไขว้กลุ่มกันทุกคน`);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สามารถเริ่มเกมได้',
+                    text: `มีคนในกลุ่มเดียวกัน (${maxGroupSize} คน) มากกว่าครึ่งหนึ่งของทั้งหมด (${members.length} คน) ทำให้เป็นไปไม่ได้ที่จะจับไขว้กลุ่มกันทุกคน`,
+                    confirmButtonText: 'ตกลง'
+                });
                 return;
             }
 
@@ -325,7 +331,12 @@
             );
 
             if (candidates.length === 0) {
-                alert("ขออภัย! เกิดสภาวะทางตันทางคณิตศาสตร์ ระบบจำเป็นต้องเริ่มจับใหม่เฉพาะส่วนของการจับคู่ เพื่อความถูกต้อง");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ขออภัย! เกิดสภาวะทางตันทางคณิตศาสตร์ ระบบจำเป็นต้องเริ่มจับใหม่เฉพาะส่วนของการจับคู่ เพื่อความถูกต้อง',
+                    confirmButtonText: 'ตกลง'
+                });
                 remainingGivers = JSON.parse(JSON.stringify(members));
                 remainingReceivers = JSON.parse(JSON.stringify(members));
                 finalResults = [];

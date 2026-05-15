@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Card Expense to JSON Converter</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
         body {
@@ -177,13 +178,22 @@
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbzzSeNd1XMEmOXEuZNqTnRqDwM-1d0gMSiPwkyDz0aFmB4Q_xdOwveQ8alBqB4ka8b4vQ/exec';
             
             if (!apiToken) {
-                alert('กรุณากรอก API Token เพื่อบันทึกข้อมูล');
-                apiTokenInput.focus();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'คำเตือน',
+                    text: 'กรุณากรอก API Token เพื่อบันทึกข้อมูล',
+                    confirmButtonText: 'ตกลง'
+                }).then(() => apiTokenInput.focus());
                 return;
             }
 
             if (!currentResults.items || currentResults.items.length === 0) {
-                alert('ไม่มีข้อมูลให้บันทึก');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'ไม่มีข้อมูล',
+                    text: 'ไม่มีข้อมูลให้บันทึก',
+                    confirmButtonText: 'ตกลง'
+                });
                 return;
             }
 
@@ -211,13 +221,28 @@
                 console.log('Response from Google Sheet:', result);
                 
                 if (result.status === 'success') {
-                    alert(result.message);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'สำเร็จ',
+                        text: result.message,
+                        confirmButtonText: 'ตกลง'
+                    });
                 } else {
-                    alert('เกิดข้อผิดพลาด: ' + (result.message || 'ไม่ทราบสาเหตุ'));
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: result.message || 'ไม่ทราบสาเหตุ',
+                        confirmButtonText: 'ตกลง'
+                    });
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message,
+                    confirmButtonText: 'ตกลง'
+                });
             } finally {
                 saveBtn.disabled = false;
                 saveBtn.textContent = originalText;
