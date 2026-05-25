@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10K Sub 1 Training Program for Moss</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Google+Sans:300,400,500,600,700&display=swap');
+        body {
+            font-family: 'Google Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-12">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-purple-800 to-indigo-900 shadow-xl border-b border-indigo-700/50 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-xl transition-all duration-200 border border-white/10 hover:border-white/25 shadow-lg" title="กลับหน้าหลัก">
+                    <i class="fa-solid fa-arrow-left text-lg"></i>
+                </a>
+                <div class="bg-pink-500 text-white p-2.5 rounded-xl shadow-lg shadow-pink-500/30 animate-pulse">
+                    <i class="fa-solid fa-person-running text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">ตารางซ้อมวิ่ง 10K Sub 1 <span class="text-pink-400">สำหรับคุณมอส</span></h1>
+                    <p class="text-xs text-indigo-200">เฟส 1: สร้างความอึด ปรับสมดุลเท้า ป้องกันอาการจุกท้อง</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-800/80 backdrop-blur-sm px-4 py-2 rounded-full border border-indigo-500/30">
+                <span class="inline-block w-2 h-2 rounded-full bg-green-400 animate-ping"></span>
+                <span class="text-xs font-semibold text-slate-300">ความยาวเท้า: ซ้าย 242mm / ขวา 244mm (เท้ากว้าง/อุ้งเท้าสูง)</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left / Center Section: Weeks & Days Selector -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Quick Stats & Highlights -->
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-slate-800/60 border border-slate-700 p-4 rounded-2xl text-center">
+                    <p class="text-xs text-slate-400 mb-1">เป้าหมายสูงสุด</p>
+                    <p class="text-base sm:text-lg font-bold text-pink-400">10K Sub 1</p>
+                    <p class="text-[10px] text-slate-500">Pace 5:59 นาน 10 km</p>
+                </div>
+                <div class="bg-slate-800/60 border border-slate-700 p-4 rounded-2xl text-center">
+                    <p class="text-xs text-slate-400 mb-1">สัปดาห์ปัจจุบัน</p>
+                    <p class="text-base sm:text-lg font-bold text-indigo-400" id="current-week-badge">สัปดาห์ที่ 1</p>
+                    <p class="text-[10px] text-slate-500">จากทั้งหมด 8 สัปดาห์</p>
+                </div>
+                <div class="bg-slate-800/60 border border-slate-700 p-4 rounded-2xl text-center">
+                    <p class="text-xs text-slate-400 mb-1">ความสำเร็จสะสม</p>
+                    <p class="text-base sm:text-lg font-bold text-green-400" id="overall-progress-percent">0%</p>
+                    <p class="text-[10px] text-slate-500" id="overall-progress-ratio">0 / 56 วันสำเร็จ</p>
+                </div>
+            </div>
+
+            <!-- Week Navigator Slider -->
+            <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-2xl shadow-xl">
+                <h3 class="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-week text-indigo-400"></i> เลือกสัปดาห์เพื่อดูตารางซ้อม
+                </h3>
+                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-600">
+                    <!-- Javascript will generate weeks buttons here -->
+                    <div id="week-buttons" class="flex gap-2 w-full justify-between min-w-[500px]"></div>
+                </div>
+            </div>
+
+            <!-- Week Overview & Day Grid -->
+            <div class="bg-slate-800 border border-slate-700/80 p-5 rounded-2xl shadow-xl space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-700/60 pb-3">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2" id="current-week-title">
+                            สัปดาห์ที่ 1: เริ่มต้นปรับตัวและสร้างฐานความฟิต
+                        </h2>
+                        <p class="text-xs text-slate-400" id="current-week-focus">
+                            เน้นการทำความคุ้นเคยกับความเหนื่อยล้า และเรียนรู้วิธีวิ่งแบบไม่สะสมอาการบาดเจ็บ
+                        </p>
+                    </div>
+                    <button onclick="toggleAllDaysInWeek()" class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors font-semibold">
+                        <i class="fa-solid fa-check-double mr-1"></i> ทำเสร็จทั้งสัปดาห์
+                    </button>
+                </div>
+
+                <!-- Days of the Week Grid -->
+                <div class="space-y-3" id="days-container">
+                    <!-- Days dynamically inserted here by JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Section: Interactive Details Pane & Fitness Timer -->
+        <div class="space-y-6">
+            
+            <!-- Detail Card -->
+            <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl space-y-4 sticky top-24" id="detail-card">
+                <div id="detail-card-empty" class="text-center py-12 text-slate-400 space-y-3">
+                    <i class="fa-solid fa-hand-pointer text-4xl text-slate-600 animate-bounce"></i>
+                    <p class="font-medium text-sm">คลิกเลือกวันซ้อมทางซ้าย<br>เพื่อดูคู่มือแบบละเอียดที่นี่</p>
+                </div>
+
+                <div id="detail-card-content" class="hidden space-y-5">
+                    <!-- Day Title Header -->
+                    <div class="flex justify-between items-start">
+                        <div class="space-y-1">
+                            <span id="detail-day-tag" class="text-xs font-bold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-full border border-indigo-500/30">
+                                วันอังคาร
+                            </span>
+                            <h3 id="detail-day-title" class="text-xl font-bold text-white mt-1">
+                                วิ่งโซนสบาย (Easy Run)
+                            </h3>
+                        </div>
+                        <button id="detail-check-btn" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all shadow-md">
+                            <!-- Filled dynamically -->
+                        </button>
+                    </div>
+
+                    <!-- Recommended Shoes Dynamic Section -->
+                    <div class="bg-slate-750 p-4 rounded-xl border border-slate-700/60 space-y-2" id="detail-shoes-box">
+                        <p class="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shoe-prints text-indigo-400"></i> รองเท้าแนะนำสตรีมวันนี้
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <div id="shoe-avatar" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg"></div>
+                            <div>
+                                <h4 id="detail-shoe-name" class="font-bold text-sm text-slate-100">Hoka Clifton 9</h4>
+                                <p id="detail-shoe-reason" class="text-xs text-slate-400">หนานุ่ม ช่วยซับแรงกระแทก เหมาะสำหรับวันวิ่งฟื้นฟูเบาๆ</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instructions and Targets -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-semibold text-slate-400 border-b border-slate-700/40 pb-2">
+                            <span>เป้าหมายหลักประจำวันนี้:</span>
+                            <span id="detail-metric" class="text-pink-400 text-sm">3 - 4 กิโลเมตร</span>
+                        </div>
+                        
+                        <!-- Rich Guidelines Text -->
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-slate-300 flex items-center gap-1.5 uppercase tracking-wide">
+                                <i class="fa-solid fa-list-check text-indigo-400"></i> ขั้นตอนการฝึกซ้อมแบบละเอียด
+                            </h4>
+                            <ul id="detail-steps" class="space-y-2 text-xs text-slate-300 list-none pl-0">
+                                <!-- Steps list items will be injected -->
+                            </ul>
+                        </div>
+
+                        <!-- Special Injury Advice / Tips -->
+                        <div class="bg-amber-500/10 border border-amber-500/20 p-3.5 rounded-xl space-y-1.5" id="detail-tips-box">
+                            <h4 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-exclamation"></i> ข้อควรระวังและการเซฟร่างกาย (คุณมอส)
+                            </h4>
+                            <p id="detail-tips" class="text-xs text-amber-200/90 leading-relaxed">
+                                เท้าของคุณมอสเป็นอุ้งเท้าสูง วันนี้ควรคลายสายผูกหน้าเท้าของ Boston 13 ให้หลวมกว่าปกติเพื่อลดความดันกลางเท้า
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Custom Bodyweight / Rest Activity (Show only if applicable) -->
+                    <div id="workout-timer-container" class="hidden border-t border-slate-700/60 pt-4 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-bold text-slate-300 flex items-center gap-1.5 uppercase tracking-wide">
+                                <i class="fa-solid fa-stopwatch text-indigo-400"></i> เครื่องจับเวลาซ้อมบอดี้เวท
+                            </h4>
+                            <span id="timer-cycle-label" class="text-xs font-semibold text-slate-400">รอบที่ 1/3 (ท่าที่ 1/4)</span>
+                        </div>
+                        
+                        <!-- Mini Timer Display -->
+                        <div class="bg-slate-900 border border-indigo-500/20 p-4 rounded-xl flex items-center justify-between shadow-inner">
+                            <div>
+                                <p id="timer-pose-name" class="font-bold text-sm text-slate-200">Squat (ต้นขาและสะโพก)</p>
+                                <p id="timer-status-text" class="text-[10px] text-pink-400 font-medium tracking-wide uppercase">กำลังทำงาน (WORK)</p>
+                            </div>
+                            <div class="text-center">
+                                <span id="timer-countdown" class="text-3xl font-mono font-bold text-white tracking-widest">45</span>
+                                <span class="text-xs text-slate-500 block">วินาที</span>
+                            </div>
+                        </div>
+
+                        <!-- Timer Controls -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <button id="btn-timer-prev" onclick="changeTimerPose(-1)" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 rounded-xl text-xs transition-colors flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-backward-step"></i> ท่าก่อนหน้า
+                            </button>
+                            <button id="btn-timer-start" onclick="toggleTimer()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-md shadow-emerald-700/20">
+                                <i class="fa-solid fa-play" id="btn-timer-icon"></i> <span id="btn-timer-text">เริ่มซ้อม</span>
+                            </button>
+                            <button id="btn-timer-next" onclick="changeTimerPose(1)" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 rounded-xl text-xs transition-colors flex items-center justify-center gap-1">
+                                ท่าถัดไป <i class="fa-solid fa-forward-step"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div id="congrats-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 max-w-md w-full p-6 rounded-3xl text-center space-y-4 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-12 -left-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl"></div>
+            
+            <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-3xl mx-auto shadow-lg shadow-emerald-500/10 border border-emerald-500/30">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            
+            <div class="space-y-1">
+                <h3 class="text-xl font-bold text-white">สุดยอดมากครับคุณมอส!</h3>
+                <p class="text-sm text-slate-300">คุณซ้อมสำเร็จครบถ้วนในแผนงานวันนี้แล้ว!</p>
+            </div>
+            
+            <div class="bg-slate-900/60 p-3.5 rounded-2xl border border-slate-700/50">
+                <p class="text-xs text-slate-400" id="modal-congrats-tip">
+                    กล้ามเนื้อฝ่าเท้าและเอ็นของคุณกำลังปรับตัวและแข็งแกร่งขึ้น อย่าลืมดื่มน้ำเยอะๆ และยืดน่องต่อนะครับ!
+                </p>
+            </div>
+
+            <button onclick="closeModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-2xl transition-colors shadow-lg shadow-indigo-600/20 text-sm">
+                ลุยวันต่อไปเลย!
+            </button>
+        </div>
+    </div>
+
+    <!-- Script Data & Interactive Logic -->
+    <script>
+        // Database of 8-Week Training Program custom designed for Moss
+        const programData = {
+            weeks: [
+                {
+                    number: 1,
+                    title: "สัปดาห์ที่ 1: ปรับเท้าและสร้างความยืดหยุ่น",
+                    focus: "เน้นการเปลี่ยนผ่านจากรองเท้า Clifton 9 นุ่มๆ มาทดสอบการดีดตัวของ Boston 13 แบบไม่บาดเจ็บ และบอดี้เวทป้องกันอาการจุก",
+                    days: [
+                        { id: "w1-d1", name: "วันจันทร์", type: "rest", title: "พักฟื้นร่างกายเต็มรูปแบบ", desc: "เพื่อลดแรงกดดันสะสมจากสัปดาห์ก่อนหน้า ยืดเหยียดเบาๆ", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["นวดฝ่าเท้าง่ายๆ ด้วยลูกเทนนิส/ลูกกอล์ฟ เบาๆ 5-10 นาที", "ทำท่ายืดกล้ามเนื้อน่อง (Calf Stretch) ป้องกันอาการรองช้ำตึงตัว", "นอนหลับให้เต็มอิ่มอย่างน้อย 7-8 ชั่วโมง"], tips: "ห้ามวิ่งเด็ดขาดในวันนี้เพื่อให้เอ็นฝ่าเท้าได้สมานตัวสมบูรณ์จากการซ้อมครั้งก่อนครับ" },
+                        { id: "w1-d2", name: "วันอังคาร", type: "easy", title: "วิ่งสบายๆ เพื่อปรับตัว (Easy Run)", desc: "วิ่งความเร็วโซนเบา เพื่อให้ปอดและกล้ามเนื้อขาได้ฟื้นฟู", metrics: "วิ่ง 3 Km. @ Pace 7:45 - 8:15", shoes: "clifton", steps: ["วอร์มอัพร่างกายด้วยการเดินเร็ว 5 นาที", "วิ่งในระดับที่ 'คุยกับเพื่อนรู้เรื่องเป็นประโยคยาวๆ' ไม่เหนื่อยหอบ", "เน้นลงน้ำหนักให้กระจายเต็มฝ่าเท้า อย่าลงกระแทกส้นเท้าหนักเกินไป", "คูลดาวน์ด้วยการยืดกล้ามเนื้อต้นขาด้านหน้า (Quads) และน่อง"], tips: "ใช้ Hoka Clifton 9 ในวันนี้เพราะโฟมที่นุ่มจะช่วยลดแรงกระแทกบริเวณกลางเท้าและฝ่าเท้าของคุณมอสที่มีอุ้งเท้าสูงได้ดีมากครับ" },
+                        { id: "w1-d3", name: "วันพุธ", type: "strength", title: "บอดี้เวทสร้างแกนกลางและต้นขา", desc: "เสริมแกนกลางลำตัวเพื่อตัดปัญหาการจุกท้องกิโลที่ 3 และเสริมขาให้แกร่งรับแรง Boston 13", metrics: "ฝึก Circuit 3 รอบ (ท่าละ 45วิ พัก 15วิ)", shoes: "none", steps: ["Squat: ทำช้าๆ หลังตรง หัวเข่าไม่พ้นปลายเท้าเพื่อพัฒนาความทนทานของหน้าขา (Quads)", "Plank: เกร็งหน้าท้องให้แกนกลางแข็งแรง ป้องกันกระบังลมสั่นคลอนระหว่างวิ่ง (แก้จุกท้อง)", "Glute Bridge: ยกระดับก้นเพื่อรับและกระจายแรงของ Hamstrings", "Calf Raises: ยืนเขย่งปลายเท้า เพื่อปั้นเอ็นฝ่าเท้าและเอ็นร้อยหวายให้เหนียวขึ้น"], tips: "บอดี้เวทอย่างมีคุณภาพ วันนี้ใช้นาฬิกาจับเวลาด้านขวาซ้อมวน 3 รอบเพื่อผลลัพธ์ที่ดีที่สุด!" },
+                        { id: "w1-d4", name: "วันพฤหัสบดี", type: "tempo", title: "ซ้อมช่วงก้าวและความก้าวหน้า (Tempo/Interval)", desc: "เริ่มฝึกรับแรงดีดจาก EnergyRods ของ Boston 13 ในระยะสั้นๆ", metrics: "วิ่ง 1K สลับเดิน 1 นาที (ทำซ้ำ 4 รอบ)", shoes: "boston", steps: ["วอร์มอัพยืดเส้นยืดสาย โดยเฉพาะเอ็นร้อยหวายและหน้าขา", "วิ่งด้วย Pace 7:00 ยาว 1 กิโลเมตร (รอบที่ 1)", "เดินช้าๆ เพื่อสลับพักหายใจคุมหัวใจ 1 นาที", "ทำซ้ำสลับกันจนครบ 4 กิโลเมตร"], tips: "สวม Adidas Boston 13 คู่กับถุงเท้าแบบบาง คลายเชือกร้อยหน้าเท้าออกเล็กน้อย เพื่อเพิ่มพื้นที่ระบายแรงกดไม่ให้บีบหน้าเท้ากว้างของคุณมอส" },
+                        { id: "w1-d5", name: "วันศุกร์", type: "rest", title: "พักผ่อนพร้อมดูแลฝ่าเท้า", desc: "ให้ร่างกายซ่อมแซมและสร้างกล้ามเนื้อใหม่หลังจากบอดี้เวทและลงรองเท้าใหม่มา", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["ประคบเย็นใต้ฝ่าเท้าหรือลูกกลิ้งแช่เย็นคลึงเบาๆ หากเริ่มรู้สึกอุ่นๆ ฝ่าเท้า", "โฟกัสการทานโปรตีนให้เพียงพอเพื่อซ่อมแซมกล้ามเนื้อต้นขา", "หากมีเวลาให้ทำโยคะคลายเส้นบริเวณหลังสะโพกและสะโพกด้านหลัง"], tips: "หากสัปดาห์นี้ฝ่าเท้าตึงมาก ให้แช่เท้าในน้ำอุ่นผสมเกลือแมกนีเซียมซัลเฟต (Epsom salt) 15 นาทีจะคลายกล้ามเนื้อฝ่าเท้าได้ดีเลิศครับ" },
+                        { id: "w1-d6", name: "วันเสาร์", type: "long", title: "วิ่งยาวเสริมฐานความอึด (Long Run)", desc: "วิ่งสะสมระยะทางช้าๆ เพื่อขยายความอึดของกล้ามเนื้อหัวใจและปอด", metrics: "วิ่งยาว 5 Km. @ Pace 8:00 - 8:30", shoes: "clifton", steps: ["ดื่มน้ำเปล่า 1 แก้วเล็กก่อนวิ่ง 15 นาที ป้องกันอาการขาดน้ำและตะคริว", "วิ่งอย่างใจเย็น ห้ามวิ่งเร็วเด็ดขาด วิ่งตามความรู้สึกสบาย", "พยายามหายใจเข้าลึกให้ท้องพองเต็มที่เพื่อลดความดันบนกระบังลม (หมดปัญหาจุกแน่น)", "หลังวิ่งให้ยืดเหยียดเน้นช่วงไอทีแบนด์ (ข้างเข่า) และต้นขาเป็นพิเศษ"], tips: "วันนี้ใช้ Hoka Clifton 9 เนื่องจากเป็นการวิ่งยาวครั้งแรกของแผน รองเท้าคู่เดิมที่ชินเท้าจะช่วยลดความเสี่ยงจากการบาดเจ็บเรื้อรังได้ดีที่สุด" },
+                        { id: "w1-d7", name: "วันอาทิตย์", type: "rest", title: "เดินผ่อนคลายกล้ามเนื้อ (Active Recovery)", desc: "ขยับร่างกายเบาๆ เพื่อให้เลือดไหลเวียนและนำพากรดแลคติกออกจากต้นขา", metrics: "เดินเล่นช้าๆ 20 - 30 นาที", shoes: "none", steps: ["สวมรองเท้าแตะเพื่อสุขภาพที่มีตัวพยุงอุ้งเท้าสูงเพื่อผ่อนคลายฝ่าเท้า", "เดินเล่นในสวนสาธารณะ หรือทำงานบ้านเบาๆ", "ยืดเหยียดน่องก่อนนอน 2 เซ็ต เซ็ตละ 30 วินาที"], tips: "หลีกเลี่ยงการเดินเท้าเปล่าบนพื้นแข็งๆ ภายในบ้านในช่วงปรับตัวนี้ แนะนำให้ใส่รองเท้าเดินในบ้านนุ่มๆ" }
+                    ]
+                },
+                {
+                    number: 2,
+                    title: "สัปดาห์ที่ 2: สะสมความอดทนและสร้างความทนทาน",
+                    focus: "เพิ่มปริมาณบอดี้เวทและความแข็งแกร่งของกล้ามเนื้อ และขยับระยะทางวิ่งขึ้นทีละนิด",
+                    days: [
+                        { id: "w2-d1", name: "วันจันทร์", type: "rest", title: "วันพักผ่อนอย่างเต็มที่", desc: "สลัดความล้าสะสมจากการวิ่งยาววันเสาร์", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["นวดฝ่าเท้าและประคบเย็นเบาๆ", "นอนหลับพักผ่อนให้เพียงพอ", "ยืดต้นขาด้านหน้าและหลังท่าละ 30 วินาที"], tips: "วันนี้ปล่อยให้ร่างกายได้ผ่อนคลายเต็มเปี่ยมเพื่อสะสมกำลัง" },
+                        { id: "w2-d2", name: "วันอังคาร", type: "easy", title: "วิ่งสบายๆ คุมรอบขา (Easy Run)", desc: "ฝึกสร้างความทนทานของเนื้อเยื่อด้วยการวิ่งช้าๆ คุมท่าวิ่ง", metrics: "วิ่ง 3.5 Km. @ Pace 7:45 - 8:15", shoes: "clifton", steps: ["เริ่มด้วยการเดินวอร์ม 5 นาที", "รักษารอบขาให้อยู่ในสเต็ปที่ซอยสั้นเพื่อเลี่ยงการลงกระแทกแรง", "คูลดาวน์ดึงสะโพกและยืดน่องป้องกันการตึง"], tips: "พยายามอย่าเพิ่งก้าวยาวเกินไปเพื่อหลีกเลี่ยงอาการตึงที่ต้นขา" },
+                        { id: "w2-d3", name: "วันพุธ", type: "strength", title: "บอดี้เวทแกนกลางและน่อง", desc: "การยกตัวเกร็งส้นเท้าและแกนกลางลำตัวเพื่อความทนทานสไตล์ Sub 1", metrics: "ฝึก Circuit 3 รอบ (ท่าละ 45วิ พัก 15วิ)", shoes: "none", steps: ["Squat ช้าๆ เน้นการควบคุมกล้ามเนื้อสะโพก", "Plank ค้างไว้ ท้องแบนราบคุมระบบหายใจเข้า-ออกลึกๆ", "Glute Bridge ยกสะโพกให้สุด เกร็งก้นชดเชยแรงดีดของแผ่นคาร์บอน", "Calf Raises เพิ่มแรงต้านต่อน่อง ปล่อยลงช้าๆ"], tips: "ระหว่างท่าพยายามควบคุมการหายใจเข้าท้องโป่ง-ออกท้องยุบ จะช่วยลดอาการจุกในวันวิ่งเร็วได้ดีมาก" },
+                        { id: "w2-d4", name: "วันพฤหัสบดี", type: "tempo", title: "คุมความเร็วกับ Boston 13", desc: "เรียนรู้ที่จะคุม Pace เร็วขึ้นบนรองเท้าที่เปี่ยมด้วยเทคโนโลยีดีดตัว", metrics: "วิ่ง 1.5K สลับเดิน 1 นาที (ทำซ้ำ 3 รอบ)", shoes: "boston", steps: ["วอร์มอัพ 5 นาที ยืดเหยียดแบบเคลื่อนไหว (Dynamic Stretch)", "คุมความเร็วที่ Pace 6:50 - 7:00 อย่างมั่นคงในรอบที่วิ่ง", "ควบคุมทางเดินหายใจลึกๆ ทุกก้าว ห้ามวิ่งกลั้นหายใจเด็ดขาด", "ยืดเหยียดน่อง ฝ่าเท้า และต้นขาหลังวิ่งเสร็จทันที"], tips: "ถ้ารู้สึกเจ็บฝ่าเท้าแปลกๆ ระหว่างวิ่งด้วย Boston 13 ให้ลดความเร็วลงทันที ความแข็งแรงต้องมาก่อนความเร็วเสมอ" },
+                        { id: "w2-d5", name: "วันศุกร์", type: "rest", title: "ฟื้นฟูกล้ามเนื้อฝ่าเท้า", desc: "ป้องกันเอ็นฝ่าเท้าอักเสบสะสมด้วยสปาร้อน-เย็นง่ายๆ", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["นวดฝ่าเท้าด้วยมือนวดคลึงยาวตามแนวกระดูกกลางเท้าเพื่อคลายกล้ามเนื้อ", "แช่น้ำอุ่นกระตุ้นระบบไหลเวียนโลหิตทั่วร่างกาย", "ยืดเหยียดเอ็นร้อยหวายเบาๆ"], tips: "ความเจ็บป่วยปวดตึงเล็กๆ วันนี้คือจุดเริ่มต้นของอาการบาดเจ็บ ดังนั้นจงใช้โอกาสในวันพักดูแลตนเองให้เต็มที่ครับ" },
+                        { id: "w2-d6", name: "วันเสาร์", type: "long", title: "ขยับระยะทางวิ่งยาว (Long Run)", desc: "วิ่งยาวต่อเนื่องนานขึ้นโดยไม่เดินเพื่อเป้าหมาย Sub 1", metrics: "วิ่งยาว 5.5 Km. @ Pace 8:00 - 8:30", shoes: "clifton", steps: ["เตรียมน้ำดื่มไว้จิบหลังกิโลเมตรที่ 3 เป็นต้นไป", "ใช้ช่วงความเร็วคงที่สม่ำเสมอตั้งแต่ต้นจนจบ", "ระลึกเสมอว่าต้องวิ่งสบายๆ คุยเป็นคำๆ ได้ตลอดเวลา", "หลังเสร็จสิ้น วิ่งเหยาะๆ และเดินคูลดาวน์อย่างช้าๆ 5 นาที"], tips: "เพิ่มระยะทางขึ้นมา 500 เมตรแล้วนะคุณมอส! ใช้ Clifton 9 เพื่อรองรับแรงที่ก้าวเพิ่มขึ้นอย่างสบายกระชับฝ่าเท้า" },
+                        { id: "w2-d7", name: "วันอาทิตย์", type: "rest", title: "พักผ่อนและเตรียมตัวสัปดาห์หน้า", desc: "ประเมินสภาพร่างกายโดยรวมเพื่อปรับตารางในสัปดาห์หน้า", metrics: "เดินคลายเส้น 20 นาที", shoes: "none", steps: ["ประเมินความเจ็บปวดของฝ่าเท้าและต้นขา: เจ็บตอนเช้าไหม? ตึงแค่ไหน?", "พักน่องและสะโพกให้พร้อมลุยต่อ", "นอนแต่หัวค่ำเพื่อเตรียมความพร้อมรับสัปดาห์ใหม่"], tips: "หากฝ่าเท้ายังตึงอยู่มาก สัปดาห์ถัดไปอาจต้องใช้วิธีวิ่งสลับเดินมากขึ้นเพื่อไม่ให้อักเสบสะสม" }
+                    ]
+                },
+                {
+                    number: 3,
+                    title: "สัปดาห์ที่ 3: พัฒนาความแข็งแรงและระบบขับลม",
+                    focus: "เพิ่มพูนความทนทานแกนกลางเพื่อตัดปัญหาจุกแน่นที่กิโลเมตรที่ 3 และเสริมระยะวิ่งเพิ่มขึ้น",
+                    days: [
+                        { id: "w3-d1", name: "วันจันทร์", type: "rest", title: "พักคลายกล้ามเนื้อสะสม", desc: "ร่างกายต้องการเวลาซ่อมสร้าง วันนี้ปล่อยกล้ามเนื้อได้ทำงานอย่างผ่อนคลาย", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["ใช้วิธีคลึงกล้ามเนื้อด้วย Foam Roller บนต้นขาด้านหน้าและน่อง", "ดื่มน้ำผึ้งผสมเกลือแร่หลังตื่นนอนเพื่อคืนน้ำให้กล้ามเนื้อ", "ยืดโยคะท่า Child's Pose คลายกระดูกสันหลัง"], tips: "การพักผ่อนที่มีคุณภาพคือหัวใจหลักของการวิ่งได้เร็วและไม่เจ็บปวดครับ" },
+                        { id: "w3-d2", name: "วันอังคาร", type: "easy", title: "วิ่งสบายๆ เพื่อสะสมไมล์ (Easy Run)", desc: "สะสมระยะทางและเพิ่มการทนทานต่อการลงเท้าในสัปดาห์ที่ 3", metrics: "วิ่ง 4 Km. @ Pace 7:45 - 8:15", shoes: "clifton", steps: ["วอร์มอย่างน้อย 5 นาที ดึงส้นขึ้นด้านหลังบ่อยๆ", "วิ่งด้วยระบบหายใจลึกๆ 4 จังหวะ (เข้า-เข้า-ออก-ออก) เพื่อป้องกันการจุก", "หลังจบการซ้อม ยืดกล้ามเนื้อก้น สะโพก และน่องทันที"], tips: "วันนี้ก้าวขยับขึ้นมาที่ 4 Km แล้ว! สลับใช้ Clifton 9 เสมือนเป็นเบาะนุ่มหนารองรับฝ่าเท้าคู่นี้อย่างประณีต" },
+                        { id: "w3-d3", name: "วันพุธ", type: "strength", title: "สร้างปึกแผ่นแกนกลางแบบ Advanced", desc: "เน้นเกร็งท้องและกล้ามเนื้อพยุงหลังส่วนล่าง ป้องกันลำตัวบิดแกว่งตอนเริ่มเหนื่อย", metrics: "ฝึก Circuit 3 รอบ (เพิ่มเป็นท่าละ 50วิ พัก 10วิ)", shoes: "none", steps: ["Squat อย่างลึกและมั่นคง: เพื่อให้กล้ามเนื้อแกนกลางและต้นขารับภาระร่วมกัน", "Plank ด้วยการเกร็งท้องลึกถึงลิ้นปี่ คุมลมหายใจคงที่", "Glute Bridge พลักสะโพกสลับยกขาช้าๆ เพื่อเพิ่มการทำงานของก้นส่วนลึก", "Calf Raises เขย่งบนขอบบันไดหรือเกณฑ์ขอบทางเท้าเพื่อยืดน่องระดับสุด"], tips: "การปรับเวลาเหนื่อยเป็น 50 วินาทีจะช่วยท้าทายหัวใจและความฟิตให้คล้ายการวิ่งความเร็วสูง" },
+                        { id: "w3-d4", name: "วันพฤหัสบดี", type: "tempo", title: "ซ้อมช่วงก้าวที่เร็วขึ้นแบบมั่นใจ", desc: "ขยับขยายระบบไหลเวียนโลหิตด้วยความเร็วที่เพิ่มขึ้น เพื่อการก้าวไปสู่เป้าหมาย Pace 6", metrics: "วิ่ง 2K สลับเดิน 1 นาที (ทำซ้ำ 2 รอบ + วิ่งปิด 1K)", shoes: "boston", steps: ["วอร์มอัพยืดคลายเส้นที่ตึงในต้นขาเป็นสำคัญ", "รอบแรกก้าวยาวแบบคุมสติที่ Pace 6:50", "รอบสองผ่อนลงเล็กน้อยแต่คุมท่าลงกลางเท้า", "วิ่งปิดท้ายรอบสุดท้ายด้วย Pace สบายๆ ป้องกันการเกิดแรงตึงฉับพลัน"], tips: "ใส่ Boston 13 และถุงเท้าบาง คลายเชือกเหมือนเคย จะสัมผัสได้เลยว่ารองเท้าจะเด้งส่งตัวดีมากเมื่อกล้ามเนื้อน่องเริ่มแข็งแรงขึ้น" },
+                        { id: "w3-d5", name: "วันศุกร์", type: "rest", title: "พักผ่อนล้างกรดแลคติก", desc: "ฟื้นคืนความสดชื่นด้วยการนอนหลับพักผ่อนและการนวดเบาๆ", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["แช่เท้าในน้ำอุ่นประคบเย็นกระตุ้นเนื้อเยื่อเอ็นเท้า", "หลีกเลี่ยงการกินมื้อหนักดึกดื่น ปล่อยให้ลำไส้และหน้าท้องได้ฟื้นฟู", "ยืดน่องและฝ่าเท้ายามเช้าหลังตื่นนอนทันที"], tips: "ห้ามวิ่งเด็ดขาด ยิ่งพักได้ลึกเท่าไหร่ พลังงานสำหรับการวิ่งยาวในวันพรุ่งนี้ก็จะพุ่งสูงขึ้นเท่านั้น!" },
+                        { id: "w3-d6", name: "วันเสาร์", type: "long", title: "ก้าวข้ามกิโลเมตรที่ 6 แบบสบาย", desc: "เอาชนะกำแพงทางจิตใจและร่างกายด้วยการวิ่งที่สม่ำเสมอไร้จุกเสียด", metrics: "วิ่งยาว 6 Km. @ Pace 8:00 - 8:30", shoes: "clifton", steps: ["พกเจลพลังงานหรือลูกอมแก้จุกไว้ด้วย (จิบน้ำและแร่ธาตุสม่ำเสมอ)", "ให้จินตนาการว่าร่างกายเคลื่อนที่เหมือนรถไฟที่ควบคุมความเร็วคงที่สม่ำเสมอ", "หากรู้สึกเจ็บแน่นท้อง ให้ลดความเร็วลงเหลือเดินเร็วเพื่อคลายหน้าท้อง แล้วค่อยเริ่มวิ่งใหม่", "เหยียดต้นขาและสะโพกหลังวิ่งเสร็จสิ้น 10 นาทีขึ้นไป"], tips: "ระยะทาง 6 Km แล้วครับคุณมอส! เป็นระยะที่เริ่มฝึกความอึดของกล้ามเนื้อน่องและเท้ากว้าง ขอให้คงการหายใจที่ลึกสม่ำเสมอไว้" },
+                        { id: "w3-d7", name: "วันอาทิตย์", type: "rest", title: "พักกายและประเมินสัปดาห์สำคัญ", desc: "เสร็จสิ้นระยะครึ่งทางของการสร้างฐานร่างกาย ตรวจเช็คกล้ามเนื้ออย่างพึงพอใจ", metrics: "เดินพักผ่อนสบายๆ 25 นาที", shoes: "none", steps: ["ใช้เจลสมุนไพรทาบางๆ นวดน่องและสะโพกแก้ล้า", "ดื่มน้ำมะพร้าวธรรมชาติเพื่อชดเชยแร่ธาตุโพแทสเซียมแก่กล้ามเนื้อต้นขา", "เช็กดูว่าอาการตึงฝ่าเท้าตอนเช้าลดน้อยลงไปกว่าเดิมหรือยัง"], tips: "สัปดาห์ถัดไปเราจะขยับขยายปริมาณและรักษาระดับเพื่อให้เข้าใกล้ความเร็วเป้าหมายมากขึ้นครับ" }
+                    ]
+                },
+                {
+                    number: 4,
+                    title: "สัปดาห์ที่ 4: สัปดาห์ลดปริมาณเพื่อฟื้นฟู (Recovery Week)",
+                    focus: "พักฟื้นร่างกายและปรับกล้ามเนื้อหลังจากเจอการซ้อมหนัก 3 สัปดาห์แรก เพื่อหลีกเลี่ยงอาการบาดเจ็บสะสม",
+                    days: [
+                        { id: "w4-d1", name: "วันจันทร์", type: "rest", title: "พักคลายตึงสะสม", desc: "ให้วันพักได้ทำหน้าที่เติมความสดชื่นกลับมาสู่กล้ามเนื้ออย่างแท้จริง", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["ยืดเหยียดน่อง นวดใต้ฝ่าเท้าด้วยมือนุ่มนวล", "เน้นรับประทานผักผลไม้สีแดง เช่น ทับทิม มะเขือเทศ เพื่อช่วยกระบวนการต้านการอักเสบ", "นอนหลับให้เร็วและอิ่มขึ้น"], tips: "สัปดาห์นี้จะช่วยให้กล้ามเนื้อและเอ็นเท้าที่เจ็บระบมกับ Boston 13 คู่ใหม่ได้สมานและคุ้นเคยกับทรงรองเท้าอย่างเต็มที่ครับ" },
+                        { id: "w4-d2", name: "วันอังคาร", type: "easy", title: "วิ่งฟื้นฟูระยะสั้น (Recovery Run)", desc: "วิ่งเพื่อกระตุ้นหัวใจเบาๆ โดยไม่ก่อให้เกิดความล้าสะสมเพิ่ม", metrics: "วิ่ง 3 Km. @ Pace 8:00 - 8:30", shoes: "clifton", steps: ["เริ่มด้วยการเดินและหมุนข้อเท้าเบาๆ 5 นาที", "รักษาระดับชีพจรให้อยู่ในโซนที่ตื้นที่สุด ห้ามเหนื่อยหอบ", "เน้นจังหวะก้าวให้เบา นิ่มนวลที่สุด", "คูลดาวน์ด้วยการยืดเหยียดขาแบบโยคะ"], tips: "สวมใส่ Clifton 9 ที่คุณมอสคุ้นเคยดีที่สุด เพื่อการซัพพอร์ตอุ้งเท้าสูงแบบไร้จุดขัดใจในวันเบาๆ นี้" },
+                        { id: "w4-d3", name: "วันพุธ", type: "strength", title: "บอดี้เวทฟื้นฟูกำลังเชิงลึก", desc: "เน้นการฝึกท่ายืดหยุ่นแกนกลางลำตัวเพื่อความยืดหยุ่นและการควบคุมการเคลื่อนไหว", metrics: "ฝึก Circuit 3 รอบ (ท่าละ 35วิ พัก 25วิ)", shoes: "none", steps: ["Squat ช้าๆ แบบโฟกัสส้นเท้าเหยียบดินแน่นเพื่อคลายเอ็นเอ็นร้อยหวาย", "Plank แบบสมาธิ จับโฟกัสที่หน้าท้องส่วนล่างที่ควบคุมระบบปอด", "Glute Bridge ค้างไว้ 3 วินาทีก่อนลดลงเพื่อยืดกล้ามเนื้อด้านหน้าของข้อสะโพก", "Calf Raises ด้วยความเร็วปกติเพื่อบริหารเอ็นฝ่าเท้าแบบไร้ความรุนแรง"], tips: "สัปดาห์นี้ลดเวลาการทำท่าลงเพื่อช่วยให้ร่างกายคลายตึงตัวและตื่นตัวไปพร้อมกัน" },
+                        { id: "w4-d4", name: "วันพฤหัสบดี", type: "tempo", title: "สัมผัสความเร็วสั้นๆ ปลุกประสาทสัมผัส", desc: "ปลุกความไวของประสาทสั่งการกล้ามเนื้อช่วงขาสั้นๆ กับแผ่นดีดของ Boston 13", metrics: "วิ่ง 1K สลับเดิน 1 นาที (ทำซ้ำ 3 รอบ)", shoes: "boston", steps: ["ยืดเหยียดต้นขาและน่องให้ดีก่อนสตาร์ทเพื่อส่งเสริมให้ฝ่าเท้ารับแรงได้เต็มร้อย", "วิ่งที่ Pace 7:00 อย่างคุมสถานการณ์ได้ดีที่สุด", "เดินพักคุมระดับลมหายใจและจังหวะของหัวใจ 1 นาทีสั้นๆ", "วิ่งปิดเซ็ตเบาๆ แล้วยืดเหยียดสะโพกและเอ็นใต้เข่า"], tips: "ใส่ Boston 13 และถุงเท้าบาง คลายเชือกเช่นเคย จะพบว่าวันนี้รองเท้าจะกระชับเข้ากับเท้าของคุณมอสได้ยืดหยุ่นมากขึ้นแล้วกว่าสัปดาห์แรก" },
+                        { id: "w4-d5", name: "วันศุกร์", type: "rest", title: "พักคลายฝ่าเท้าอย่างสมบูรณ์", desc: "ใช้โอกาสนี้ให้กล้ามเนื้อเอ็นฝ่าเท้าได้สลัดความล้าสะสมออกไปจนหมดสิ้น", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["ใช้น้ำมันมะพร้าวอุ่นลูบนวดฝ่าเท้าและนิ้วเท้าแผ่แผ่ออกจากกัน", "ทานอาหารที่มีโอเมก้า 3 (ปลา, อะโวคาโด) เพื่อผ่อนคลายความตึงอักเสบของเนื้อเยื่อ", "นอนหลับพักผ่อนโดยไม่ตั้งนาฬิกาปลุกหากทำได้"], tips: "สัปดาห์ถัดไปเราจะเริ่มเข้าสู่เฟสพัฒนาความเร็ว วันนี้จึงสำคัญที่สุดในการคืนความสดชื่นกลับสู่ฝ่าเท้าครับ" },
+                        { id: "w4-d6", name: "วันเสาร์", type: "long", title: "วิ่งยาวระยะกลางแบบสบายตัว", desc: "รักษาระดับความอึดของร่างกายแบบไม่ใช้กำลังกล้ามเนื้อมากเกินจำเป็น", metrics: "วิ่งยาว 5 Km. @ Pace 8:00 - 8:30", shoes: "clifton", steps: ["วิ่งอย่างมีสติ ช้าๆ เบาๆ ราวกับจะกวาดล้างสารพิษในหัวใจออกไป", "โฟกัสไปที่มุมกล้ามเนื้อสะโพกและกล้ามเนื้อก้นที่ช่วยผลักตัว", "ยืดต้นขาด้านหน้าและหลังด้วยความระมัดระวังหลังวิ่งเสร็จ", "ดื่มน้ำผสมแร่ธาตุฟื้นฟูทันที"], tips: "ใส่ Hoka Clifton 9 วิ่งยาว 5 กม. สบายๆ คู่นี้จะช่วยพยุงโครงสร้างเท้ากว้างได้อย่างอ่อนโยนที่สุดในวันรักษาระดับ" },
+                        { id: "w4-d7", name: "วันอาทิตย์", type: "rest", title: "พร้อมรับเฟสยกระดับในสัปดาห์ถัดไป", desc: "เตรียมจิตใจและประเมินความฟิตความพร้อมหลังสัปดาห์ลดความตึงผ่านพ้นไป", metrics: "เดินเล่น 20 นาที", shoes: "none", steps: ["ทบทวนเป้าหมายและจดจำวันเวลาที่ผ่านไปอย่างภาคภูมิใจ", "เตรียมสลัดอาการบาดเจ็บเดิมให้พร้อมยืดขยับในเฟสความเร็วย่อยต่อไป", "พักผ่อนให้สบายใจลืมความเครียดจากการทำงานให้หมดสิ้น"], tips: "นวดฝ่าเท้าเบาๆ ครั้งสุดท้ายของสัปดาห์ สัปดาห์ต่อไปเตรียมพร้อมรับการวิ่งที่เร็วและแข็งแรงขึ้น!" }
+                    ]
+                }
+                // Weeks 5-8 are generated dynamically or continued with advanced paces (supported in-app via algorithm to save space but guarantee fully functional experience!)
+            ]
+        };
+
+        // Complete database generator for weeks 5-8 based on progression logic
+        function generateRemainingWeeks() {
+            // Week 5: Building Pace
+            programData.weeks.push({
+                number: 5,
+                title: "สัปดาห์ที่ 5: เริ่มต้นพัฒนาความเร็วปลายสัปดาห์",
+                focus: "ยกระดับขีดความสามารถในการรับแรง และหัดคุมความเหนื่อยล้าในสเต็ปที่ใกล้เป้าหมาย Pace 6:30",
+                days: [
+                    { id: "w5-d1", name: "วันจันทร์", type: "rest", title: "พักชาร์จแบตเต็มที่", desc: "นอนหลับลึกเพื่อคืนสภาพโครงสร้างฝ่าเท้าและน่อง", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["ใช้ลูกนวดฝ่าเท้าคลึงไล่เบาๆ", "ยืดโยคะเพื่อความยืดหยุ่นของแฮมสตริง", "เติมคาร์โบไฮเดรตเชิงซ้อนเพื่อสะสมพลังงาน"], tips: "กล้ามเนื้อต้นขาด้านหน้าและหลังของคุณมอสเริ่มคุ้นชินกับการดีดของ Boston 13 มากขึ้นแล้วในจุดนี้!" },
+                    { id: "w5-d2", name: "วันอังคาร", type: "easy", title: "วิ่งสบายเพิ่มระยะยืดหยุ่น (Easy Run)", desc: "วิ่งสะสมปริมาตรแบบผ่อนคลายอย่างต่อเนื่อง", metrics: "วิ่ง 4.5 Km. @ Pace 7:30 - 8:00", shoes: "clifton", steps: ["เดินวอร์ม 5 นาที เน้นการบิดข้อต่อสะโพกเพื่อผ่อนคลายกล้ามเนื้อต้นขา", "รักษาระดับความเร็วให้นิ่ง หายใจเข้า-ออกลึกสม่ำเสมอ", "ยืดเหยียดน่อง ฝ่าเท้า และต้นขาเป็นระยะเวลา 10 นาทีหลังวิ่งจบ"], tips: "ใช้ Clifton 9 เคลื่อนตัวด้วยความนุ่มซัพพอร์ต เพื่อปกป้องเท้าจากการลงน้ำหนักสะสม" },
+                    { id: "w5-d3", name: "วันพุธ", type: "strength", title: "บอดี้เวทเข้มข้นขึ้นรับช่วงก้าวเร่ง", desc: "เพิ่มแรงทนทานของหน้าขาและสะโพกเพื่อช่วยลดโอกาสเจ็บข้อเข่า", metrics: "ฝึก Circuit 3 รอบ (ท่าละ 45วิ พัก 15วิ)", shoes: "none", steps: ["Squat ช้าๆ แบบลึกเพื่อฝึกส้นเท้าให้มั่นคง", "Plank แบบสั่นเพื่อเพิ่มปริมาณความทนทานแกนกลาง", "Glute Bridge พลักสะโพกสลับยกเท้าสูง", "Calf Raises เพิ่มการเขย่งแบบนิ่งค้างด้านบน 2 วินาทีเพื่อสร้างแรงสปริงตัว"], tips: "การเกร็งค้างในท่า Calf Raises ช่วยให้เอ็นฝ่าเท้าทนทานต่อแรงดีดดีขึ้นอย่างน่าอัศจรรย์ครับ" },
+                    { id: "w5-d4", name: "วันพฤหัสบดี", type: "tempo", title: "ซ้อมช่วงสั้นระดับความเร็วเป้าหมาย (Intervals)", desc: "หัดวิ่งด้วย Pace ใกล้เคียงความเร็วเป้าหมายเพื่อฝึกระบบประสาทและการรับแรงดีด", metrics: "วิ่ง 1K @ Pace 6:30 สลับเดิน 1 นาที (ทำซ้ำ 4 รอบ)", shoes: "boston", steps: ["วอร์มอัพร่างกายด้วยการจ็อกกิ้งเบาๆ 5 นาที", "ในรอบวิ่ง: เร่งขึ้นไปที่ Pace 6:30-6:40 อย่างสม่ำเสมอ รักษาตำแหน่งการวิ่งให้สมดุล", "เดินสลับพัก 1 นาทีคุมลมหายใจให้คงที่", "ยืดเหยียดน่องและสะโพกเพื่อล้างความล้าทันทีหลังจากเซ็ตสุดท้ายจบ"], tips: "สวมรองเท้าคู่ใจ Boston 13 คู่กับถุงเท้าบาง คลายสายเชือกหน้าเท้าให้รู้สึกเป็นอิสระที่สุด จะรู้สึกเด้งและสนุกอย่างยิ่ง" },
+                    { id: "w5-d5", name: "วันศุกร์", type: "rest", title: "พักคืนสภาพกล้ามเนื้อแฮมสตริง", desc: "ดูแลกล้ามเนื้อต้นขาด้านหลังที่เพิ่งถูกเร่งแรงในวันวิ่งเร็ว", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["นอนหงายดึงข้อขาหาหน้าอกยืดสะโพกและแฮมสตริงเป็นเวลา 1 นาทีต่อข้าง", "ดื่มนมอุ่นเพื่อเสริมโปรตีนซ่อมสร้างโครงสร้างกระดูกและเอ็นเท้า", "นวดใต้ฝ่าเท้าด้วยลูกเทนนิสเพื่อคลายพังผืด"], tips: "สัปดาห์นี้จะเริ่มตึงขาช่วงบนเพราะเริ่มมีความเร็ว ขอให้นวดคลายและดื่มน้ำมากๆ เพื่อช่วยฟื้นฟูครับ" },
+                    { id: "w5-d6", name: "วันเสาร์", type: "long", title: "ก้าวแตะระยะทางกิโลที่ 7 แบบมั่นใจ", desc: "พิสูจน์ความทนทานของปอดและการควบคุมจังหวะการหายใจเพื่อป้องกันการจุกแน่นหน้าอก", metrics: "วิ่งยาว 7 Km. @ Pace 7:45 - 8:15", shoes: "clifton", steps: ["คุมจังหวะออกตัวให้ช้าที่สุด (Pace 8:30) ในกิโลเมตรแรก เพื่อให้ทางเดินหายใจตื่นตัวช้าๆ", "รักษาการลงเท้าให้นุ่มนวลเสมือนวิ่งบนก้อนเมฆ คุมหลังตรง", "หากเจอปัญหาจุกท้อง ให้รีบลดความเร็วลงจนเดินช้าแล้วยกมือขึ้นกดเบาๆ บนจุดที่จุกหายใจเข้าลึกๆ", "หลังวิ่งคูลดาวน์และยืดต้นขากับฝ่าเท้าให้ถึงเพื่อความสดใหม่ในวันหน้า"], tips: "ระยะทาง 7 กิโลเมตรกับ Clifton 9 นุ่มๆ วันนี้จะทำให้คุณมอสสัมผัสได้ถึงความอึดของกล้ามเนื้อหัวใจที่ขยายตัวมากขึ้นอย่างไม่จุกเสียดแน่นอน!" },
+                    { id: "w5-d7", name: "วันอาทิตย์", type: "rest", title: "พักผ่อนคลายจุดตึงตัว", desc: "ฟื้นสภาพร่างกายอย่างมีความสุขเพื่อเตรียมตัวสำหรับความท้าทายในสัปดาห์ถัดไป", metrics: "เดินพักผ่อนสบายๆ 25 นาที", shoes: "none", steps: ["ยืดน่องและข้อเท้าเบาๆ", "ทายานวดบรรเทาปวดที่หน้าขาและเอ็นใต้สะบ้า", "สวมรองเท้าแตะซัพพอร์ตฝ่าเท้าเวลาเดินทั่วไป"], tips: "สัปดาห์ที่ 5 ผ่านพ้นไปด้วยความเก่งกาจ ปอดของคุณมอสมีความแข็งแกร่งอย่างไม่เคยเป็นมาก่อนแล้วครับ" }
+                ]
+            });
+
+            // Week 6: Consolidation
+            programData.weeks.push({
+                number: 6,
+                title: "สัปดาห์ที่ 6: เพิ่มระดับความทนทานต่อความล้า",
+                focus: "ฝึกรักษารอบขาและความเร็วยาวขึ้นอย่างมั่นคง ทรงประสิทธิภาพ ไร้อาการเจ็บตึงฝ่าเท้า",
+                days: [
+                    { id: "w6-d1", name: "วันจันทร์", type: "rest", title: "วันพักเพื่อการเติบโต", desc: "พักสลายความล้าสะสมจากการวิ่งยาว 7 กม. สดๆ ร้อนๆ", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["ประคบเย็นใต้ฝ่าเท้าหากยังมีการเต้นระบมเบาๆ", "ทานวิตามินซีและแร่ธาตุจำเป็นสม่ำเสมอ", "ยืดต้นขาด้านหน้าและน่องสม่ำเสมอ"], tips: "การพักผ่อนที่มีคุณภาพคือยาที่ดีที่สุดเพื่อยับยั้งอาการบาดเจ็บรุนแรงครับ" },
+                    { id: "w6-d2", name: "วันอังคาร", type: "easy", title: "วิ่งซึมซับปริมาตรอย่างต่อเนื่อง (Easy Run)", desc: "วิ่งเพื่อความเพลิดเพลินและคุ้นชินของปอดและหัวใจ", metrics: "วิ่ง 5 Km. @ Pace 7:30 - 8:00", shoes: "clifton", steps: ["วอร์มอัพด้วยท่าบิดสะโพกและแกว่งขาก่อนวิ่ง 5 นาที", "รักษาความเร็วให้คงที่ตลอดสม่ำเสมอ ประคองลมหายใจเข้าลึกออกยาว", "ยืดคูลดาวน์ขาทุกกลุ่มมัดกล้ามเนื้อ"], tips: "ใส่ Clifton 9 วิ่งระยะ 5 กม. สบายๆ คู่นี้จะทำให้เท้ากว้างของท่านมีความสุขมากยิ่งขึ้น" },
+                    { id: "w6-d3", name: "วันพุธ", type: "strength", title: "บอดี้เวทสร้างโครงสร้างทองคำ", desc: "ฝึกกล้ามเนื้อพยุงหลัง หน้าท้อง และน่องรับน้ำหนักแรงระเบิด", metrics: "ฝึก Circuit 3 รอบ (ท่าละ 45วิ พัก 15วิ)", shoes: "none", steps: ["Squat ช้าๆ แบบทิ้งน้ำหนักลงส้นเท้าหลังตรงแนวตั้ง", "Plank ด้วยความมั่นคงคุมช่องท้องคงที่", "Glute Bridge ค้างด้านบนเกร็งก้นให้เป็นลูก", "Calf Raises บริหารกล้ามเนื้อน่องล่างอย่างทรงประสิทธิภาพ"], tips: "แกนกลางที่สตรองในสัปดาห์ที่ 6 นี้จะเป็นปราการสำคัญด่านสุดท้ายเพื่อไม่ให้เกิดการจุกแน่นบริเวณหน้าอกยามวิ่งเร็ว" },
+                    { id: "w6-d4", name: "วันพฤหัสบดี", type: "tempo", title: "ฝึกวิ่งด้วยความเร็ว Tempo ที่ทรงพลัง", desc: "ทดสอบการรับแรงดีดและการผลักตัวของแผ่นคาร์บอน Boston 13 นานขึ้น", metrics: "วิ่ง 2K @ Pace 6:30 สลับเดิน 1 นาที (ทำซ้ำ 2 รอบ)", shoes: "boston", steps: ["วอร์มยืดเหยียดร่างกายให้ดีเป็นพิเศษเนื่องจากวันนี้วิ่งความเร็วระยะยาวขึ้น", "วิ่งรอบแรกที่ Pace 6:30 รักษาระดับลมหายใจให้ดีและต่อเนื่อง", "เดินผ่อนคลายลมหายใจคุมชีพจร 1 นาทีสั้นๆ", "ลุยรอบที่สองด้วยความรู้สึกทรงพลัง ลงน้ำหนักกลางเท้าอย่างมั่นคง", "คูลดาวน์และยืดเหยียดช่วงหน้าขาและฝ่าเท้าอย่างประณีตทันทีหลังวิ่งจบ"], tips: "สวม Boston 13 และถุงเท้าบาง คลายเชือกร้อยหน้าเท้าอย่างระมัดระวัง ฟันธงเลยว่าจะสัมผัสความลื่นไหลความเร็วระดับใหม่ได้เป็นรูปธรรมขึ้นแล้วครับ" },
+                    { id: "w6-d5", name: "วันศุกร์", type: "rest", title: "พักผ่อนพร้อมเตรียมลุยเป้าหมายใหม่", desc: "ให้ร่างกายฟื้นคืนระบบชีวกลศาสตร์เต็มร้อยเปอร์เซ็นต์", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["แช่เท้าคลายกล้ามเนื้อฝ่าเท้าเบาๆ", "นอนหลับให้เร็วและอุ่นสบายตัว", "หลีกเลี่ยงการก้มเงยหยิบของหนักป้องกันปวดตึงแฮมสตริง"], tips: "ห้ามทำกิจกรรมที่สร้างความเหนื่อยล้าสะสมในวันนี้ เพื่อวันเสาร์วิ่งยาวที่สดชื่น" },
+                    { id: "w6-d6", name: "วันเสาร์", type: "long", title: "วิ่งยาวข้ามกิโลเมตรที่ 8 สู่ฝัน", desc: "ขยายขอบเขตความอึดของปอดและหัวใจเข้าใกล้เป้าหมาย 10 กิโลเมตรอย่างแท้จริง", metrics: "วิ่งยาว 8 Km. @ Pace 7:45 - 8:15", shoes: "clifton", steps: ["เตรียมความพร้อม: ทานกล้วยน้ำว้า 1 ลูกล่วงหน้าก่อนวิ่ง 1 ชั่วโมง เพื่อเติมแป้งคาร์บโภชนาการป้องกันจุกท้อง", "วิ่งด้วย Pace ผ่อนคลายคงที่ตั้งแต่ต้นจนจบ", "ระลึกเสมอว่าต้องหายใจลึกยาวๆ ทรงประสิทธิภาพ อย่าหายใจสั้นรัว", "หลังจบการซ้อม ยืดเหยียดสะโพกและฝ่าเท้าเพื่อป้องกันตึงสะสม"], tips: "ระยะทาง 8 Km แล้วคุณมอส! ใช้ Clifton 9 นุ่มๆ วันนี้เพื่อปกป้องฝ่าเท้ากว้างอุ้งเท้าสูงของคุณมอสอย่างทะนุถนอมที่สุดในการวิ่งระยะยาวแบบใหม่นี้" },
+                    { id: "w6-d7", name: "วันอาทิตย์", type: "rest", title: "วันอาทิตย์แสนสงบหลังชัยชนะย่อย", desc: "ฟื้นคืนความสมบูรณ์และเติมเต็มรอยยิ้มอย่างพึงพอใจ", metrics: "เดินคลายล้าเบาๆ 20 นาที", shoes: "none", steps: ["นวดฝ่าเท้านุ่มๆ ด้วยมือ", "ทานสเต็กหรือเนื้อสัตว์เพื่อฟื้นคืนมัดกล้ามเนื้อต้นขา", "นอนหลับพักผ่อนโดยไม่คิดเรื่องกังวลใดๆ"], tips: "สัปดาห์ถัดไปเราจะสัมผัสความเร็วปลายทางที่เตรียมไปทดสอบวิ่งจริง 10 กิโลเมตรแล้วครับ!" }
+                ]
+            });
+
+            // Week 7: Peak Performance
+            programData.weeks.push({
+                number: 7,
+                title: "สัปดาห์ที่ 7: จุดสูงสุดของการฝึกซ้อม (Peak Week)",
+                focus: "จำลองความเร็วเป้าหมายเสมือนวันวิ่งจริง ทดสอบความเร็วและระบบความอึดปอดอย่างมีคุณภาพสูงสุด",
+                days: [
+                    { id: "w7-d1", name: "วันจันทร์", type: "rest", title: "วันพักเพื่อสะสมแรงระเบิด", desc: "ร่างกายต้องการพลังงานดิบสูงที่สุดในรอบสัปดาห์เพื่อลุยซ้อมพีคสุดสัปดาห์นี้", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["นวดฝ่าเท้าและเอ็นน่องอย่างละเอียดประณีต", "ทานผักและโปรตีนชั้นยอดฟื้นโครงสร้างกล้ามเนื้อ", "ดื่มน้ำสะอาดสม่ำเสมอตลอดวันประมาณ 2.5 - 3 ลิตร"], tips: "วันนี้อย่าให้มีภารกิจเหนื่อยกาย คลึงจุดที่เจ็บตึงด้วยความนิ่มนวลครับ" },
+                    { id: "w7-d2", name: "วันอังคาร", type: "easy", title: "วิ่งสบายเตรียมกระสุนความเร็ว (Easy Run)", desc: "วิ่งกระตุ้นปอดหัวใจเบาๆ ให้ระบบไหลเวียนโลหิตไหลลื่นคล่องตัว", metrics: "วิ่ง 5 Km. @ Pace 7:30 - 8:00", shoes: "clifton", steps: ["วอร์มอัพให้กล้ามเนื้อแกนกลางและต้นขารู้สึกร้อนขึ้นพร้อมทำงาน", "วิ่งตามสเต็ปที่มั่นคงเบาสบาย หายใจลึกๆ โล่งๆ ท้องสบาย", "หลังเสร็จ ยืดเหยียดน่อง คางสะบ้า และไอทีแบนด์ให้เรียบร้อย"], tips: "สวมใส่ Clifton 9 เป็นตัวนำพาความสะดวกสบายกระชับฝ่าเท้าในวันนี้เพื่อลดแรงสะสมจากปลายเท้าครับ" },
+                    { id: "w7-d3", name: "วันพุธ", type: "strength", title: "บอดี้เวทป้องกันการสั่นคลอนหน้าขา", desc: "การยกสะโพกและเกร็งแกนกลางด่านสุดท้ายเพื่อคงเสถียรภาพวันวิ่งเร็วพรุ่งนี้", metrics: "ฝึก Circuit 3 รอบ (ท่าละ 45วิ พัก 15วิ)", shoes: "none", steps: ["Squat ช้าๆ ย่อลึกให้กล้ามเนื้อหน้าขาแกร่ง", "Plank แบบคุมลมหายใจเสมือนเวลาวิ่งเหนื่อยจริงๆ", "Glute Bridge พลักสะโพกกระตุ้นก้นและหลังต้นขา", "Calf Raises บริหารข้อพยุงเขย่งน่องและฝ่าเท้า"], tips: "ฝึกเกร็งท้องลึกร่วมกับลมหายใจอย่างมีสมาธิ วันนี้แกนกลางคุณมอสพร้อมสู้แรงกระเพื่อมแน่นอน!" },
+                    { id: "w7-d4", name: "วันพฤหัสบดี", type: "tempo", title: "ทดสอบ Pace วันแข่งจริงกับ Boston 13", desc: "ซ้อมสัมผัสและรักษาระดับ Pace เป้าหมาย Sub 1 สั้นๆ เพื่อสร้างความคุ้นเคยและความมั่นใจ", metrics: "วิ่ง 3 Km. @ Pace 6:00 (Tempo คงที่)", shoes: "boston", steps: ["วอร์มอัพ 5 นาที ยืดเหยียดร่างกายแบบแอคทีฟ (Dynamic Stretch)", "ออกตัวช้าๆ ใน 500 เมตรแรกเพื่อจัดมุมก้าวก่อนเร่งขึ้นที่ Pace 6:00 ตรงสม่ำเสมอ", "หายใจเข้าท้องโป่ง-ออกท้องแฟบ ลึกๆ อย่างทรงพลัง คุมชีพจรไม่ให้พุ่งทะลุ", "หลังวิ่งเสร็จ จ็อกกิ้งช้าลงจนเดิน 5 นาทีเพื่อคูลดาวน์ และยืดเหยียดน่องฝ่าเท้าทันที"], tips: "สวม Boston 13 ถุงเท้าบาง คลายเชือกรองเท้าเช่นเคย จะสัมผัสได้เลยว่ารอบขากระฉับกระเฉงเข้าใกล้ Pace 6:00 ได้อย่างยอดเยี่ยมครับ" },
+                    { id: "w7-d5", name: "วันศุกร์", type: "rest", title: "พักฟื้นร่างเพื่อกิโลเมตรที่ 9", desc: "เตรียมความฟิตของเนื้อเยื่อเพื่อรองรับการวิ่งระยะทางไกลที่สุดในวันพรุ่งนี้", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["แช่เท้าในอ่างเกลืออุ่นนวดผ่อนคลายฝ่าเท้าเป็นพิเศษ", "เน้นกินข้าวหรือแป้งคาร์บดี เพื่อเติมไกลโคเจนให้กล้ามเนื้อต้นขา", "นอนหลับพักผ่อนให้ยาวนานขึ้นกว่าปกติ"], tips: "พรุ่งนี้จะเป็นวันวิ่งยาวที่สุดในตารางซ้อมนี้ (9 Km) ขอให้พักผ่อนจิตใจให้สบายที่สุดครับคุณมอส" },
+                    { id: "w7-d6", name: "วันเสาร์", type: "long", title: "วิ่งยาวขั้นสูงสุดพิชิตระยะทาง 9 Km", desc: "ขยายพลังปอดและขีดจำกัดความอึดกล้ามเนื้อสู่ขอบเขตสุดท้ายก่อนวันทดสอบวิ่งจริง 10 กิโลเมตร", metrics: "วิ่งยาว 9 Km. @ Pace 7:45 - 8:15", shoes: "clifton", steps: ["เตรียมจิบแร่ธาตุและน้ำตั้งแต่ก่อนเริ่ม และพกเจล/แร่ธาตุระหว่างวิ่งเพื่อแก้จุกและคลายล้า", "ออกตัวอย่างใจเย็นที่สุด Pace 8:15 เพื่อป้องกันการกระเพื่อมปอดฉับพลัน (กันจุกกิโลเมตรที่ 3)", "ก้าวไปอย่างสม่ำเสมอ ผ่อนคลายช่วงไหล่และหลังให้ตรง ทรงประสิทธิภาพ", "หลังซ้อมวิ่งสำเร็จ ดื่มน้ำเกลือแร่และโปรตีน ชื่นชมความมุ่งมั่น และยืดเหยียดน่อง สะโพก หน้าขาอย่างละเอียดประณีต 15 นาที"], tips: "สุดยอดมากครับคุณมอส! 9 Km กับ Clifton 9 คู่เก่ง วันนี้คือชัยชนะยิ่งใหญ่ที่สะท้อนว่าระบบปอดและขาของคุณพร้อมสำหรับ 10K Sub 1 แล้ว!" },
+                    { id: "w7-d7", name: "วันอาทิตย์", type: "rest", title: "พักฟื้นเพื่อสัปดาห์ลดระยะ (Taper Week)", desc: "ผ่อนคลายร่างกายอย่างสมบูรณ์เพื่อปลดล็อกขีดความสามารถที่สะสมมาทั้งหมด", metrics: "เดินเล่นช้าๆ 20 นาที", shoes: "none", steps: ["ประคบคลายจุดตึงที่สะโพกและน่อง", "ทานของอร่อยที่มีคุณค่าทางอาหารเป็นรางวัลชีวิต", "ทำใจให้สบายเพื่อต้อนรับสัปดาห์สุดท้าย"], tips: "สัปดาห์ต่อไปเราจะลดระยะทางลงเพื่อนำความสดชื่นสูงสุดไปสู้ในวันวิ่งจริง 10K Sub 1 ครับ!" }
+                ]
+            });
+
+            // Week 8: Taper & Goal Execution
+            programData.weeks.push({
+                number: 8,
+                title: "สัปดาห์ที่ 8: ลดระยะซ้อมสู่ความสดสูงสุดและวันพิชิตฝัน (Race Week)",
+                focus: "ลดระยะทางวิ่งซ้อมลงเพื่อสะสมความสดของกล้ามเนื้อ และปลดปล่อยความเร็วขีดสุดในวันทดสอบวิ่งจริง 10K Sub 1",
+                days: [
+                    { id: "w8-d1", name: "วันจันทร์", type: "rest", title: "วันพักเพื่อสะสมพลังสำรอง", desc: "ไม่มีการใช้แรงกล้ามเนื้อหนักหน่วง ปล่อยให้ระบบเซลล์ในร่างกายฟื้นกลับมาสมบูรณ์สูงสุด", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["นวดฝ่าเท้าเบาๆ ด้วยลูกเทนนิสเพื่อกระตุ้นและผ่อนคลายเอ็นเอฟฟัส", "ยืดต้นขาด้านหน้า แฮมสตริง และน่อง ท่าละ 30 วินาที", "นอนหลับลึกเพื่อเติมพลังงานสมองและร่างกาย"], tips: "ห้ามทำกิจกรรมที่เหนื่อยล้า วันนี้คือการสะสมพลังงานดิบของกล้ามเนื้อต้นขาเพื่อวันวิ่งจริงครับ" },
+                    { id: "w8-d2", name: "วันอังคาร", type: "easy", title: "วิ่งสบายๆ กระตุ้นรอบขา (Easy Recovery)", desc: "วิ่งสั้นๆ นิ่มๆ ให้เลือดไหลเวียนและคงความยืดหยุ่นของมัดกล้ามเนื้อ", metrics: "วิ่ง 3 Km. @ Pace 7:45 - 8:15", shoes: "clifton", steps: ["เดินวอร์มอย่างน้อย 5 นาที ให้กล้ามเนื้อยืดตัวนุ่มนวล", "วิ่งอย่างมีความสุข นุ่มสบายเท้า ลงน้ำหนักเต็มฝ่าเท้า", "ยืดเหยียดน่องและสะโพกให้สบายหลังวิ่งจบ"], tips: "สวมใส่ Clifton 9 เป็นตัวนำพาร่างกายให้อ่อนนุ่ม ชินเท้า สลายความตึงเครียดของกล้ามเนื้อน่องล่าง" },
+                    { id: "w8-d3", name: "วันพุธ", type: "strength", title: "บอดี้เวทแบบเบาๆ กระตุ้นแกนกลาง (Light Workout)", desc: "กระตุ้นกล้ามเนื้อทรงตัวแบบไม่สร้างความบอบช้ำหรือความล้าให้กล้ามเนื้อขา", metrics: "ฝึก Circuit 2 รอบ (ลดเหลือ 2 รอบพอ คลายเหนื่อย)", shoes: "none", steps: ["Squat ช้าๆ ย่อกึ่งกลาง 10 ครั้ง เพื่อกระตุ้นกล้ามเนื้อรอบเข่า", "Plank ค้างสั้นๆ 30 วินาที คุมการหายใจเข้า-ออกลึกเพื่อคุมกระบังลม", "Glute Bridge ยกกระตุ้นก้น 10 ครั้งกระชับรอบสะโพก", "Calf Raises เขย่งบนพื้นราบแบบเบาสบาย 15 ครั้งเพื่อปลุกสัมผัสสปริงน่อง"], tips: "วันนี้ลดความหน่วงลงมาก เพื่อสร้างความตื่นตัวให้กล้ามเนื้อโดยไม่ทิ้งความตึงล้าไว้ข้ามวัน" },
+                    { id: "w8-d4", name: "วันพฤหัสบดี", type: "tempo", title: "สัมผัสความเร็วปลายทางสั้นๆ (Stride Run)", desc: "กระตุ้นฝีเท้าและความรู้สึกมั่นใจในความเร็วเป้าหมายที่จะใช้วิ่งจริง", metrics: "วิ่ง 2 Km. @ Pace 6:15 - 6:30", shoes: "boston", steps: ["วอร์มอัพยืดคลายต้นขาให้โล่งสบายตัวที่สุดก่อนวิ่ง", "วิ่งด้วย Pace สบายค่อนไปทางเร็วปานกลาง รักษารอบขาจัดระเบียบท่าวิ่งให้สวยงามและคงที่", "หายใจเข้าลึกๆ คุมชีพจรให้สงบนิ่ง", "หลังวิ่งเสร็จ จ็อกกิ้งช้าคูลดาวน์ และยืดเหยียดน่องฝ่าเท้าทันที"], tips: "วันนี้ใส่ Boston 13 ถุงเท้าบาง คลายเชือกเพื่อสร้างการซึมซับและคุ้นเคยกับแผ่นดีดรอบสุดท้ายอย่างปลอดภัยและกระฉับกระเฉง" },
+                    { id: "w8-d5", name: "วันศุกร์", type: "rest", title: "พักสงบสะสมความสดชื่นสุดท้าย", desc: "คืนความสมบูรณ์แบบ 100% สู่มัดกล้ามเนื้อ เอ็นเท้า และระบบทางเดินหายใจของร่างกาย", metrics: "พักผ่อน (Rest)", shoes: "none", steps: ["นวดฝ่าเท้านุ่มๆ ด้วยมือ คลายความฝืดในทุกจุดใต้ฝ่าเท้า", "เน้นรับประทานคาร์โบไฮเดรตคุณภาพดี (ข้าวกล้อง, พาสต้า, มันหวาน)", "จัดเตรียมนอนหลับยาว 8 ชั่วโมงขึ้นไป"], tips: "สู้มาตั้ง 8 สัปดาห์แล้วคุณมอส วันนี้พักให้สงบและปล่อยวางเรื่องกังวลทั้งหมดเพื่อวันสำคัญในวันพรุ่งนี้!" },
+                    { id: "w8-d6", name: "วันเสาร์", type: "race", title: "วันพิชิตฝัน: วิ่งจริง 10K Sub 1", desc: "ปลดปล่อยพลังงานและความอึดที่สะสมมาทั้งหมดตลอด 8 สัปดาห์ เพื่อพิชิตเป้าหมายวิ่ง 10 กิโลเมตรในเวลาต่ำกว่า 60 นาที!", metrics: "วิ่งทดสอบจริง 10 Km. (เป้าหมาย: คุม Pace 5:55 - 5:59)", shoes: "boston", steps: ["ทานกล้วยหรือแป้งพลังงานย่อยง่าย 1.5 - 2 ชั่วโมงก่อนวิ่งเพื่อกันจุกท้องและเติมพลัง", "วอร์มอัพร่างกายและยืดกล้ามเนื้อต้นขาอย่างละเอียด 10-15 นาที", "1-2 กิโลเมตรแรก: ห้ามบ้าพลังเด็ดขาด! ให้ประคองที่ Pace 6:10 ก่อน เพื่อให้ปอดและกระบังลมปรับสมดุล (ป้องกันจุดจุกท้องเด็ดขาด)", "3-8 กิโลเมตร: เข้าสู่จังหวะบินออร์แกนิค คุม Pace สม่ำเสมอที่ 5:55 หายใจเข้า-ออกลึกๆ ปล่อยให้ Boston 13 ดีดพาตัวไปข้างหน้าอย่างเบาสบาย", "9-10 กิโลเมตร: ปลดปล่อยความเร็วสะสมตามพลังที่เหลือ มุ่งตรงสู่เป้าหมายด้วยรอยยิ้ม!", "หลังจบการวิ่ง: เดินช้าๆ คูลดาวน์ ดื่มน้ำผสมเกลือแร่ และยืดเหยียดร่างกายทุกมัดกล้ามเนื้อเพื่อเฉลิมฉลองความสำเร็จ!"], tips: "คู่หูวันแข่ง: สวมใส่ Adidas Boston 13 + ถุงเท้าแบบบาง คลายเชือกร้อยหน้าเท้าให้ยืดหยุ่น ปลดปล่อยแรงดีดส่งของรองเท้าให้เต็มที่ครับ คุณมอสทำได้แน่นอน!" },
+                    { id: "w8-d7", name: "วันอาทิตย์", type: "rest", title: "เฉลิมฉลองความสำเร็จและพักผ่อน", desc: "แสดงความยินดีกับชัยชนะที่เกิดจากวินัยและการซ้อมอย่างปลอดภัย!", metrics: "พักผ่อนเต็มรูปแบบ (Rest)", shoes: "none", steps: ["ทานอาหารมื้อพิเศษเพื่อเฉลิมฉลองและซ่อมสร้างร่างกาย", "นวดผ่อนคลายกล้ามเนื้อทั้งน่อง ต้นขา และฝ่าเท้าเบาๆ", "นอนหลับพักผ่อนอย่างมีความสุขกับสถิติใหม่ 10K Sub 1!"], tips: "ความสม่ำเสมอและวินัยของคุณมอสคือสิ่งที่ทำให้เป้าหมายนี้เป็นจริงขึ้นมาได้ ยินดีด้วยอย่างยิ่งครับ!" }
+                ]
+            });
+        }
+
+        // Initialize dynamic weeks
+        generateRemainingWeeks();
+
+        // App state
+        let currentWeekNum = 1;
+        let selectedDayId = null;
+        
+        // Progress tracking state (stored in localStorage)
+        let completedDays = {};
+        
+        // Load progress from localStorage if exists
+        function loadProgress() {
+            const saved = localStorage.getItem('moss_running_progress');
+            if (saved) {
+                try {
+                    completedDays = JSON.parse(saved);
+                } catch(e) {
+                    completedDays = {};
+                }
+            }
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            localStorage.setItem('moss_running_progress', JSON.stringify(completedDays));
+            updateOverallProgress();
+        }
+
+        // Initialize Week navigation buttons
+        function renderWeekButtons() {
+            const container = document.getElementById('week-buttons');
+            container.innerHTML = '';
+            
+            programData.weeks.forEach(week => {
+                const btn = document.createElement('button');
+                btn.className = `flex-1 py-3 px-2 rounded-xl text-xs font-bold transition-all text-center border ${
+                    week.number === currentWeekNum 
+                        ? 'bg-gradient-to-br from-indigo-600 to-purple-750 text-white border-indigo-500 shadow-lg shadow-indigo-600/30' 
+                        : 'bg-slate-750 hover:bg-slate-700 text-slate-300 border-slate-700/60'
+                }`;
+                btn.innerHTML = `
+                    <div class="block text-[10px] opacity-75">สัปดาห์</div>
+                    <div class="text-base">${week.number}</div>
+                `;
+                btn.onclick = () => selectWeek(week.number);
+                container.appendChild(btn);
+            });
+        }
+
+        // Handle week selection
+        function selectWeek(weekNum) {
+            currentWeekNum = weekNum;
+            renderWeekButtons();
+            
+            const week = programData.weeks.find(w => w.number === weekNum);
+            document.getElementById('current-week-badge').innerText = `สัปดาห์ที่ ${weekNum}`;
+            document.getElementById('current-week-title').innerText = `${week.title}`;
+            document.getElementById('current-week-focus').innerText = `${week.focus}`;
+            
+            renderDays(week.days);
+            
+            // Auto-select first day of the week on week change
+            if (week.days && week.days.length > 0) {
+                selectDay(week.days[0].id);
+            }
+        }
+
+        // Render days list for selected week
+        function renderDays(days) {
+            const container = document.getElementById('days-container');
+            container.innerHTML = '';
+            
+            days.forEach(day => {
+                const isCompleted = !!completedDays[day.id];
+                const isSelected = day.id === selectedDayId;
+                
+                // Color formatting based on training type
+                let typeColorClass = "bg-slate-700 border-slate-600 text-slate-300";
+                let typeIcon = "fa-solid fa-moon";
+                if (day.type === "easy") { typeColorClass = "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"; typeIcon = "fa-solid fa-feather"; }
+                else if (day.type === "tempo") { typeColorClass = "bg-amber-500/10 border-amber-500/20 text-amber-400"; typeIcon = "fa-solid fa-bolt"; }
+                else if (day.type === "long") { typeColorClass = "bg-pink-500/10 border-pink-500/20 text-pink-400"; typeIcon = "fa-solid fa-route"; }
+                else if (day.type === "strength") { typeColorClass = "bg-purple-500/10 border-purple-500/20 text-purple-400"; typeIcon = "fa-solid fa-dumbbell"; }
+                else if (day.type === "race") { typeColorClass = "bg-rose-500/10 border-rose-500/20 text-rose-400"; typeIcon = "fa-solid fa-trophy"; }
+                
+                const card = document.createElement('div');
+                card.id = `day-card-${day.id}`;
+                card.className = `p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-4 ${
+                    isSelected 
+                        ? 'bg-slate-750 border-indigo-500 shadow-md shadow-indigo-500/5' 
+                        : 'bg-slate-800/60 border-slate-700/60 hover:bg-slate-750/50'
+                }`;
+                
+                card.innerHTML = `
+                    <div class="flex items-center gap-3.5 flex-1 min-w-0" onclick="selectDay('${day.id}')">
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <input type="checkbox" id="checkbox-${day.id}" ${isCompleted ? 'checked' : ''} 
+                                   onclick="event.stopPropagation(); toggleDayCompleted('${day.id}')"
+                                   class="w-4 h-4 rounded border-slate-600 text-indigo-600 bg-slate-900 focus:ring-indigo-500 focus:ring-offset-slate-900">
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-400 shrink-0">${day.name}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full border ${typeColorClass} font-semibold flex items-center gap-1 shrink-0">
+                                    <i class="${typeIcon}"></i> ${getTypeLabel(day.type)}
+                                </span>
+                            </div>
+                            <h4 class="font-bold text-sm text-slate-100 truncate mt-1">${day.title}</h4>
+                            <p class="text-xs text-slate-400 truncate mt-0.5">${day.metrics}</p>
+                        </div>
+                    </div>
+                    <div class="shrink-0 text-slate-500 hover:text-indigo-400 p-1" onclick="selectDay('${day.id}')">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function getTypeLabel(type) {
+            switch(type) {
+                case 'rest': return 'พักผ่อน';
+                case 'easy': return 'Easy Run';
+                case 'strength': return 'เวทสร้างขา';
+                case 'tempo': return 'Tempo / เร็ว';
+                case 'long': return 'วิ่งยาว';
+                case 'race': return 'วันวิ่งจริง!';
+                default: return 'ทั่วไป';
+            }
+        }
+
+        // Toggle day completion state
+        function toggleDayCompleted(dayId) {
+            completedDays[dayId] = !completedDays[dayId];
+            saveProgress();
+            
+            // Update checkbox state in DOM
+            const checkbox = document.getElementById(`checkbox-${dayId}`);
+            if (checkbox) checkbox.checked = completedDays[dayId];
+            
+            // Update detail card button if active
+            if (selectedDayId === dayId) {
+                updateDetailCardCheckButton(dayId);
+            }
+            
+            // If completed, trigger congratulations modal
+            if (completedDays[dayId]) {
+                const day = findDayById(dayId);
+                let customCongratMsg = "รักษาวินัยอย่างสุดอดเยี่ยมครับ การสร้างความคงเส้นคงวาคือกุญแจสู่ Sub 1!";
+                if (day.type === 'strength') {
+                    customCongratMsg = "บอดี้เวทกล้ามเนื้อขาและแกนกลางเสร็จสิ้น! ท่าเหล่านี้จะช่วยคุณมอสประคองสะโพกและป้องกันอาการจุกท้องกิโลที่ 3 ได้ดีมากครับ";
+                } else if (day.type === 'rest') {
+                    customCongratMsg = "การพักผ่อนคือสิ่งสำคัญที่สุด วันพักที่มีคุณภาพจะช่วยซ่อมแซมเส้นใยกล้ามเนื้อและเอ็นเท้าให้กลับมาแกร่งยิ่งขึ้น!";
+                } else if (day.type === 'boston') {
+                    customCongratMsg = "วิ่งกับ Boston 13 เด้งดึ๋งสะใจไหมครับคุณมอส? อย่าลืมคลายเชือกและยืดเหยียดน่องหลังวิ่งน้า!";
+                } else if (day.type === 'race') {
+                    customCongratMsg = "โอ้โห!! บรรลุเป้าหมาย 10K Sub 1 สำเร็จแล้ว! ยินดีกับความตั้งใจและชัยชนะครั้งใหญ่ของคุณมอสด้วยใจจริงครับ!";
+                }
+                
+                document.getElementById('modal-congrats-tip').innerText = customCongratMsg;
+                document.getElementById('congrats-modal').classList.remove('hidden');
+            }
+        }
+
+        // Toggle entire week completion
+        function toggleAllDaysInWeek() {
+            const week = programData.weeks.find(w => w.number === currentWeekNum);
+            let allDone = true;
+            week.days.forEach(day => {
+                if (!completedDays[day.id]) allDone = false;
+            });
+
+            week.days.forEach(day => {
+                completedDays[day.id] = !allDone; // if all were done, uncheck all. Otherwise check all.
+                const checkbox = document.getElementById(`checkbox-${day.id}`);
+                if (checkbox) checkbox.checked = !allDone;
+            });
+            
+            saveProgress();
+            if (selectedDayId) {
+                updateDetailCardCheckButton(selectedDayId);
+            }
+            
+            if (!allDone) {
+                document.getElementById('modal-congrats-tip').innerText = `สุดยอดมากครับ! คุณมอสทำภารกิจการซ้อมสัปดาห์ที่ ${currentWeekNum} สำเร็จครบถ้วนแล้ว ร่างกายของคุณพัฒนาขึ้นมาอีกขั้นใหญ่แล้วครับ!`;
+                document.getElementById('congrats-modal').classList.remove('hidden');
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('congrats-modal').classList.add('hidden');
+        }
+
+        // Find day data by ID
+        function findDayById(dayId) {
+            for (let week of programData.weeks) {
+                const day = week.days.find(d => d.id === dayId);
+                if (day) return day;
+            }
+            return null;
+        }
+
+        // Handle day selection in detail card
+        function selectDay(dayId) {
+            // Remove previous selection border in list
+            if (selectedDayId) {
+                const prevCard = document.getElementById(`day-card-${selectedDayId}`);
+                if (prevCard) {
+                    prevCard.classList.remove('bg-slate-750', 'border-indigo-500');
+                    prevCard.classList.add('bg-slate-800/60', 'border-slate-700/60');
+                }
+            }
+
+            selectedDayId = dayId;
+            
+            // Add selection border in list
+            const activeCard = document.getElementById(`day-card-${dayId}`);
+            if (activeCard) {
+                activeCard.classList.remove('bg-slate-800/60', 'border-slate-700/60');
+                activeCard.classList.add('bg-slate-750', 'border-indigo-500');
+            }
+
+            const day = findDayById(dayId);
+            if (!day) return;
+
+            // Show content container and hide empty state
+            document.getElementById('detail-card-empty').classList.add('hidden');
+            document.getElementById('detail-card-content').classList.remove('hidden');
+
+            // Set content details
+            document.getElementById('detail-day-tag').innerText = day.name;
+            document.getElementById('detail-day-title').innerText = day.title;
+            document.getElementById('detail-metric').innerText = day.metrics;
+            document.getElementById('detail-tips').innerText = day.tips;
+
+            // Toggle Timer display for strength workout
+            const timerContainer = document.getElementById('workout-timer-container');
+            if (day.type === 'strength') {
+                timerContainer.classList.remove('hidden');
+                resetTimerState(); // Reset timer for fresh use
+            } else {
+                timerContainer.classList.add('hidden');
+                stopTimer();
+            }
+
+            // Shoes selection card
+            const shoeBox = document.getElementById('detail-shoes-box');
+            const shoeAvatar = document.getElementById('shoe-avatar');
+            const shoeName = document.getElementById('detail-shoe-name');
+            const shoeReason = document.getElementById('detail-shoe-reason');
+
+            if (day.shoes === 'none') {
+                shoeBox.classList.add('hidden');
+            } else {
+                shoeBox.classList.remove('hidden');
+                if (day.shoes === 'clifton') {
+                    shoeAvatar.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20";
+                    shoeAvatar.innerHTML = '<i class="fa-solid fa-cloud"></i>';
+                    shoeName.innerText = "Hoka Clifton 9";
+                    shoeReason.innerText = "เน้นนุ่มนวล ซึมซับแรงกระแทกได้นุ่มนวลสูงสุด เซฟฝ่าเท้ากว้างที่ตึงและอุ้งเท้าสูงได้ยอดเยี่ยม";
+                } else if (day.shoes === 'boston') {
+                    shoeAvatar.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-purple-500/10 text-purple-400 border border-purple-500/20";
+                    shoeAvatar.innerHTML = '<i class="fa-solid fa-bolt-lightning"></i>';
+                    shoeName.innerText = "Adidas Boston 13 (ถุงเท้าบาง)";
+                    shoeReason.innerText = "ใช้ความเด้งตอบสนองของ EnergyRods ฝึกให้กล้ามเนื้อต้นขาชินความเร็ว (ต้องคลายสายผูกเล็กน้อย)";
+                }
+            }
+
+            // Steps generation
+            const stepsList = document.getElementById('detail-steps');
+            stepsList.innerHTML = '';
+            day.steps.forEach(step => {
+                const li = document.createElement('li');
+                li.className = "flex items-start gap-2 text-xs leading-relaxed";
+                li.innerHTML = `
+                    <span class="text-indigo-400 mt-0.5 shrink-0"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                    <span>${step}</span>
+                `;
+                stepsList.appendChild(li);
+            });
+
+            updateDetailCardCheckButton(dayId);
+        }
+
+        // Update detail card complete/incomplete button
+        function updateDetailCardCheckButton(dayId) {
+            const isCompleted = !!completedDays[dayId];
+            const btn = document.getElementById('detail-check-btn');
+            
+            if (isCompleted) {
+                btn.className = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/30 transition-all shadow-md";
+                btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> เสร็จสิ้นแล้ว`;
+            } else {
+                btn.className = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition-all shadow-md shadow-indigo-600/15";
+                btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> ติ๊กทำสำเร็จ`;
+            }
+            
+            btn.onclick = () => toggleDayCompleted(dayId);
+        }
+
+        // Update progress percentages and ratios
+        function updateOverallProgress() {
+            let totalDays = 0;
+            let doneDays = 0;
+            
+            programData.weeks.forEach(week => {
+                week.days.forEach(day => {
+                    totalDays++;
+                    if (completedDays[day.id]) doneDays++;
+                });
+            });
+
+            const percent = totalDays > 0 ? Math.round((doneDays / totalDays) * 100) : 0;
+            document.getElementById('overall-progress-percent').innerText = `${percent}%`;
+            document.getElementById('overall-progress-ratio').innerText = `${doneDays} / ${totalDays} วันสำเร็จ`;
+        }
+
+
+        /* --- INTERACTIVE FITNESS TIMER (FOR DAY 3 STRENGTH) --- */
+        const strengthPoses = [
+            { name: "Squat (ต้นขาและสะโพก)", duration: 45, status: "ทำงาน (WORK)", restAfter: 15 },
+            { name: "Plank (แกนกลางลดอาการจุก)", duration: 45, status: "ทำงาน (WORK)", restAfter: 15 },
+            { name: "Glute Bridge (ก้นและแฮมสตริง)", duration: 45, status: "ทำงาน (WORK)", restAfter: 15 },
+            { name: "Calf Raises (เซฟฝ่าเท้าและน่อง)", duration: 45, status: "ทำงาน (WORK)", restAfter: 15 }
+        ];
+
+        let currentPoseIdx = 0;
+        let currentCycle = 1; // 1 to 3
+        let timerInterval = null;
+        let isRunning = false;
+        let timerSecondsLeft = 45;
+        let timerState = "work"; // "work" or "rest"
+
+        function updateTimerUI() {
+            const pose = strengthPoses[currentPoseIdx];
+            document.getElementById('timer-cycle-label').innerText = `รอบที่ ${currentCycle}/3 (ท่าที่ ${currentPoseIdx + 1}/4)`;
+            
+            if (timerState === "work") {
+                document.getElementById('timer-pose-name').innerText = pose.name;
+                document.getElementById('timer-status-text').innerText = "กำลังทำงาน (WORK)";
+                document.getElementById('timer-status-text').className = "text-[10px] text-emerald-400 font-bold tracking-wide uppercase";
+                document.getElementById('timer-countdown').innerText = timerSecondsLeft;
+                document.getElementById('timer-countdown').className = "text-3xl font-mono font-bold text-emerald-400 tracking-widest";
+            } else {
+                document.getElementById('timer-pose-name').innerText = `เตรียมพร้อม: ท่าต่อไป ${getNextPoseName()}`;
+                document.getElementById('timer-status-text').innerText = "พักผ่อน (REST)";
+                document.getElementById('timer-status-text').className = "text-[10px] text-amber-400 font-bold tracking-wide uppercase";
+                document.getElementById('timer-countdown').innerText = timerSecondsLeft;
+                document.getElementById('timer-countdown').className = "text-3xl font-mono font-bold text-amber-400 tracking-widest";
+            }
+        }
+
+        function getNextPoseName() {
+            let nextIdx = currentPoseIdx + 1;
+            let nextCycle = currentCycle;
+            if (nextIdx >= strengthPoses.length) {
+                nextIdx = 0;
+                nextCycle++;
+            }
+            if (nextCycle > 3) {
+                return "ซ้อมเสร็จเรียบร้อย!";
+            }
+            return strengthPoses[nextIdx].name;
+        }
+
+        function toggleTimer() {
+            if (isRunning) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            isRunning = true;
+            document.getElementById('btn-timer-text').innerText = "หยุดพัก";
+            document.getElementById('btn-timer-icon').className = "fa-solid fa-pause";
+            document.getElementById('btn-timer-start').className = "bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-md shadow-amber-700/20";
+            
+            timerInterval = setInterval(() => {
+                timerSecondsLeft--;
+                if (timerSecondsLeft < 0) {
+                    // Switch state
+                    if (timerState === "work") {
+                        // Switch to rest
+                        timerState = "rest";
+                        timerSecondsLeft = strengthPoses[currentPoseIdx].restAfter;
+                        playBeep();
+                    } else {
+                        // Switch to next pose work
+                        timerState = "work";
+                        advanceTimerPose();
+                        const pose = strengthPoses[currentPoseIdx];
+                        timerSecondsLeft = pose.duration;
+                        playDoubleBeep();
+                    }
+                }
+                updateTimerUI();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('btn-timer-text').innerText = "เริ่มซ้อม";
+            document.getElementById('btn-timer-icon').className = "fa-solid fa-play";
+            document.getElementById('btn-timer-start').className = "bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-md shadow-emerald-700/20";
+        }
+
+        function resetTimerState() {
+            stopTimer();
+            currentPoseIdx = 0;
+            currentCycle = 1;
+            timerSecondsLeft = strengthPoses[0].duration;
+            timerState = "work";
+            updateTimerUI();
+        }
+
+        function changeTimerPose(direction) {
+            stopTimer();
+            currentPoseIdx += direction;
+            if (currentPoseIdx < 0) {
+                if (currentCycle > 1) {
+                    currentCycle--;
+                    currentPoseIdx = strengthPoses.length - 1;
+                } else {
+                    currentPoseIdx = 0;
+                }
+            } else if (currentPoseIdx >= strengthPoses.length) {
+                if (currentCycle < 3) {
+                    currentCycle++;
+                    currentPoseIdx = 0;
+                } else {
+                    currentPoseIdx = strengthPoses.length - 1;
+                }
+            }
+            timerSecondsLeft = strengthPoses[currentPoseIdx].duration;
+            timerState = "work";
+            updateTimerUI();
+        }
+
+        function advanceTimerPose() {
+            currentPoseIdx++;
+            if (currentPoseIdx >= strengthPoses.length) {
+                currentPoseIdx = 0;
+                currentCycle++;
+                if (currentCycle > 3) {
+                    // Entire circuit finished!
+                    resetTimerState();
+                    // Auto tick current day completed
+                    if (selectedDayId) {
+                        toggleDayCompleted(selectedDayId);
+                    }
+                    return;
+                }
+            }
+        }
+
+        // Simulating sound feedback via Web Audio API (since in iframe environment)
+        function playBeep() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, ctx.currentTime);
+                osc.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch(e) {
+                // AudioContext blocked or not supported - fail silently
+            }
+        }
+
+        function playDoubleBeep() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                // Beep 1
+                const osc1 = ctx.createOscillator();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(800, ctx.currentTime);
+                osc1.connect(ctx.destination);
+                osc1.start();
+                osc1.stop(ctx.currentTime + 0.1);
+                
+                // Beep 2
+                setTimeout(() => {
+                    const osc2 = ctx.createOscillator();
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(1000, ctx.currentTime);
+                    osc2.connect(ctx.destination);
+                    osc2.start();
+                    osc2.stop(ctx.currentTime + 0.15);
+                }, 150);
+            } catch(e) {}
+        }
+
+
+        // Window onload initialization
+        window.onload = function() {
+            loadProgress();
+            selectWeek(1); // Default to Week 1
+            updateOverallProgress();
+        };
+    </script>
+</body>
+</html>
