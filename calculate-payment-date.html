@@ -3,120 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คำนวณวันชำระ</title>
+    <title>โปรแกรมคำนวณงวดชำระเงิน (Payment Installment Calculator)</title>
+    <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Google Fonts (Google Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
         body {
             font-family: 'Google Sans', sans-serif;
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
+<body class="bg-slate-50 min-h-screen text-slate-800">
+    <!-- ปุ่มสำหรับกลับไปหน้าหลัก -->
+    <a href="index.html" class="fixed top-4 left-4 z-50 px-4 py-2 bg-gray-200 text-gray-700 font-semibold rounded-full shadow-md hover:bg-gray-300 transition-colors">
+        &larr; กลับหน้าหลัก
+    </a>
 
-        <!-- ปุ่มสำหรับกลับไปหน้าหลัก -->
-        <a href="index.html" class="fixed top-4 left-4 z-50 px-4 py-2 bg-gray-200 text-gray-700 font-semibold rounded-full shadow-md hover:bg-gray-300 transition-colors">
-            &larr; กลับหน้าหลัก
-        </a>
-        
-        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">คำนวณวันชำระ</h1>
-        <div class="space-y-4">
-            <div>
-                <label for="installments" class="block text-sm font-medium text-gray-700">จำนวนงวดที่ผ่อนชำระ (เดือน)</label>
-                <input type="number" id="installments" min="1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 text-white rounded-2xl shadow-lg mb-4">
+                <i class="fa-solid fa-calendar-days text-3xl"></i>
             </div>
-            <div>
-                <label for="firstDueDate" class="block text-sm font-medium text-gray-700">วันดิววันแรก</label>
-                <input type="text" id="firstDueDate" placeholder="เลือกวันที่..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">โปรแกรมคำนวณงวดชำระเงิน</h1>
+            <p class="text-slate-500 mt-2">คำนวณวันชำระงวดแรก งวดสุดท้าย และแสดงตารางการชำระเงินพร้อมตัวเลือกเลี่ยงวันหยุด</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Form Configuration -->
+            <div class="md:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+                    <i class="fa-solid fa-sliders text-blue-600 mr-2"></i>ตั้งค่าการชำระเงิน
+                </h2>
+
+                <form id="calcForm" class="space-y-4">
+                    <!-- Start Date Reference -->
+                    <div>
+                        <label for="startDate" class="block text-sm font-medium text-slate-700 mb-1">เดือนที่เริ่มชำระเงิน</label>
+                        <input type="month" id="startDate" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-sm">
+                        <p class="text-xs text-slate-400 mt-1">เลือกระบุปีและเดือนที่จะเริ่มชำระงวดแรก</p>
+                    </div>
+
+                    <!-- Payment Day of Month -->
+                    <div>
+                        <label for="paymentDay" class="block text-sm font-medium text-slate-700 mb-1">ชำระทุกวันที่ (ของเดือน)</label>
+                        <input type="number" id="paymentDay" min="1" max="31" value="1" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-sm">
+                        <p class="text-xs text-slate-400 mt-1">หากเดือนใดไม่มีวันที่ระบุ ระบบจะปรับเป็นวันสุดท้ายของเดือนนั้นๆ</p>
+                    </div>
+
+                    <!-- Installments count -->
+                    <div>
+                        <label for="installments" class="block text-sm font-medium text-slate-700 mb-1">จำนวนงวดที่ชำระ (เดือน)</label>
+                        <input type="number" id="installments" min="1" max="360" value="12" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-sm">
+                    </div>
+
+                    <!-- Skip Weekends Option -->
+                    <div class="pt-2">
+                        <label class="relative flex items-start cursor-pointer select-none">
+                            <input type="checkbox" id="skipWeekends" checked class="sr-only peer">
+                            <div class="w-10 h-6 bg-slate-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <span class="ml-3 text-sm font-medium text-slate-700">เลื่อนวันชำระหากตรงกับวันหยุดเสาร์-อาทิตย์</span>
+                        </label>
+                        <p class="text-xs text-slate-400 ml-13 mt-1">หากตรงกับ เสาร์-อาทิตย์ จะเลื่อนไปเป็นวันจันทร์ถัดไป</p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg shadow-sm hover:shadow transition-all duration-150 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-calculator mr-2"></i>คำนวณวันชำระเงิน
+                    </button>
+                </form>
             </div>
-            <div>
-                <label class="flex items-center mt-4">
-                    <input type="checkbox" id="skipWeekends" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300" checked>
-                    <span class="ml-2 text-sm font-medium text-gray-700">ข้ามวันหยุด (เสาร์-อาทิตย์)</span>
-                </label>
+
+            <!-- Results Section -->
+            <div class="md:col-span-2 space-y-6">
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- First Payment -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
+                        <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                            <i class="fa-solid fa-circle-play text-2xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">วันที่ชำระงวดแรก</span>
+                            <span id="summaryFirstDate" class="text-lg font-bold text-slate-800">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Last Payment -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
+                        <div class="p-3 bg-rose-50 text-rose-600 rounded-xl">
+                            <i class="fa-solid fa-circle-stop text-2xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">วันที่ชำระงวดสุดท้าย</span>
+                            <span id="summaryLastDate" class="text-lg font-bold text-slate-800">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Schedule Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-100 flex flex-wrap justify-between items-center gap-2">
+                        <h2 class="text-lg font-bold text-slate-900">
+                            <i class="fa-solid fa-list-ol text-blue-600 mr-2"></i>ตารางการชำระเงินทั้งหมด
+                        </h2>
+                        <span id="totalInstallmentsLabel" class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">0 งวด</span>
+                    </div>
+
+                    <!-- Table Container -->
+                    <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/75 text-slate-500 text-xs font-bold uppercase border-b border-slate-100 sticky top-0 backdrop-blur-sm z-10">
+                                    <th class="px-6 py-3.5 text-center w-20">งวดที่</th>
+                                    <th class="px-6 py-3.5">วันที่ชำระ</th>
+                                    <th class="px-6 py-3.5">วันในสัปดาห์</th>
+                                    <th class="px-6 py-3.5 text-right">หมายเหตุ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scheduleTableBody" class="divide-y divide-slate-100 text-sm">
+                                <tr>
+                                    <td colspan="4" class="px-6 py-12 text-center text-slate-400">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <i class="fa-regular fa-calendar text-4xl mb-3 text-slate-300"></i>
+                                            <p>กรุณากรอกข้อมูลและกดปุ่มคำนวณด้านซ้าย</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-        <button onclick="calculateDates()" class="w-full mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
-            คำนวณ
-        </button>
-        <div id="results" class="mt-8 space-y-4 text-center">
-            <!-- Results will be displayed here -->
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
-
+    <!-- JavaScript logic -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#firstDueDate", {
-                locale: 'th',
-                dateFormat: "Y-m-d",
-                defaultDate: new Date(),
-            });
+        // Set default month to current month on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            document.getElementById('startDate').value = `${year}-${month}`;
+
+            // Auto run calculation for initial value
+            calculateSchedule();
         });
 
-        function isWeekend(date) {
-            const day = date.getDay();
-            return day === 0 || day === 6; // Sunday = 0, Saturday = 6
-        }
+        // Thai locale day names
+        const thDays = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
 
-        function getNextWorkingDay(date, skipWeekends = true) {
-            let nextDate = new Date(date);
-            if (skipWeekends) {
-                while (isWeekend(nextDate)) {
-                    nextDate.setDate(nextDate.getDate() + 1);
-                }
-            }
-            return nextDate;
-        }
-
-        function formatDate(date) {
-            const d = new Date(date);
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear() + 543; // Convert to Thai Buddhist Era
+        // Format date helper to DD/MM/YYYY with Buddhist Era (B.E.)
+        function formatThaiDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear() + 543; // Convert to Buddhist Era (B.E.)
             return `${day}/${month}/${year}`;
         }
 
-        function calculateDates() {
-            const installments = parseInt(document.getElementById('installments').value);
-            const fp = document.getElementById('firstDueDate')._flatpickr;
-            const selectedDate = fp.selectedDates[0];
+        // Get day of week string in Thai
+        function getThaiDayOfWeek(date) {
+            return thDays[date.getDay()];
+        }
+
+        // Main Calculation function
+        function calculateSchedule() {
+            const startDateVal = document.getElementById('startDate').value;
+            const paymentDay = parseInt(document.getElementById('paymentDay').value);
+            const totalInstallments = parseInt(document.getElementById('installments').value);
             const skipWeekends = document.getElementById('skipWeekends').checked;
 
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = ''; // Clear previous results
-
-            if (!installments || !selectedDate) {
-                resultsDiv.innerHTML = '<p class="text-red-500 font-semibold">กรุณากรอกข้อมูลให้ครบถ้วน</p>';
+            if (!startDateVal || isNaN(paymentDay) || isNaN(totalInstallments) || totalInstallments <= 0) {
                 return;
             }
 
-            const initialDueDate = new Date(selectedDate);
+            // Parse initial year and month
+            const [startYear, startMonthZeroBased] = startDateVal.split('-').map(Number);
+            const startMonth = startMonthZeroBased - 1; // JS Month is 0-indexed
 
-            // Calculate start date
-            let startDate = new Date(initialDueDate);
-            startDate = getNextWorkingDay(startDate, skipWeekends);
-            
-            // Calculate end date
-            let endDate = new Date(initialDueDate);
-            endDate.setMonth(endDate.getMonth() + installments - 1);
-            endDate = getNextWorkingDay(endDate, skipWeekends);
+            const schedule = [];
 
-            const startFormatted = formatDate(startDate);
-            const endFormatted = formatDate(endDate);
+            for (let i = 0; i < totalInstallments; i++) {
+                // Determine year and month of current installment
+                let targetMonth = startMonth + i;
+                let targetYear = startYear;
 
-            resultsDiv.innerHTML = `
-                <div class="bg-green-100 p-4 rounded-lg shadow-inner">
-                    <p class="text-gray-800 text-lg font-semibold mb-2">ผลลัพธ์การคำนวณ:</p>
-                    <p class="text-gray-700"><span class="font-medium">วันเริ่มชำระค่างวด:</span> ${startFormatted}</p>
-                    <p class="text-gray-700"><span class="font-medium">วันที่ครบกำหนดชำระ:</span> ${endFormatted}</p>
-                </div>
-            `;
+                if (targetMonth > 11) {
+                    targetYear += Math.floor(targetMonth / 12);
+                    targetMonth = targetMonth % 12;
+                }
+
+                // Get max days of the target month
+                const lastDayOfMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+
+                // If requested payment day exceeds month's limit (e.g. 31 in Feb), cap at last day
+                const actualDay = Math.min(paymentDay, lastDayOfMonth);
+
+                // Create target date
+                let paymentDate = new Date(targetYear, targetMonth, actualDay);
+                let note = '';
+                const originalDayOfWeek = paymentDate.getDay();
+
+                // If check holiday/weekend is active
+                if (skipWeekends) {
+                    if (originalDayOfWeek === 6) { // Saturday -> move to Monday (+2 days)
+                        paymentDate.setDate(paymentDate.getDate() + 2);
+                        note = 'เลื่อนจากวันเสาร์';
+                    } else if (originalDayOfWeek === 0) { // Sunday -> move to Monday (+1 day)
+                        paymentDate.setDate(paymentDate.getDate() + 1);
+                        note = 'เลื่อนจากวันอาทิตย์';
+                    }
+                }
+
+                schedule.push({
+                    index: i + 1,
+                    date: new Date(paymentDate),
+                    originalDayOfWeek: originalDayOfWeek,
+                    note: note
+                });
+            }
+
+            // Render Output UI
+            renderOutput(schedule);
         }
+
+        // Render UI helper
+        function renderOutput(schedule) {
+            const tableBody = document.getElementById('scheduleTableBody');
+            const summaryFirstDate = document.getElementById('summaryFirstDate');
+            const summaryLastDate = document.getElementById('summaryLastDate');
+            const totalInstallmentsLabel = document.getElementById('totalInstallmentsLabel');
+
+            if (schedule.length === 0) {
+                return;
+            }
+
+            // Update Summary Cards with numeric date format
+            const firstInstallment = schedule[0];
+            const lastInstallment = schedule[schedule.length - 1];
+
+            summaryFirstDate.textContent = formatThaiDate(firstInstallment.date);
+            summaryLastDate.textContent = formatThaiDate(lastInstallment.date);
+            totalInstallmentsLabel.textContent = `${schedule.length} งวด`;
+
+            // Build HTML table rows
+            tableBody.innerHTML = '';
+            schedule.forEach(item => {
+                const dayOfWeek = getThaiDayOfWeek(item.date);
+                const isSaturdayOrSunday = item.date.getDay() === 0 || item.date.getDay() === 6;
+                const wasAdjusted = item.note !== '';
+
+                let dayColorClass = 'text-slate-600';
+                if (item.date.getDay() === 0) dayColorClass = 'text-rose-500 font-medium'; // Sunday Red
+                if (item.date.getDay() === 6) dayColorClass = 'text-purple-600 font-medium'; // Saturday Purple
+
+                const rowHtml = `
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="px-6 py-3.5 text-center font-semibold text-slate-500">${item.index}</td>
+                        <td class="px-6 py-3.5 font-medium text-slate-900">${formatThaiDate(item.date)}</td>
+                        <td class="px-6 py-3.5 ${dayColorClass}">${dayOfWeek}</td>
+                        <td class="px-6 py-3.5 text-right">
+                            ${wasAdjusted
+                                ? `<span class="inline-flex items-center text-xs bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full border border-amber-100 font-medium">
+                                    <i class="fa-solid fa-circle-exclamation mr-1"></i>${item.note}
+                                   </span>`
+                                : `<span class="text-slate-400 text-xs">ตามกำหนดปกติ</span>`
+                            }
+                        </td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', rowHtml);
+            });
+        }
+
+        // Form Submit Event Listener
+        document.getElementById('calcForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            calculateSchedule();
+        });
     </script>
 </body>
 </html>
