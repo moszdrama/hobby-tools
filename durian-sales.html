@@ -159,6 +159,8 @@
                     </tbody>
                 </table>
             </div>
+                <div id="order-history-pagination"></div>
+            </div>
         </div>
     </section>
 
@@ -334,6 +336,8 @@
         let cart = []; // Array of { cartItemId, productId, name, qty, unit, unitPrice, total }
         let cartItemCounter = 0;
         let orderHistory = [];
+        let currentPage = 1;
+        const ORDERS_PER_PAGE = 10;
 
         // -------------------------
         // Order History Logic
@@ -345,12 +349,22 @@
             
             if (orderHistory.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-400">ยังไม่มีประวัติการขาย</td></tr>';
+                renderPagination(0);
                 return;
             }
 
-            tbody.innerHTML = '';
             // Render latest orders first
-            [...orderHistory].reverse().forEach(order => {
+            const reversed = [...orderHistory].reverse();
+            const totalPages = Math.ceil(reversed.length / ORDERS_PER_PAGE);
+            // Clamp currentPage
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const startIdx = (currentPage - 1) * ORDERS_PER_PAGE;
+            const pageOrders = reversed.slice(startIdx, startIdx + ORDERS_PER_PAGE);
+
+            tbody.innerHTML = '';
+            pageOrders.forEach(order => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-gray-50 transition-colors';
 
@@ -376,6 +390,69 @@
                 `;
                 tbody.appendChild(tr);
             });
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const container = document.getElementById('order-history-pagination');
+            if (!container) return;
+
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const totalItems = orderHistory.length;
+            const startIdx = (currentPage - 1) * ORDERS_PER_PAGE + 1;
+            const endIdx = Math.min(currentPage * ORDERS_PER_PAGE, totalItems);
+
+            // Build page buttons (show up to 5 pages around current)
+            let pageButtons = '';
+            const delta = 2;
+            let pages = [];
+            for (let i = Math.max(1, currentPage - delta); i <= Math.min(totalPages, currentPage + delta); i++) {
+                pages.push(i);
+            }
+            if (pages[0] > 1) {
+                pageButtons += `<button onclick="goToPage(1)" class="px-3 py-1.5 rounded-lg text-sm border border-gray-200 hover:bg-green-50 hover:border-green-300 transition-colors">1</button>`;
+                if (pages[0] > 2) pageButtons += `<span class="px-1 text-gray-400">…</span>`;
+            }
+            pages.forEach(p => {
+                if (p === currentPage) {
+                    pageButtons += `<button class="px-3 py-1.5 rounded-lg text-sm bg-green-600 text-white font-medium border border-green-600">${p}</button>`;
+                } else {
+                    pageButtons += `<button onclick="goToPage(${p})" class="px-3 py-1.5 rounded-lg text-sm border border-gray-200 hover:bg-green-50 hover:border-green-300 transition-colors">${p}</button>`;
+                }
+            });
+            if (pages[pages.length - 1] < totalPages) {
+                if (pages[pages.length - 1] < totalPages - 1) pageButtons += `<span class="px-1 text-gray-400">…</span>`;
+                pageButtons += `<button onclick="goToPage(${totalPages})" class="px-3 py-1.5 rounded-lg text-sm border border-gray-200 hover:bg-green-50 hover:border-green-300 transition-colors">${totalPages}</button>`;
+            }
+
+            container.innerHTML = `
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t border-gray-100 mt-2">
+                    <span class="text-xs text-gray-400">แสดง ${startIdx}–${endIdx} จาก ${totalItems} รายการ</span>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}
+                            class="px-3 py-1.5 rounded-lg text-sm border border-gray-200 hover:bg-green-50 hover:border-green-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1">
+                            <i class="fa-solid fa-chevron-left text-xs"></i> ก่อนหน้า
+                        </button>
+                        ${pageButtons}
+                        <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}
+                            class="px-3 py-1.5 rounded-lg text-sm border border-gray-200 hover:bg-green-50 hover:border-green-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1">
+                            ถัดไป <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function goToPage(page) {
+            const totalPages = Math.ceil(orderHistory.length / ORDERS_PER_PAGE);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderOrderHistory();
         }
 
         function fetchOrderHistory() {
@@ -387,6 +464,7 @@
                 .then(data => {
                     if (data.status === 'success') {
                         orderHistory = data.orders || [];
+                        currentPage = 1; // reset to first page on fresh load
                         renderOrderHistory();
                     } else {
                         tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-400">โหลดข้อมูลไม่สำเร็จ: ${data.message || 'Unknown error'}</td></tr>`;
