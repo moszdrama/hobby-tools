@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap');
-        
+
         body {
             font-family: 'Kanit', sans-serif;
             background: linear-gradient(135deg, #fef9e7 0%, #e8f5e9 100%);
@@ -29,7 +30,7 @@
             color: white;
             transition: all 0.3s ease;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
@@ -43,10 +44,10 @@
 
         .product-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
             border-color: #81c784;
         }
-        
+
         .product-card:active {
             transform: translateY(0);
         }
@@ -55,13 +56,16 @@
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.02);
+            background: rgba(0, 0, 0, 0.02);
         }
+
         ::-webkit-scrollbar-thumb {
             background: #a5d6a7;
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #81c784;
         }
@@ -71,6 +75,7 @@
             margin: 0 auto;
             border-radius: 8px;
         }
+
         #promptpay-qr canvas {
             border-radius: 8px;
             margin: 0 auto;
@@ -78,6 +83,7 @@
         }
     </style>
 </head>
+
 <body class="text-gray-800 min-h-screen pb-10">
 
     <!-- Header -->
@@ -95,7 +101,7 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 md:px-8 flex flex-col lg:flex-row gap-6">
-        
+
         <!-- Left Column: Products -->
         <section class="lg:w-1/2 flex flex-col gap-4">
             <div class="glass-panel rounded-2xl p-6 flex flex-col h-full">
@@ -103,11 +109,12 @@
                     <h2 class="text-xl font-medium text-gray-700 flex items-center gap-2">
                         <i class="fa-solid fa-boxes-stacked text-green-600"></i> รายการสินค้า
                     </h2>
-                    <button onclick="openModal()" class="text-sm bg-yellow-100 hover:bg-yellow-200 text-yellow-800 py-2 px-4 rounded-lg font-medium transition-colors flex items-center gap-2">
+                    <button onclick="openModal()"
+                        class="text-sm bg-yellow-100 hover:bg-yellow-200 text-yellow-800 py-2 px-4 rounded-lg font-medium transition-colors flex items-center gap-2">
                         <i class="fa-solid fa-plus"></i> เพิ่มสินค้า
                     </button>
                 </div>
-                
+
                 <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 flex-grow content-start">
                     <!-- Products will be generated here -->
                 </div>
@@ -124,7 +131,8 @@
                 <div class="flex-grow flex flex-col min-h-[300px]">
                     <div id="cart-items" class="flex-grow space-y-3 overflow-y-auto pr-2">
                         <!-- Cart items will be generated here -->
-                        <div id="empty-cart-msg" class="h-full flex flex-col items-center justify-center text-gray-400 gap-3 py-10">
+                        <div id="empty-cart-msg"
+                            class="h-full flex flex-col items-center justify-center text-gray-400 gap-3 py-10">
                             <i class="fa-solid fa-basket-shopping text-5xl opacity-20"></i>
                             <p>ยังไม่มีสินค้าในตะกร้า</p>
                         </div>
@@ -138,7 +146,9 @@
                                 <span id="cart-total" class="text-3xl font-bold text-green-700">฿0.00</span>
                             </div>
                         </div>
-                        <button onclick="openPaymentModal()" id="btn-checkout" class="w-full btn-primary py-4 rounded-xl text-lg font-medium flex justify-center items-center gap-2 opacity-50 cursor-not-allowed" disabled>
+                        <button onclick="openPaymentModal()" id="btn-checkout"
+                            class="w-full btn-primary py-4 rounded-xl text-lg font-medium flex justify-center items-center gap-2 opacity-50 cursor-not-allowed"
+                            disabled>
                             <i class="fa-solid fa-check-circle"></i> ยืนยันการขาย
                         </button>
                     </div>
@@ -155,7 +165,8 @@
                 <h2 class="text-xl font-medium text-gray-700 flex items-center gap-2">
                     <i class="fa-solid fa-list-check text-green-600"></i> ประวัติการขายของวันนี้ (Order History)
                 </h2>
-                <button onclick="openSalesSummaryModal()" class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 py-2 px-4 rounded-lg font-medium transition-colors flex items-center gap-2">
+                <button onclick="openSalesSummaryModal()"
+                    class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 py-2 px-4 rounded-lg font-medium transition-colors flex items-center gap-2">
                     <i class="fa-solid fa-chart-pie"></i> สรุปยอดขาย
                 </button>
             </div>
@@ -176,28 +187,32 @@
                     </tbody>
                 </table>
             </div>
-                <div id="order-history-pagination"></div>
-            </div>
+            <div id="order-history-pagination"></div>
+        </div>
         </div>
     </section>
 
     <!-- Navigation Back -->
     <div class="max-w-7xl mx-auto px-4 mt-6">
-        <a href="index.html" class="inline-flex items-center gap-2 text-gray-500 hover:text-green-700 transition-colors">
+        <a href="index.html"
+            class="inline-flex items-center gap-2 text-gray-500 hover:text-green-700 transition-colors">
             <i class="fa-solid fa-arrow-left"></i> กลับไปหน้าหลัก
         </a>
     </div>
 
     <!-- Sales Summary Modal -->
-    <div id="salesSummaryModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="salesSummaryContent">
+    <div id="salesSummaryModal"
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300"
+            id="salesSummaryContent">
             <div class="flex justify-between items-center mb-5 shrink-0">
-                <h3 class="text-lg font-medium text-gray-800"><i class="fa-solid fa-chart-pie text-blue-600 mr-2"></i>สรุปยอดขายแบบละเอียด</h3>
+                <h3 class="text-lg font-medium text-gray-800"><i
+                        class="fa-solid fa-chart-pie text-blue-600 mr-2"></i>สรุปยอดขายแบบละเอียด</h3>
                 <button onclick="closeSalesSummaryModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fa-solid fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <div class="overflow-y-auto pr-2 space-y-6 flex-grow custom-scrollbar" id="salesSummaryDetails">
                 <!-- Summary content will be injected here -->
             </div>
@@ -205,23 +220,28 @@
     </div>
 
     <!-- Add to Cart Modal -->
-    <div id="addToCartModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300" id="addToCartModalContent">
+    <div id="addToCartModal"
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300"
+            id="addToCartModalContent">
             <div class="flex justify-between items-center mb-5">
                 <h3 id="addToCartModalTitle" class="text-lg font-medium text-gray-800">ระบุจำนวนและหน่วย</h3>
                 <button onclick="closeAddToCartModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fa-solid fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">จำนวน</label>
-                    <input type="number" id="addToCartQty" min="0" step="any" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="1">
+                    <input type="number" id="addToCartQty" min="0" step="any"
+                        class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        placeholder="1">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">หน่วย</label>
-                    <select id="addToCartUnit" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <select id="addToCartUnit"
+                        class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                         <option value="กิโลกรัม">กิโลกรัม</option>
                         <option value="ลูก">ลูก</option>
                     </select>
@@ -234,23 +254,29 @@
     </div>
 
     <!-- Add Product Modal -->
-    <div id="addProductModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl transform scale-95 transition-transform duration-300" id="modalContent">
+    <div id="addProductModal"
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl transform scale-95 transition-transform duration-300"
+            id="modalContent">
             <div class="flex justify-between items-center mb-5">
                 <h3 id="modalTitle" class="text-lg font-medium text-gray-800">เพิ่มสินค้าใหม่</h3>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fa-solid fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อสินค้า (สายพันธุ์)</label>
-                    <input type="text" id="newProductName" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="เช่น นกหยิบ, พวงมณี">
+                    <input type="text" id="newProductName"
+                        class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        placeholder="เช่น นกหยิบ, พวงมณี">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">ราคาขายตั้งต้น (บาท)</label>
-                    <input type="number" id="newProductPrice" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0">
+                    <input type="number" id="newProductPrice"
+                        class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        placeholder="0">
                 </div>
                 <button onclick="saveNewProduct()" class="w-full btn-primary py-3 rounded-lg font-medium mt-4">
                     บันทึกสินค้า
@@ -260,10 +286,13 @@
     </div>
 
     <!-- Payment Modal -->
-    <div id="paymentModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300" id="paymentModalContent">
+    <div id="paymentModal"
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300"
+            id="paymentModalContent">
             <div class="flex justify-between items-center mb-5">
-                <h3 class="text-lg font-medium text-gray-800"><i class="fa-solid fa-credit-card text-green-600 mr-2"></i>ชำระเงิน</h3>
+                <h3 class="text-lg font-medium text-gray-800"><i
+                        class="fa-solid fa-credit-card text-green-600 mr-2"></i>ชำระเงิน</h3>
                 <button onclick="closePaymentModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fa-solid fa-times text-xl"></i>
                 </button>
@@ -277,11 +306,13 @@
 
             <!-- Payment Method Selection -->
             <div class="flex gap-3 mb-5">
-                <button id="btn-cash" onclick="selectPaymentMethod('cash')" class="flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-50 text-green-700 font-medium flex flex-col items-center gap-1 transition-all">
+                <button id="btn-cash" onclick="selectPaymentMethod('cash')"
+                    class="flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-50 text-green-700 font-medium flex flex-col items-center gap-1 transition-all">
                     <i class="fa-solid fa-money-bill-wave text-xl"></i>
                     <span class="text-sm">เงินสด</span>
                 </button>
-                <button id="btn-transfer" onclick="selectPaymentMethod('transfer')" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-500 font-medium flex flex-col items-center gap-1 transition-all">
+                <button id="btn-transfer" onclick="selectPaymentMethod('transfer')"
+                    class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-500 font-medium flex flex-col items-center gap-1 transition-all">
                     <i class="fa-solid fa-building-columns text-xl"></i>
                     <span class="text-sm">โอน</span>
                 </button>
@@ -305,7 +336,8 @@
             <div id="transfer-section" class="hidden mb-5">
                 <!-- PromptPay QR Section (shown when configured) -->
                 <div id="promptpay-section" class="hidden">
-                    <div class="bg-gradient-to-b from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 text-center">
+                    <div
+                        class="bg-gradient-to-b from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 text-center">
                         <div class="flex items-center justify-center gap-2 mb-3">
                             <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
                                 <span class="text-white text-xs font-bold">P</span>
@@ -329,15 +361,18 @@
                 </div>
             </div>
 
-            <button onclick="confirmPayment()" id="btn-confirm-payment" class="w-full btn-primary py-3 rounded-xl font-medium flex justify-center items-center gap-2">
+            <button onclick="confirmPayment()" id="btn-confirm-payment"
+                class="w-full btn-primary py-3 rounded-xl font-medium flex justify-center items-center gap-2">
                 <i class="fa-solid fa-check"></i> ยืนยันและบันทึก
             </button>
         </div>
     </div>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300" id="settingsModalContent">
+    <div id="settingsModal"
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300"
+            id="settingsModalContent">
             <div class="flex justify-between items-center mb-5">
                 <h3 class="text-lg font-medium text-gray-800">
                     <i class="fa-solid fa-gear text-indigo-600 mr-2"></i>ตั้งค่า PromptPay
@@ -365,15 +400,18 @@
 
                 <!-- Input -->
                 <div>
-                    <label id="settings-id-label" class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
+                    <label id="settings-id-label"
+                        class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
                     <input type="text" id="settings-id-input" maxlength="13" inputmode="numeric"
                         placeholder="เช่น 0812345678"
                         class="w-full border border-gray-300 rounded-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent tracking-widest text-lg text-center font-mono">
-                    <p id="settings-id-hint" class="text-xs text-gray-400 mt-1 text-center">กรอกเบอร์ 10 หลัก (ขึ้นต้นด้วย 0)</p>
+                    <p id="settings-id-hint" class="text-xs text-gray-400 mt-1 text-center">กรอกเบอร์ 10 หลัก
+                        (ขึ้นต้นด้วย 0)</p>
                 </div>
 
                 <!-- Preview -->
-                <div id="settings-preview" class="hidden bg-indigo-50 border border-indigo-100 rounded-xl p-3 text-center">
+                <div id="settings-preview"
+                    class="hidden bg-indigo-50 border border-indigo-100 rounded-xl p-3 text-center">
                     <p class="text-xs text-gray-500 mb-1">ตัวอย่าง QR Code PromptPay</p>
                     <div id="settings-qr-preview" class="flex justify-center my-2"></div>
                     <p id="settings-preview-label" class="text-xs text-indigo-600 font-medium"></p>
@@ -394,17 +432,21 @@
     </div>
 
     <!-- Alert Modal for Checkout Success -->
-    <div id="successModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-lg shadow-2xl text-center transform scale-95 transition-transform duration-300" id="successModalContent">
+    <div id="successModal"
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-lg shadow-2xl text-center transform scale-95 transition-transform duration-300"
+            id="successModalContent">
             <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fa-solid fa-check text-4xl text-green-500"></i>
             </div>
             <h3 class="text-2xl font-semibold text-gray-800 mb-2">บันทึกการขายสำเร็จ</h3>
             <p class="text-gray-500 mb-6">ข้อมูลเตรียมพร้อมสำหรับส่งไป Google Sheets</p>
-            
+
             <div class="bg-gray-50 rounded-lg p-4 mb-6 text-left overflow-hidden">
-                <p class="text-xs text-gray-400 mb-1 uppercase font-semibold tracking-wider">Preview Data (1 Item = 1 Row)</p>
-                <pre id="previewData" class="text-xs text-gray-700 overflow-x-auto whitespace-pre-wrap max-h-40 font-mono"></pre>
+                <p class="text-xs text-gray-400 mb-1 uppercase font-semibold tracking-wider">Preview Data (1 Item = 1
+                    Row)</p>
+                <pre id="previewData"
+                    class="text-xs text-gray-700 overflow-x-auto whitespace-pre-wrap max-h-40 font-mono"></pre>
             </div>
 
             <button onclick="closeSuccessModal()" class="btn-primary py-2 px-8 rounded-lg font-medium">
@@ -420,7 +462,7 @@
             { id: 2, name: 'ก้านยาว', defaultPrice: 250 },
             { id: 3, name: 'จันทบุรีสาม', defaultPrice: 160 }
         ];
-        
+
         // Load products from localStorage, fallback to defaults
         let products = JSON.parse(localStorage.getItem('durianProducts')) || DEFAULT_PRODUCTS;
 
@@ -441,7 +483,7 @@
 
         function renderOrderHistory() {
             const tbody = document.getElementById('order-history-body');
-            
+
             if (orderHistory.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-400">ยังไม่มีประวัติการขาย</td></tr>';
                 renderPagination(0);
@@ -481,7 +523,7 @@
                     <td class="p-3 font-mono text-xs text-gray-500 whitespace-nowrap">${order.orderId}</td>
                     <td class="p-3 text-gray-600 whitespace-nowrap">${timeStr}</td>
                     <td class="p-3 text-gray-700">${summary}</td>
-                    <td class="p-3 text-right font-semibold text-green-700 whitespace-nowrap">฿${Number(total).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td class="p-3 text-right font-semibold text-green-700 whitespace-nowrap">฿${Number(total).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -574,7 +616,7 @@
         function openSalesSummaryModal() {
             const container = document.getElementById('salesSummaryDetails');
             container.innerHTML = '<div class="text-center py-10 text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังประมวลผล...</div>';
-            
+
             const modal = document.getElementById('salesSummaryModal');
             const content = document.getElementById('salesSummaryContent');
             modal.classList.remove('hidden');
@@ -619,7 +661,7 @@
 
                 const dateSummary = summaryByDate[dateStr];
                 const total = Number(order.totalPrice !== undefined ? order.totalPrice : (order.total || 0));
-                
+
                 dateSummary.totalRevenue += total;
                 dateSummary.ordersCount += 1;
                 overallTotal += total;
@@ -643,7 +685,7 @@
                                 name: match[1].trim(),
                                 qty: parseFloat(match[2]),
                                 unit: match[3].trim(),
-                                total: 0 
+                                total: 0
                             });
                         }
                     });
@@ -665,7 +707,7 @@
             });
 
             const container = document.getElementById('salesSummaryDetails');
-            
+
             if (overallOrders === 0) {
                 container.innerHTML = '<div class="text-center py-10 text-gray-500">ไม่มีข้อมูลการขายสำหรับสรุปผล</div>';
                 return;
@@ -675,7 +717,7 @@
                 <div class="grid grid-cols-2 gap-4 mb-2">
                     <div class="bg-green-50 rounded-xl p-4 text-center border border-green-100">
                         <p class="text-sm text-green-600 mb-1">ยอดขายรวมทั้งหมด</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-green-700">฿${overallTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-green-700">฿${overallTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     </div>
                     <div class="bg-blue-50 rounded-xl p-4 text-center border border-blue-100">
                         <p class="text-sm text-blue-600 mb-1">จำนวนบิลทั้งหมด</p>
@@ -693,7 +735,7 @@
                 for (const [unit, qty] of Object.entries(overallUnits)) {
                     html += `
                         <div class="bg-yellow-50 text-yellow-800 px-4 py-2 rounded-lg border border-yellow-100 flex items-center gap-2">
-                            <span class="font-semibold">${qty.toLocaleString(undefined, {maximumFractionDigits: 2})}</span> ${unit}
+                            <span class="font-semibold">${qty.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span> ${unit}
                         </div>
                     `;
                 }
@@ -702,7 +744,7 @@
 
             const sortedProducts = Object.entries(overallProducts).sort((a, b) => b[1].qty - a[1].qty);
             if (sortedProducts.length > 0) {
-                 html += `
+                html += `
                     <div class="mb-4">
                         <h4 class="font-medium text-gray-700 mb-3"><i class="fa-solid fa-ranking-star mr-2 text-purple-600"></i>ยอดขายแยกตามสินค้า</h4>
                         <div class="overflow-x-auto bg-white rounded-xl border border-gray-100 shadow-sm">
@@ -719,7 +761,7 @@
                     html += `
                         <tr class="hover:bg-gray-50">
                             <td class="p-3">${name}</td>
-                            <td class="p-3 text-right font-medium">${data.qty.toLocaleString(undefined, {maximumFractionDigits: 2})} ${data.unit}</td>
+                            <td class="p-3 text-right font-medium">${data.qty.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${data.unit}</td>
                         </tr>
                     `;
                 });
@@ -737,7 +779,7 @@
                 const ds = summaryByDate[date];
                 let unitBadges = '';
                 for (const [unit, qty] of Object.entries(ds.units)) {
-                    unitBadges += `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded border border-gray-200">${qty.toLocaleString(undefined, {maximumFractionDigits: 2})} ${unit}</span> `;
+                    unitBadges += `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded border border-gray-200">${qty.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${unit}</span> `;
                 }
 
                 html += `
@@ -748,7 +790,7 @@
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-sm mb-3">
                             <div class="text-gray-600">ยอดขายรวม:</div>
-                            <div class="text-right font-bold text-green-700 text-base">฿${ds.totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                            <div class="text-right font-bold text-green-700 text-base">฿${ds.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                         </div>
                         <div class="text-sm">
                             <div class="text-gray-600 mb-2 text-xs">ปริมาณสินค้าที่ขายได้:</div>
@@ -784,7 +826,7 @@
                 const card = document.createElement('div');
                 card.className = 'product-card bg-white rounded-xl p-4 shadow-sm flex flex-col items-center justify-center text-center gap-2 aspect-square relative';
                 card.onclick = () => openAddToCartModal(p);
-                
+
                 card.innerHTML = `
                     <button onclick="event.stopPropagation(); openModal(${p.id})" class="absolute top-2 right-2 text-gray-300 hover:text-yellow-600 transition-colors p-1" title="แก้ไขสินค้า">
                         <i class="fa-solid fa-pen-to-square"></i>
@@ -804,13 +846,13 @@
             const modal = document.getElementById('addProductModal');
             const content = document.getElementById('modalContent');
             const title = document.getElementById('modalTitle');
-            
+
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 content.classList.remove('scale-95');
             }, 10);
-            
+
             if (productId) {
                 const p = products.find(x => x.id === productId);
                 title.textContent = 'แก้ไขสินค้า';
@@ -829,7 +871,7 @@
             const content = document.getElementById('modalContent');
             modal.classList.add('opacity-0');
             content.classList.add('scale-95');
-            
+
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300); // matches duration-300
@@ -870,7 +912,7 @@
             document.getElementById('addToCartModalTitle').textContent = `เพิ่ม ${product.name}`;
             document.getElementById('addToCartQty').value = 1;
             document.getElementById('addToCartUnit').value = 'กิโลกรัม';
-            
+
             const modal = document.getElementById('addToCartModal');
             const content = document.getElementById('addToCartModalContent');
             modal.classList.remove('hidden');
@@ -963,10 +1005,10 @@
 
                 cart.forEach(item => {
                     grandTotal += item.total;
-                    
+
                     const el = document.createElement('div');
                     el.className = 'bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col gap-3 relative animate-[fadeIn_0.3s_ease-out]';
-                    
+
                     // Style injected for simple fade-in
                     const style = document.createElement('style');
                     style.innerHTML = `@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`;
@@ -1003,7 +1045,7 @@
                             </div>
                             <div class="col-span-3 text-right">
                                 <label class="text-[10px] text-gray-500 uppercase tracking-wide">รวม</label>
-                                <div class="font-semibold text-green-700 mt-1">฿${item.total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</div>
+                                <div class="font-semibold text-green-700 mt-1">฿${item.total.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</div>
                             </div>
                         </div>
                     `;
@@ -1011,7 +1053,7 @@
                 });
             }
 
-            totalEl.textContent = `฿${grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            totalEl.textContent = `฿${grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }
 
         // -------------------------
@@ -1031,7 +1073,7 @@
         function openPaymentModal() {
             if (cart.length === 0) return;
             const grandTotal = cart.reduce((sum, item) => sum + item.total, 0);
-            document.getElementById('payment-grand-total').textContent = `\u0e3f${grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('payment-grand-total').textContent = `\u0e3f${grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             document.getElementById('cash-received').value = '';
             document.getElementById('change-amount').textContent = '\u0e3f0.00';
             selectPaymentMethod('transfer');
@@ -1082,10 +1124,10 @@
             const change = received - grandTotal;
             const el = document.getElementById('change-amount');
             if (change < 0) {
-                el.textContent = `\u0e3f${Math.abs(change).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (ไม่พอ)`;
+                el.textContent = `\u0e3f${Math.abs(change).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (ไม่พอ)`;
                 el.className = 'text-2xl font-bold text-red-500';
             } else {
-                el.textContent = `\u0e3f${change.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                el.textContent = `\u0e3f${change.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                 el.className = 'text-2xl font-bold text-yellow-700';
             }
         }
@@ -1123,11 +1165,11 @@
 
             const orderId = generateOrderId();
             const now = new Date();
-            const timestamp = now.getFullYear() + '-' + 
-                String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                String(now.getDate()).padStart(2, '0') + ' ' + 
-                String(now.getHours()).padStart(2, '0') + ':' + 
-                String(now.getMinutes()).padStart(2, '0') + ':' + 
+            const timestamp = now.getFullYear() + '-' +
+                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                String(now.getDate()).padStart(2, '0') + ' ' +
+                String(now.getHours()).padStart(2, '0') + ':' +
+                String(now.getMinutes()).padStart(2, '0') + ':' +
                 String(now.getSeconds()).padStart(2, '0');
 
             const grandTotal = cart.reduce((sum, item) => sum + item.total, 0);
@@ -1163,44 +1205,44 @@
                 body: JSON.stringify(payload),
                 headers: { 'Content-Type': 'text/plain' }
             })
-            .then(response => response.json())
-            .then(data => {
-                checkoutBtn.innerHTML = originalText;
-                checkoutBtn.disabled = false;
-                
-                if (data.status === 'success') {
-                    // Add to history
-                    const grandTotal = cart.reduce((sum, item) => sum + item.total, 0);
-                    orderHistory.push({
-                        orderId: orderId,
-                        timestamp: timestamp,
-                        items: cart.map(i => ({...i})),
-                        total: grandTotal
-                    });
-                    renderOrderHistory();
+                .then(response => response.json())
+                .then(data => {
+                    checkoutBtn.innerHTML = originalText;
+                    checkoutBtn.disabled = false;
 
-                    // Show success modal
-                    const modal = document.getElementById('successModal');
-                    const content = document.getElementById('successModalContent');
-                    const preview = document.getElementById('previewData');
-                    
-                    preview.textContent = JSON.stringify(sheetData, null, 2);
+                    if (data.status === 'success') {
+                        // Add to history
+                        const grandTotal = cart.reduce((sum, item) => sum + item.total, 0);
+                        orderHistory.push({
+                            orderId: orderId,
+                            timestamp: timestamp,
+                            items: cart.map(i => ({ ...i })),
+                            total: grandTotal
+                        });
+                        renderOrderHistory();
 
-                    modal.classList.remove('hidden');
-                    setTimeout(() => {
-                        modal.classList.remove('opacity-0');
-                        content.classList.remove('scale-95');
-                    }, 10);
-                } else {
-                    alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + (data.message || 'Unknown Error'));
-                }
-            })
-            .catch(error => {
-                checkoutBtn.innerHTML = originalText;
-                checkoutBtn.disabled = false;
-                console.error('Error:', error);
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ โปรดลองอีกครั้ง');
-            });
+                        // Show success modal
+                        const modal = document.getElementById('successModal');
+                        const content = document.getElementById('successModalContent');
+                        const preview = document.getElementById('previewData');
+
+                        preview.textContent = JSON.stringify(sheetData, null, 2);
+
+                        modal.classList.remove('hidden');
+                        setTimeout(() => {
+                            modal.classList.remove('opacity-0');
+                            content.classList.remove('scale-95');
+                        }, 10);
+                    } else {
+                        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + (data.message || 'Unknown Error'));
+                    }
+                })
+                .catch(error => {
+                    checkoutBtn.innerHTML = originalText;
+                    checkoutBtn.disabled = false;
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ โปรดลองอีกครั้ง');
+                });
         }
 
         function closeSuccessModal() {
@@ -1208,7 +1250,7 @@
             const content = document.getElementById('successModalContent');
             modal.classList.add('opacity-0');
             content.classList.add('scale-95');
-            
+
             setTimeout(() => {
                 modal.classList.add('hidden');
                 // Clear cart after closing
@@ -1313,7 +1355,7 @@
                     ? clean.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
                     : clean.replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, '$1-$2-$3-$4-$5');
                 previewLabel.textContent = (currentSettingsType === 'phone' ? 'เบอร์: ' : 'บัตร: ') + display;
-            } catch(e) {
+            } catch (e) {
                 previewBox.classList.add('hidden');
             }
         }
@@ -1347,7 +1389,7 @@
 
         // Live preview on input change (attach after DOM ready)
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('settings-id-input').addEventListener('input', function() {
+            document.getElementById('settings-id-input').addEventListener('input', function () {
                 showSettingsPreview(this.value.trim());
             });
         });
@@ -1368,21 +1410,25 @@
 
         function formatPromptPay(type, id, amount) {
             id = id.replace(/\D/g, '');
-            if (type === 'phone' && id.startsWith('0')) {
-                id = '66' + id.substring(1);
-            }
-            const tag00 = '000201';
-            const tag01 = '010212';
+            if (type === 'phone' && id.startsWith('0')) id = '66' + id.substring(1);
+
+            // Sub-tags for Tag 29
             const aid = 'A000000677010111';
-            const target = (type === 'phone' ? '01' : '02') + id;
-            const tag29 = '29' + (aid.length + target.length).toString().padStart(2, '0') + aid + target;
-            const tag53 = '5303764';
+            const aidTag = '0016' + aid; // Tag 00 + Length 16
+            const targetTag = (type === 'phone' ? '01' : '02') + id.length.toString().padStart(2, '0') + id; // Tag 01 or 02 + Length + ID
+
+            const tag29 = '29' + (aidTag.length + targetTag.length).toString().padStart(2, '0') + aidTag + targetTag;
+
+            const tag00 = '000201'; // Payload Format Indicator
+            const tag01 = '010212'; // 12 = Static with amount
+            const tag53 = '5303764'; // THB
             const amtStr = parseFloat(amount).toFixed(2);
             const tag54 = '54' + amtStr.length.toString().padStart(2, '0') + amtStr;
             const tag58 = '5802TH';
+
             const base = tag00 + tag01 + tag29 + tag53 + tag54 + tag58;
-            const crcVal = crc16(base + '6304');
-            return base + '6304' + crcVal;
+            const crc = crc16(base + '6304');
+            return base + '6304' + crc;
         }
 
         function generateTransferQR() {
@@ -1426,11 +1472,12 @@
                     height: 180,
                     correctLevel: QRCode.CorrectLevel.M
                 });
-            } catch(e) {
+            } catch (e) {
                 qrContainer.innerHTML = '<p class="text-xs text-red-400">ไม่สามารถสร้าง QR ได้</p>';
             }
         }
 
     </script>
 </body>
+
 </html>
