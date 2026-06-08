@@ -134,9 +134,14 @@
     <!-- Order History Section -->
     <section class="max-w-7xl mx-auto px-4 md:px-8 mt-8">
         <div class="glass-panel rounded-2xl p-6">
-            <h2 class="text-xl font-medium text-gray-700 flex items-center gap-2 mb-6">
-                <i class="fa-solid fa-list-check text-green-600"></i> ประวัติการขายของวันนี้ (Order History)
-            </h2>
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+                <h2 class="text-xl font-medium text-gray-700 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-green-600"></i> ประวัติการขายของวันนี้ (Order History)
+                </h2>
+                <button onclick="openSalesSummaryModal()" class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 py-2 px-4 rounded-lg font-medium transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie"></i> สรุปยอดขาย
+                </button>
+            </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -162,6 +167,51 @@
         <a href="index.html" class="inline-flex items-center gap-2 text-gray-500 hover:text-green-700 transition-colors">
             <i class="fa-solid fa-arrow-left"></i> กลับไปหน้าหลัก
         </a>
+    </div>
+
+    <!-- Sales Summary Modal -->
+    <div id="salesSummaryModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="salesSummaryContent">
+            <div class="flex justify-between items-center mb-5 shrink-0">
+                <h3 class="text-lg font-medium text-gray-800"><i class="fa-solid fa-chart-pie text-blue-600 mr-2"></i>สรุปยอดขายแบบละเอียด</h3>
+                <button onclick="closeSalesSummaryModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="overflow-y-auto pr-2 space-y-6 flex-grow custom-scrollbar" id="salesSummaryDetails">
+                <!-- Summary content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add to Cart Modal -->
+    <div id="addToCartModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300" id="addToCartModalContent">
+            <div class="flex justify-between items-center mb-5">
+                <h3 id="addToCartModalTitle" class="text-lg font-medium text-gray-800">ระบุจำนวนและหน่วย</h3>
+                <button onclick="closeAddToCartModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">จำนวน</label>
+                    <input type="number" id="addToCartQty" min="0" step="any" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="1">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">หน่วย</label>
+                    <select id="addToCartUnit" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <option value="กิโลกรัม">กิโลกรัม</option>
+                        <option value="ลูก">ลูก</option>
+                    </select>
+                </div>
+                <button onclick="confirmAddToCart()" class="w-full btn-primary py-3 rounded-lg font-medium mt-4">
+                    <i class="fa-solid fa-cart-plus mr-2"></i> เพิ่มลงตะกร้า
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Add Product Modal -->
@@ -348,6 +398,199 @@
                 });
         }
 
+        function openSalesSummaryModal() {
+            const container = document.getElementById('salesSummaryDetails');
+            container.innerHTML = '<div class="text-center py-10 text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังประมวลผล...</div>';
+            
+            const modal = document.getElementById('salesSummaryModal');
+            const content = document.getElementById('salesSummaryContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                generateDetailedSummary();
+            }, 10);
+        }
+
+        function closeSalesSummaryModal() {
+            const modal = document.getElementById('salesSummaryModal');
+            const content = document.getElementById('salesSummaryContent');
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function generateDetailedSummary() {
+            // Aggregate data
+            const summaryByDate = {};
+            let overallTotal = 0;
+            let overallOrders = 0;
+            const overallUnits = {};
+            const overallProducts = {};
+
+            orderHistory.forEach(order => {
+                // Determine date
+                let dateStr = 'ไม่ระบุวันที่';
+                if (order.timestamp) {
+                    dateStr = order.timestamp.toString().substring(0, 10);
+                }
+
+                if (!summaryByDate[dateStr]) {
+                    summaryByDate[dateStr] = {
+                        totalRevenue: 0,
+                        ordersCount: 0,
+                        units: {},
+                        products: {}
+                    };
+                }
+
+                const dateSummary = summaryByDate[dateStr];
+                const total = Number(order.totalPrice !== undefined ? order.totalPrice : (order.total || 0));
+                
+                dateSummary.totalRevenue += total;
+                dateSummary.ordersCount += 1;
+                overallTotal += total;
+                overallOrders += 1;
+
+                // Process Items
+                let itemsList = [];
+                if (order.items && Array.isArray(order.items)) {
+                    itemsList = order.items.map(i => ({
+                        name: i.name,
+                        qty: Number(i.qty) || 0,
+                        unit: i.unit,
+                        total: Number(i.total) || 0
+                    }));
+                } else if (order.itemsSummary) {
+                    const parts = order.itemsSummary.split(',');
+                    parts.forEach(part => {
+                        const match = part.trim().match(/(.*?)\s*\(([\d.]+)\s*(.*?)\)/);
+                        if (match) {
+                            itemsList.push({
+                                name: match[1].trim(),
+                                qty: parseFloat(match[2]),
+                                unit: match[3].trim(),
+                                total: 0 
+                            });
+                        }
+                    });
+                }
+
+                // Aggregate items
+                itemsList.forEach(item => {
+                    dateSummary.units[item.unit] = (dateSummary.units[item.unit] || 0) + item.qty;
+                    overallUnits[item.unit] = (overallUnits[item.unit] || 0) + item.qty;
+
+                    if (!dateSummary.products[item.name]) dateSummary.products[item.name] = { qty: 0, revenue: 0, unit: item.unit };
+                    dateSummary.products[item.name].qty += item.qty;
+                    dateSummary.products[item.name].revenue += item.total;
+
+                    if (!overallProducts[item.name]) overallProducts[item.name] = { qty: 0, revenue: 0, unit: item.unit };
+                    overallProducts[item.name].qty += item.qty;
+                    overallProducts[item.name].revenue += item.total;
+                });
+            });
+
+            const container = document.getElementById('salesSummaryDetails');
+            
+            if (overallOrders === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-gray-500">ไม่มีข้อมูลการขายสำหรับสรุปผล</div>';
+                return;
+            }
+
+            let html = `
+                <div class="grid grid-cols-2 gap-4 mb-2">
+                    <div class="bg-green-50 rounded-xl p-4 text-center border border-green-100">
+                        <p class="text-sm text-green-600 mb-1">ยอดขายรวมทั้งหมด</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-green-700">฿${overallTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-4 text-center border border-blue-100">
+                        <p class="text-sm text-blue-600 mb-1">จำนวนบิลทั้งหมด</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-blue-700">${overallOrders} บิล</p>
+                    </div>
+                </div>
+            `;
+
+            if (Object.keys(overallUnits).length > 0) {
+                html += `
+                    <div class="mb-2">
+                        <h4 class="font-medium text-gray-700 mb-3"><i class="fa-solid fa-scale-balanced mr-2 text-yellow-600"></i>สรุปปริมาณรวม (ตามหน่วย)</h4>
+                        <div class="flex flex-wrap gap-3">
+                `;
+                for (const [unit, qty] of Object.entries(overallUnits)) {
+                    html += `
+                        <div class="bg-yellow-50 text-yellow-800 px-4 py-2 rounded-lg border border-yellow-100 flex items-center gap-2">
+                            <span class="font-semibold">${qty.toLocaleString(undefined, {maximumFractionDigits: 2})}</span> ${unit}
+                        </div>
+                    `;
+                }
+                html += `</div></div>`;
+            }
+
+            const sortedProducts = Object.entries(overallProducts).sort((a, b) => b[1].qty - a[1].qty);
+            if (sortedProducts.length > 0) {
+                 html += `
+                    <div class="mb-4">
+                        <h4 class="font-medium text-gray-700 mb-3"><i class="fa-solid fa-ranking-star mr-2 text-purple-600"></i>ยอดขายแยกตามสินค้า</h4>
+                        <div class="overflow-x-auto bg-white rounded-xl border border-gray-100 shadow-sm">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead>
+                                    <tr class="bg-purple-50 text-purple-800">
+                                        <th class="p-3">ชื่อสินค้า</th>
+                                        <th class="p-3 text-right">จำนวนรวม</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                `;
+                sortedProducts.forEach(([name, data]) => {
+                    html += `
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3">${name}</td>
+                            <td class="p-3 text-right font-medium">${data.qty.toLocaleString(undefined, {maximumFractionDigits: 2})} ${data.unit}</td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table></div></div>`;
+            }
+
+            const sortedDates = Object.keys(summaryByDate).sort().reverse();
+            html += `
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-4"><i class="fa-solid fa-calendar-days mr-2 text-indigo-600"></i>แยกตามวันที่</h4>
+                    <div class="space-y-4">
+            `;
+
+            sortedDates.forEach(date => {
+                const ds = summaryByDate[date];
+                let unitBadges = '';
+                for (const [unit, qty] of Object.entries(ds.units)) {
+                    unitBadges += `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded border border-gray-200">${qty.toLocaleString(undefined, {maximumFractionDigits: 2})} ${unit}</span> `;
+                }
+
+                html += `
+                    <div class="border border-indigo-100 rounded-xl p-4 bg-indigo-50/30">
+                        <div class="flex justify-between items-center mb-3 pb-2 border-b border-indigo-100">
+                            <div class="font-medium text-indigo-800"><i class="fa-regular fa-calendar mr-2"></i>${date}</div>
+                            <div class="text-xs text-gray-500 bg-white px-2 py-1 rounded-md shadow-sm">${ds.ordersCount} บิล</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+                            <div class="text-gray-600">ยอดขายรวม:</div>
+                            <div class="text-right font-bold text-green-700 text-base">฿${ds.totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                        </div>
+                        <div class="text-sm">
+                            <div class="text-gray-600 mb-2 text-xs">ปริมาณสินค้าที่ขายได้:</div>
+                            <div class="flex flex-wrap gap-1.5">
+                                ${unitBadges || '<span class="text-gray-400 text-xs">-</span>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts();
@@ -367,7 +610,7 @@
             products.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'product-card bg-white rounded-xl p-4 shadow-sm flex flex-col items-center justify-center text-center gap-2 aspect-square relative';
-                card.onclick = () => addToCart(p);
+                card.onclick = () => openAddToCartModal(p);
                 
                 card.innerHTML = `
                     <button onclick="event.stopPropagation(); openModal(${p.id})" class="absolute top-2 right-2 text-gray-300 hover:text-yellow-600 transition-colors p-1" title="แก้ไขสินค้า">
@@ -447,19 +690,57 @@
         // -------------------------
         // Cart Logic
         // -------------------------
-        function addToCart(product) {
+        let selectedProductForCart = null;
+
+        function openAddToCartModal(product) {
+            selectedProductForCart = product;
+            document.getElementById('addToCartModalTitle').textContent = `เพิ่ม ${product.name}`;
+            document.getElementById('addToCartQty').value = 1;
+            document.getElementById('addToCartUnit').value = 'กิโลกรัม';
+            
+            const modal = document.getElementById('addToCartModal');
+            const content = document.getElementById('addToCartModalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                document.getElementById('addToCartQty').focus();
+                document.getElementById('addToCartQty').select();
+            }, 10);
+        }
+
+        function closeAddToCartModal() {
+            const modal = document.getElementById('addToCartModal');
+            const content = document.getElementById('addToCartModalContent');
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+            selectedProductForCart = null;
+        }
+
+        function confirmAddToCart() {
+            if (!selectedProductForCart) return;
+            const qty = parseFloat(document.getElementById('addToCartQty').value) || 0;
+            const unit = document.getElementById('addToCartUnit').value;
+
+            if (qty <= 0) {
+                alert('กรุณาระบุจำนวนให้ถูกต้อง');
+                return;
+            }
+
             cartItemCounter++;
             const newItem = {
                 cartItemId: cartItemCounter,
-                productId: product.id,
-                name: product.name,
-                qty: 1,
-                unit: 'กิโลกรัม',
-                unitPrice: product.defaultPrice,
-                total: product.defaultPrice
+                productId: selectedProductForCart.id,
+                name: selectedProductForCart.name,
+                qty: qty,
+                unit: unit,
+                unitPrice: selectedProductForCart.defaultPrice,
+                total: selectedProductForCart.defaultPrice * qty
             };
             cart.push(newItem);
             updateCartUI();
+            closeAddToCartModal();
         }
 
         function removeFromCart(cartItemId) {
@@ -572,7 +853,7 @@
             return `ORD${year}${month}${day}-${random}`;
         }
 
-        let selectedPaymentMethod = 'cash';
+        let selectedPaymentMethod = 'transfer';
 
         function openPaymentModal() {
             if (cart.length === 0) return;
@@ -580,7 +861,7 @@
             document.getElementById('payment-grand-total').textContent = `\u0e3f${grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             document.getElementById('cash-received').value = '';
             document.getElementById('change-amount').textContent = '\u0e3f0.00';
-            selectPaymentMethod('cash');
+            selectPaymentMethod('transfer');
 
             const modal = document.getElementById('paymentModal');
             const content = document.getElementById('paymentModalContent');
