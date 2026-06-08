@@ -6,6 +6,7 @@
     <title>บันทึกการขายทุเรียน | Premium Durian POS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap');
         
@@ -64,14 +65,30 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #81c784;
         }
+
+        /* QR Code container fix */
+        #promptpay-qr img {
+            margin: 0 auto;
+            border-radius: 8px;
+        }
+        #promptpay-qr canvas {
+            border-radius: 8px;
+            margin: 0 auto;
+            display: block;
+        }
     </style>
 </head>
 <body class="text-gray-800 min-h-screen pb-10">
 
     <!-- Header -->
-    <header class="pt-8 pb-6 px-4 md:px-8 text-center">
+    <header class="pt-8 pb-6 px-4 md:px-8 text-center relative">
+        <button onclick="openSettingsModal()" title="ตั้งค่า PromptPay"
+            class="absolute top-6 right-4 md:right-8 flex items-center gap-2 text-sm text-gray-500 hover:text-green-700 bg-white/70 hover:bg-white border border-gray-200 hover:border-green-300 px-3 py-2 rounded-xl transition-all shadow-sm">
+            <i class="fa-solid fa-gear"></i>
+            <span class="hidden sm:inline">ตั้งค่า PromptPay</span>
+        </button>
         <div class="inline-block p-4 rounded-full bg-yellow-100 text-green-700 mb-2 shadow-sm">
-            <i class="fa-solid fa-lemon text-3xl"></i> <!-- using lemon icon as durian placeholder -->
+            <i class="fa-solid fa-lemon text-3xl"></i>
         </div>
         <h1 class="text-3xl md:text-4xl font-semibold text-green-800 tracking-tight">Durian Premium POS</h1>
         <p class="text-gray-500 mt-2">ระบบบันทึกการขายทุเรียน</p>
@@ -286,15 +303,93 @@
 
             <!-- Transfer Section -->
             <div id="transfer-section" class="hidden mb-5">
-                <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-center">
-                    <i class="fa-solid fa-qrcode text-3xl text-blue-400 mb-2"></i>
-                    <p class="text-sm text-blue-600">โอนเงินแล้วกดยืนยันได้เลย</p>
+                <!-- PromptPay QR Section (shown when configured) -->
+                <div id="promptpay-section" class="hidden">
+                    <div class="bg-gradient-to-b from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 text-center">
+                        <div class="flex items-center justify-center gap-2 mb-3">
+                            <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">P</span>
+                            </div>
+                            <span class="text-sm font-semibold text-blue-700">พร้อมเพย์</span>
+                        </div>
+                        <div id="promptpay-id-label" class="text-xs text-gray-500 mb-3"></div>
+                        <div id="promptpay-qr" class="flex justify-center mb-3"></div>
+                        <div id="promptpay-amount-label" class="text-sm font-semibold text-blue-700 mb-1"></div>
+                        <p class="text-xs text-gray-400">สแกน QR เพื่อโอนเงิน แล้วกดยืนยัน</p>
+                    </div>
+                </div>
+                <!-- Fallback (no QR configured) -->
+                <div id="transfer-no-qr" class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-center">
+                    <i class="fa-solid fa-qrcode text-3xl text-blue-300 mb-2"></i>
+                    <p class="text-sm text-blue-600 mb-2">โอนเงินแล้วกดยืนยันได้เลย</p>
+                    <button onclick="closePaymentModal(); setTimeout(openSettingsModal, 310)"
+                        class="text-xs text-indigo-500 hover:text-indigo-700 underline transition-colors">
+                        <i class="fa-solid fa-gear mr-1"></i>ตั้งค่า PromptPay เพื่อแสดง QR Code
+                    </button>
                 </div>
             </div>
 
             <button onclick="confirmPayment()" id="btn-confirm-payment" class="w-full btn-primary py-3 rounded-xl font-medium flex justify-center items-center gap-2">
                 <i class="fa-solid fa-check"></i> ยืนยันและบันทึก
             </button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300" id="settingsModalContent">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-lg font-medium text-gray-800">
+                    <i class="fa-solid fa-gear text-indigo-600 mr-2"></i>ตั้งค่า PromptPay
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Type selector -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">ประเภทหมายเลข</label>
+                    <div class="flex gap-2">
+                        <button id="settings-btn-phone" onclick="selectIdType('phone')"
+                            class="flex-1 py-2.5 rounded-xl border-2 text-sm font-medium flex items-center justify-center gap-2 transition-all border-indigo-500 bg-indigo-50 text-indigo-700">
+                            <i class="fa-solid fa-phone"></i> เบอร์โทรศัพท์
+                        </button>
+                        <button id="settings-btn-citizen" onclick="selectIdType('citizen')"
+                            class="flex-1 py-2.5 rounded-xl border-2 text-sm font-medium flex items-center justify-center gap-2 transition-all border-gray-200 text-gray-500">
+                            <i class="fa-solid fa-id-card"></i> เลขบัตร ปชช.
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Input -->
+                <div>
+                    <label id="settings-id-label" class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
+                    <input type="text" id="settings-id-input" maxlength="13" inputmode="numeric"
+                        placeholder="เช่น 0812345678"
+                        class="w-full border border-gray-300 rounded-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent tracking-widest text-lg text-center font-mono">
+                    <p id="settings-id-hint" class="text-xs text-gray-400 mt-1 text-center">กรอกเบอร์ 10 หลัก (ขึ้นต้นด้วย 0)</p>
+                </div>
+
+                <!-- Preview -->
+                <div id="settings-preview" class="hidden bg-indigo-50 border border-indigo-100 rounded-xl p-3 text-center">
+                    <p class="text-xs text-gray-500 mb-1">ตัวอย่าง QR Code PromptPay</p>
+                    <div id="settings-qr-preview" class="flex justify-center my-2"></div>
+                    <p id="settings-preview-label" class="text-xs text-indigo-600 font-medium"></p>
+                </div>
+
+                <div class="flex gap-2 pt-1">
+                    <button onclick="clearSettings()"
+                        class="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-500 hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-all">
+                        <i class="fa-solid fa-trash mr-1"></i> ล้างค่า
+                    </button>
+                    <button onclick="saveSettings()"
+                        class="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition-all">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึก
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -976,6 +1071,8 @@
                 transferSection.classList.remove('hidden');
                 btnTransfer.className = 'flex-1 py-3 rounded-xl border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium flex flex-col items-center gap-1 transition-all';
                 btnCash.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-500 font-medium flex flex-col items-center gap-1 transition-all';
+                // Generate QR if settings are configured
+                generateTransferQR();
             }
         }
 
@@ -1118,6 +1215,220 @@
                 cart = [];
                 updateCartUI();
             }, 300);
+        }
+
+        // -------------------------
+        // PromptPay Settings Logic
+        // -------------------------
+        let promptPaySettings = JSON.parse(localStorage.getItem('durianPromptPay')) || { type: 'phone', id: '' };
+        let currentSettingsType = promptPaySettings.type || 'phone';
+
+        function openSettingsModal() {
+            // Restore saved values into form
+            currentSettingsType = promptPaySettings.type || 'phone';
+            document.getElementById('settings-id-input').value = promptPaySettings.id || '';
+            updateSettingsTypeUI();
+
+            // Show preview if id is already set
+            if (promptPaySettings.id) {
+                showSettingsPreview(promptPaySettings.id);
+            } else {
+                document.getElementById('settings-preview').classList.add('hidden');
+            }
+
+            const modal = document.getElementById('settingsModal');
+            const content = document.getElementById('settingsModalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                document.getElementById('settings-id-input').focus();
+            }, 10);
+        }
+
+        function closeSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            const content = document.getElementById('settingsModalContent');
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function selectIdType(type) {
+            currentSettingsType = type;
+            updateSettingsTypeUI();
+            // Re-show preview if input has value
+            const val = document.getElementById('settings-id-input').value.trim();
+            if (val) showSettingsPreview(val);
+        }
+
+        function updateSettingsTypeUI() {
+            const btnPhone = document.getElementById('settings-btn-phone');
+            const btnCitizen = document.getElementById('settings-btn-citizen');
+            const label = document.getElementById('settings-id-label');
+            const hint = document.getElementById('settings-id-hint');
+            const input = document.getElementById('settings-id-input');
+
+            if (currentSettingsType === 'phone') {
+                btnPhone.className = 'flex-1 py-2.5 rounded-xl border-2 text-sm font-medium flex items-center justify-center gap-2 transition-all border-indigo-500 bg-indigo-50 text-indigo-700';
+                btnCitizen.className = 'flex-1 py-2.5 rounded-xl border-2 text-sm font-medium flex items-center justify-center gap-2 transition-all border-gray-200 text-gray-500';
+                label.textContent = 'เบอร์โทรศัพท์';
+                hint.textContent = 'กรอกเบอร์ 10 หลัก (ขึ้นต้นด้วย 0) เช่น 0812345678';
+                input.maxLength = 10;
+                input.placeholder = 'เช่น 0812345678';
+            } else {
+                btnCitizen.className = 'flex-1 py-2.5 rounded-xl border-2 text-sm font-medium flex items-center justify-center gap-2 transition-all border-indigo-500 bg-indigo-50 text-indigo-700';
+                btnPhone.className = 'flex-1 py-2.5 rounded-xl border-2 text-sm font-medium flex items-center justify-center gap-2 transition-all border-gray-200 text-gray-500';
+                label.textContent = 'เลขบัตรประชาชน';
+                hint.textContent = 'กรอกเลข 13 หลัก';
+                input.maxLength = 13;
+                input.placeholder = 'เช่น 1234567890123';
+            }
+        }
+
+        function showSettingsPreview(idVal) {
+            const previewBox = document.getElementById('settings-preview');
+            const previewQr = document.getElementById('settings-qr-preview');
+            const previewLabel = document.getElementById('settings-preview-label');
+
+            // Validate length before showing
+            const clean = idVal.replace(/\D/g, '');
+            if ((currentSettingsType === 'phone' && clean.length !== 10) ||
+                (currentSettingsType === 'citizen' && clean.length !== 13)) {
+                previewBox.classList.add('hidden');
+                return;
+            }
+
+            previewBox.classList.remove('hidden');
+            previewQr.innerHTML = '';
+            try {
+                const payload = formatPromptPay(currentSettingsType, clean, 0);
+                new QRCode(previewQr, {
+                    text: payload,
+                    width: 120,
+                    height: 120,
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                const display = currentSettingsType === 'phone'
+                    ? clean.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
+                    : clean.replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, '$1-$2-$3-$4-$5');
+                previewLabel.textContent = (currentSettingsType === 'phone' ? 'เบอร์: ' : 'บัตร: ') + display;
+            } catch(e) {
+                previewBox.classList.add('hidden');
+            }
+        }
+
+        function saveSettings() {
+            const idVal = document.getElementById('settings-id-input').value.trim();
+            const clean = idVal.replace(/\D/g, '');
+
+            if (currentSettingsType === 'phone' && clean.length !== 10) {
+                alert('กรุณากรอกเบอร์โทรศัพท์ 10 หลัก (ขึ้นต้นด้วย 0)');
+                return;
+            }
+            if (currentSettingsType === 'citizen' && clean.length !== 13) {
+                alert('กรุณากรอกเลขบัตรประชาชน 13 หลัก');
+                return;
+            }
+
+            promptPaySettings = { type: currentSettingsType, id: clean };
+            localStorage.setItem('durianPromptPay', JSON.stringify(promptPaySettings));
+            closeSettingsModal();
+        }
+
+        function clearSettings() {
+            if (!confirm('ล้างข้อมูล PromptPay ออกใช่ไหม?')) return;
+            promptPaySettings = { type: 'phone', id: '' };
+            localStorage.removeItem('durianPromptPay');
+            document.getElementById('settings-id-input').value = '';
+            document.getElementById('settings-preview').classList.add('hidden');
+            closeSettingsModal();
+        }
+
+        // Live preview on input change (attach after DOM ready)
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('settings-id-input').addEventListener('input', function() {
+                showSettingsPreview(this.value.trim());
+            });
+        });
+
+        // -------------------------
+        // PromptPay QR Generation
+        // -------------------------
+        function crc16(data) {
+            let crc = 0xFFFF;
+            for (let i = 0; i < data.length; i++) {
+                crc ^= data.charCodeAt(i) << 8;
+                for (let j = 0; j < 8; j++) {
+                    crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : (crc << 1);
+                }
+            }
+            return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+        }
+
+        function formatPromptPay(type, id, amount) {
+            id = id.replace(/\D/g, '');
+            if (type === 'phone' && id.startsWith('0')) {
+                id = '66' + id.substring(1);
+            }
+            const tag00 = '000201';
+            const tag01 = '010212';
+            const aid = 'A000000677010111';
+            const target = (type === 'phone' ? '01' : '02') + id;
+            const tag29 = '29' + (aid.length + target.length).toString().padStart(2, '0') + aid + target;
+            const tag53 = '5303764';
+            const amtStr = parseFloat(amount).toFixed(2);
+            const tag54 = '54' + amtStr.length.toString().padStart(2, '0') + amtStr;
+            const tag58 = '5802TH';
+            const base = tag00 + tag01 + tag29 + tag53 + tag54 + tag58;
+            const crcVal = crc16(base + '6304');
+            return base + '6304' + crcVal;
+        }
+
+        function generateTransferQR() {
+            const qrContainer = document.getElementById('promptpay-qr');
+            const promptpaySection = document.getElementById('promptpay-section');
+            const noQrSection = document.getElementById('transfer-no-qr');
+            const idLabel = document.getElementById('promptpay-id-label');
+            const amtLabel = document.getElementById('promptpay-amount-label');
+
+            const settings = JSON.parse(localStorage.getItem('durianPromptPay')) || { type: 'phone', id: '' };
+
+            if (!settings.id) {
+                promptpaySection.classList.add('hidden');
+                noQrSection.classList.remove('hidden');
+                return;
+            }
+
+            promptpaySection.classList.remove('hidden');
+            noQrSection.classList.add('hidden');
+
+            const grandTotal = cart.reduce((sum, item) => sum + item.total, 0);
+            const payload = formatPromptPay(settings.type, settings.id, grandTotal);
+
+            // Display ID
+            const clean = settings.id.replace(/\D/g, '');
+            let displayId = clean;
+            if (settings.type === 'phone') {
+                displayId = clean.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            } else {
+                displayId = clean.replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, '$1-$2-$3-$4-$5');
+            }
+            idLabel.textContent = (settings.type === 'phone' ? 'เบอร์: ' : 'เลขบัตร: ') + displayId;
+            amtLabel.textContent = 'ยอดโอน: ฿' + grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Clear & regenerate QR
+            qrContainer.innerHTML = '';
+            try {
+                new QRCode(qrContainer, {
+                    text: payload,
+                    width: 180,
+                    height: 180,
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            } catch(e) {
+                qrContainer.innerHTML = '<p class="text-xs text-red-400">ไม่สามารถสร้าง QR ได้</p>';
+            }
         }
 
     </script>
