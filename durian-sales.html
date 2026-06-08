@@ -505,14 +505,23 @@
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-gray-50 transition-colors';
 
-                // Format timestamp: show full date + time
+                // Format timestamp: show full date + time in local timezone
                 let timeStr = '-';
                 if (order.timestamp) {
-                    const ts = order.timestamp.toString();
-                    // Format: "YYYY-MM-DD HH:mm:ss" from Apps Script
-                    const datePart = ts.substring(0, 10);
-                    const timePart = ts.substring(11, 16);
-                    timeStr = datePart && timePart ? `${datePart} ${timePart}` : ts.substring(0, 16);
+                    const d = new Date(order.timestamp);
+                    if (!isNaN(d.getTime())) {
+                        const yyyy = d.getFullYear();
+                        const mm = String(d.getMonth() + 1).padStart(2, '0');
+                        const dd = String(d.getDate()).padStart(2, '0');
+                        const hh = String(d.getHours()).padStart(2, '0');
+                        const min = String(d.getMinutes()).padStart(2, '0');
+                        timeStr = `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+                    } else {
+                        const ts = order.timestamp.toString();
+                        const datePart = ts.substring(0, 10);
+                        const timePart = ts.substring(11, 16);
+                        timeStr = datePart && timePart ? `${datePart} ${timePart}` : ts.substring(0, 16);
+                    }
                 }
                 const summary = order.itemsSummary
                     ? order.itemsSummary
@@ -644,10 +653,18 @@
             const overallProducts = {};
 
             orderHistory.forEach(order => {
-                // Determine date
+                // Determine date in local timezone
                 let dateStr = 'ไม่ระบุวันที่';
                 if (order.timestamp) {
-                    dateStr = order.timestamp.toString().substring(0, 10);
+                    const d = new Date(order.timestamp);
+                    if (!isNaN(d.getTime())) {
+                        const yyyy = d.getFullYear();
+                        const mm = String(d.getMonth() + 1).padStart(2, '0');
+                        const dd = String(d.getDate()).padStart(2, '0');
+                        dateStr = `${yyyy}-${mm}-${dd}`;
+                    } else {
+                        dateStr = order.timestamp.toString().substring(0, 10);
+                    }
                 }
 
                 if (!summaryByDate[dateStr]) {
