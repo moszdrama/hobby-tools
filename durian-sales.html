@@ -122,9 +122,12 @@
 
                 <!-- Product loading spinner -->
                 <div id="product-loading" class="flex flex-col items-center justify-center py-12 gap-3 text-green-600">
-                    <svg class="animate-spin h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    <svg class="animate-spin h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
+                        </path>
                     </svg>
                     <span class="text-sm text-gray-500">กำลังโหลดสินค้า…</span>
                 </div>
@@ -582,7 +585,7 @@
             showProductLoading();
             setRefreshButtonLoading(true);
             try {
-                const res = await fetch(`${scriptUrl}?action=product`);
+                const res = await fetch(`${scriptUrl}?module=ProductModule&action=getAll`);
                 const json = await res.json();
                 if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
                     products = json.data;
@@ -633,7 +636,7 @@
         // -------------------------
         // Order History Logic
         // -------------------------
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxC--GJzXzzTymoOSRXQIZ9UXTWTgcFKJ28A5tM7770AW82kAo1O1NWE2Q5SlvJ8pys/exec';
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbyknzBhAUjQCGDmqYAjVXWVcpjq9BL8KGgcXuX5iRdWP5ifG7_wNH_x_vQSdfojF_zHSg/exec';
 
         function renderOrderHistory() {
             const tbody = document.getElementById('order-history-body');
@@ -786,7 +789,7 @@
             tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังโหลดข้อมูล...</td></tr>';
             setOrderRefreshButtonLoading(true);
 
-            fetch(`${scriptUrl}?action=order`)
+            fetch(`${scriptUrl}?module=OrderModule&action=getAll`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.status === 'success') {
@@ -1406,7 +1409,7 @@
                 }
             };
 
-            fetch(scriptUrl, {
+            fetch(`${scriptUrl}?module=OrderModule&action=create`, {
                 method: 'POST',
                 body: JSON.stringify(payload),
                 headers: { 'Content-Type': 'text/plain' }
