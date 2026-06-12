@@ -109,13 +109,27 @@
                     <h2 class="text-xl font-medium text-gray-700 flex items-center gap-2">
                         <i class="fa-solid fa-boxes-stacked text-green-600"></i> รายการสินค้า
                     </h2>
-                    <button onclick="openModal()"
-                        class="text-sm bg-yellow-100 hover:bg-yellow-200 text-yellow-800 py-2 px-4 rounded-lg font-medium transition-colors flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i> เพิ่มสินค้า
-                    </button>
+                    <div class="flex flex-col items-end gap-0.5">
+                        <button id="btn-refresh-products" onclick="forceRefreshProducts()"
+                            class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors px-2 py-1 rounded-lg hover:bg-green-50"
+                            title="โหลดข้อมูลสินค้าใหม่">
+                            <i id="icon-refresh-products" class="fa-solid fa-rotate text-base"></i>
+                            <span>รีเฟรช</span>
+                        </button>
+                        <span id="product-last-updated" class="text-xs text-gray-400 pr-2">ยังไม่ได้โหลด</span>
+                    </div>
                 </div>
 
-                <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 flex-grow content-start">
+                <!-- Product loading spinner -->
+                <div id="product-loading" class="flex flex-col items-center justify-center py-12 gap-3 text-green-600">
+                    <svg class="animate-spin h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    <span class="text-sm text-gray-500">กำลังโหลดสินค้า…</span>
+                </div>
+
+                <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 flex-grow content-start hidden">
                     <!-- Products will be generated here -->
                 </div>
             </div>
@@ -165,10 +179,21 @@
                 <h2 class="text-xl font-medium text-gray-700 flex items-center gap-2">
                     <i class="fa-solid fa-list-check text-green-600"></i> ประวัติการขายของวันนี้ (Order History)
                 </h2>
-                <button onclick="openSalesSummaryModal()"
-                    class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 py-2 px-4 rounded-lg font-medium transition-colors flex items-center gap-2">
-                    <i class="fa-solid fa-chart-pie"></i> สรุปยอดขาย
-                </button>
+                <div class="flex items-center gap-4 flex-wrap sm:flex-nowrap">
+                    <div class="flex flex-col items-end gap-0.5">
+                        <button id="btn-refresh-orders" onclick="fetchOrderHistory()"
+                            class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors px-2 py-1 rounded-lg hover:bg-green-50"
+                            title="โหลดประวัติการขายใหม่">
+                            <i id="icon-refresh-orders" class="fa-solid fa-rotate text-base"></i>
+                            <span>รีเฟรช</span>
+                        </button>
+                        <span id="order-last-updated" class="text-xs text-gray-400 pr-2">ยังไม่ได้โหลด</span>
+                    </div>
+                    <button onclick="openSalesSummaryModal()"
+                        class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 py-2 px-4 rounded-lg font-medium transition-colors flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-chart-pie"></i> สรุปยอดขาย
+                    </button>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
@@ -457,17 +482,146 @@
 
     <script>
         // State
-        const DEFAULT_PRODUCTS = [
-            { id: 1, name: 'หมอนทอง', defaultPrice: 180 },
-            { id: 2, name: 'ก้านยาว', defaultPrice: 250 },
-            { id: 3, name: 'จันทบุรีสาม', defaultPrice: 160 }
-        ];
+        let products = [];
 
-        // Load products from localStorage, fallback to defaults
-        let products = JSON.parse(localStorage.getItem('durianProducts')) || DEFAULT_PRODUCTS;
+        // -------------------------
+        // Product Cache Config
+        // -------------------------
+        const PRODUCT_CACHE_KEY = 'durianProducts_cache';
+        const PRODUCT_CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms
 
-        function saveProducts() {
-            localStorage.setItem('durianProducts', JSON.stringify(products));
+        function getProductCache() {
+            try {
+                const raw = localStorage.getItem(PRODUCT_CACHE_KEY);
+                if (!raw) return null;
+                const { timestamp, data } = JSON.parse(raw);
+                if (Date.now() - timestamp < PRODUCT_CACHE_TTL) return data;
+                return null; // expired
+            } catch { return null; }
+        }
+
+        function setProductCache(data) {
+            try {
+                localStorage.setItem(PRODUCT_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data }));
+            } catch { /* ignore storage errors */ }
+        }
+
+        function showProductGrid() {
+            document.getElementById('product-loading').classList.add('hidden');
+            document.getElementById('product-grid').classList.remove('hidden');
+        }
+
+        function showProductLoading() {
+            document.getElementById('product-loading').classList.remove('hidden');
+            document.getElementById('product-grid').classList.add('hidden');
+        }
+
+        function showToast(message, type = 'info') {
+            const existing = document.getElementById('product-toast');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.id = 'product-toast';
+            const colors = { info: 'bg-blue-500', warn: 'bg-yellow-500', error: 'bg-red-500', success: 'bg-green-600' };
+            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] ${colors[type] || colors.info} text-white text-sm px-5 py-3 rounded-xl shadow-lg transition-all duration-300 opacity-0`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.replace('opacity-0', 'opacity-100'), 10);
+            setTimeout(() => { toast.classList.replace('opacity-100', 'opacity-0'); setTimeout(() => toast.remove(), 400); }, 3500);
+        }
+
+        function updateProductTimestamp() {
+            const el = document.getElementById('product-last-updated');
+            if (!el) return;
+            try {
+                const raw = localStorage.getItem(PRODUCT_CACHE_KEY);
+                if (raw) {
+                    const { timestamp } = JSON.parse(raw);
+                    if (timestamp) {
+                        const d = new Date(timestamp);
+                        const hh = String(d.getHours()).padStart(2, '0');
+                        const mm = String(d.getMinutes()).padStart(2, '0');
+                        const dd = String(d.getDate()).padStart(2, '0');
+                        const mo = String(d.getMonth() + 1).padStart(2, '0');
+                        el.textContent = `อัปเดต: ${dd}/${mo} ${hh}:${mm}`;
+                        return;
+                    }
+                }
+            } catch { /* ignore */ }
+            el.textContent = 'ยังไม่ได้โหลด';
+        }
+
+        function setRefreshButtonLoading(isLoading) {
+            const icon = document.getElementById('icon-refresh-products');
+            const btn = document.getElementById('btn-refresh-products');
+            if (!icon || !btn) return;
+            if (isLoading) {
+                icon.classList.add('fa-spin');
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                icon.classList.remove('fa-spin');
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        async function fetchProducts(forceRefresh = false) {
+            // 1. Try cache first (skip if force refresh)
+            if (!forceRefresh) {
+                const cached = getProductCache();
+                if (cached && cached.length > 0) {
+                    products = cached;
+                    renderProducts();
+                    showProductGrid();
+                    updateProductTimestamp();
+                    return;
+                }
+            }
+
+            // 2. Fetch from AppScript
+            showProductLoading();
+            setRefreshButtonLoading(true);
+            try {
+                const res = await fetch(`${scriptUrl}?action=product`);
+                const json = await res.json();
+                if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
+                    products = json.data;
+                    setProductCache(products);
+                    renderProducts();
+                    showProductGrid();
+                    updateProductTimestamp();
+                    if (forceRefresh) showToast('✅ โหลดข้อมูลสินค้าใหม่สำเร็จ', 'success');
+                } else {
+                    throw new Error(json.message || 'ข้อมูลสินค้าว่างเปล่า');
+                }
+            } catch (err) {
+                // 3. Fallback to stale localStorage cache (ignore TTL)
+                try {
+                    const raw = localStorage.getItem(PRODUCT_CACHE_KEY);
+                    if (raw) {
+                        const { data } = JSON.parse(raw);
+                        if (data && data.length > 0) {
+                            products = data;
+                            renderProducts();
+                            showProductGrid();
+                            updateProductTimestamp();
+                            showToast('⚠️ ใช้ข้อมูลสินค้าจาก cache (API ไม่ตอบสนอง)', 'warn');
+                            return;
+                        }
+                    }
+                } catch { /* ignore */ }
+                // No cache at all
+                showProductGrid();
+                document.getElementById('product-grid').innerHTML =
+                    '<p class="col-span-3 text-center text-red-400 py-8">โหลดสินค้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</p>';
+                showToast('❌ โหลดข้อมูลสินค้าไม่สำเร็จ', 'error');
+            } finally {
+                setRefreshButtonLoading(false);
+            }
+        }
+
+        async function forceRefreshProducts() {
+            await fetchProducts(true);
         }
 
         let cart = []; // Array of { cartItemId, productId, name, qty, unit, unitPrice, total }
@@ -601,17 +755,45 @@
             renderOrderHistory();
         }
 
+        function setOrderRefreshButtonLoading(isLoading) {
+            const icon = document.getElementById('icon-refresh-orders');
+            const btn = document.getElementById('btn-refresh-orders');
+            if (!icon || !btn) return;
+            if (isLoading) {
+                icon.classList.add('fa-spin');
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                icon.classList.remove('fa-spin');
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function updateOrderTimestamp() {
+            const el = document.getElementById('order-last-updated');
+            if (!el) return;
+            const d = new Date();
+            const hh = String(d.getHours()).padStart(2, '0');
+            const mm = String(d.getMinutes()).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mo = String(d.getMonth() + 1).padStart(2, '0');
+            el.textContent = `อัปเดต: ${dd}/${mo} ${hh}:${mm}`;
+        }
+
         function fetchOrderHistory() {
             const tbody = document.getElementById('order-history-body');
             tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังโหลดข้อมูล...</td></tr>';
+            setOrderRefreshButtonLoading(true);
 
-            fetch(scriptUrl)
+            fetch(`${scriptUrl}?action=order`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        orderHistory = data.orders || [];
+                        orderHistory = data.data || [];
                         currentPage = 1; // reset to first page on fresh load
                         renderOrderHistory();
+                        updateOrderTimestamp();
                     } else {
                         tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-400">โหลดข้อมูลไม่สำเร็จ: ${data.message || 'Unknown error'}</td></tr>`;
                     }
@@ -619,6 +801,9 @@
                 .catch(err => {
                     console.error('fetchOrderHistory error:', err);
                     tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-red-400">ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้</td></tr>';
+                })
+                .finally(() => {
+                    setOrderRefreshButtonLoading(false);
                 });
         }
 
@@ -825,7 +1010,7 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            renderProducts();
+            fetchProducts();
             updateCartUI();
             fetchOrderHistory();
         });
@@ -845,9 +1030,10 @@
                 card.onclick = () => openAddToCartModal(p);
 
                 card.innerHTML = `
-                    <button onclick="event.stopPropagation(); openModal(${p.id})" class="absolute top-2 right-2 text-gray-300 hover:text-yellow-600 transition-colors p-1" title="แก้ไขสินค้า">
+                    <!-- Edit button hidden until write-back to Sheet is implemented -->
+                    <!-- <button onclick="event.stopPropagation(); openModal(${p.id})" class="absolute top-2 right-2 text-gray-300 hover:text-yellow-600 transition-colors p-1" title="แก้ไขสินค้า">
                         <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
+                    </button> -->
                     <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-1">
                         <i class="fa-solid fa-seedling text-xl"></i>
                     </div>
@@ -914,7 +1100,7 @@
                 products.push({ id: newId, name: name, defaultPrice: price });
             }
 
-            saveProducts();
+            // Note: write-back to Google Sheet not yet implemented
             renderProducts();
             closeModal();
         }
