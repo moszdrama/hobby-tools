@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
+
         body {
             font-family: 'Google Sans', sans-serif;
         }
     </style>
 </head>
+
 <body class="flex items-center justify-center min-h-screen p-4">
     <div class="bg-white rounded-2xl shadow-xl p-8 max-w-4xl w-full">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
@@ -145,6 +148,12 @@
                 icon: "🚘",
                 description: "ระบบติดตามและคำนวณงวดรถยนต์ พร้อมแดชบอร์ดสรุปผล",
                 url: "car-loan-tracker.html"
+            },
+            {
+                name: "บันทึกการเงินส่วนตัว",
+                icon: "💰",
+                description: "บันทึกรายรับ-รายจ่าย วิเคราะห์งบประมาณ และดูรายงานสรุปการเงินรายเดือน",
+                url: "personal-finance-tracker/index.html"
             }
         ];
 
@@ -156,7 +165,7 @@
             const card = document.createElement('a');
             card.href = app.url;
             card.className = "flex flex-col items-center p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1";
-            
+
             card.innerHTML = `
                 <div class="text-5xl mb-4">
                     ${app.icon}
@@ -178,4 +187,5 @@
         });
     </script>
 </body>
+
 </html>
