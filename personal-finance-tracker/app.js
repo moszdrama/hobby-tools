@@ -152,7 +152,7 @@ function updateCategoryDropdown(type) {
   if (filtered.length === 0) {
     const opt = document.createElement('option');
     opt.value = '';
-    opt.innerText = 'No categories found';
+    opt.innerText = 'ไม่พบหมวดหมู่';
     catSelect.appendChild(opt);
     return;
   }
@@ -175,10 +175,10 @@ function setFormType(type) {
 
   if (type === 'income') {
     incomeBtn.className = "py-2.5 px-4 rounded-xl border border-accentEmerald bg-emerald-500/10 text-accentEmerald text-sm font-semibold transition-all flex items-center justify-center gap-2 select-none";
-    expenseBtn.className = "py-2.5 px-4 rounded-xl border border-darkBorder text-slate-400 text-sm font-medium transition-all flex items-center justify-center gap-2 select-none hover:bg-slate-900/40";
+    expenseBtn.className = "py-2.5 px-4 rounded-xl border border-slate-200/60 text-slate-600 text-sm font-medium transition-all flex items-center justify-center gap-2 select-none hover:bg-slate-100/40";
   } else {
     expenseBtn.className = "py-2.5 px-4 rounded-xl border border-accentRose bg-rose-500/10 text-accentRose text-sm font-semibold transition-all flex items-center justify-center gap-2 select-none";
-    incomeBtn.className = "py-2.5 px-4 rounded-xl border border-darkBorder text-slate-400 text-sm font-medium transition-all flex items-center justify-center gap-2 select-none hover:bg-slate-900/40";
+    incomeBtn.className = "py-2.5 px-4 rounded-xl border border-slate-200/60 text-slate-600 text-sm font-medium transition-all flex items-center justify-center gap-2 select-none hover:bg-slate-100/40";
   }
 
   updateCategoryDropdown(type);
@@ -200,8 +200,8 @@ function openTransactionModal(tx = null) {
 
   if (tx) {
     // Edit transaction mode
-    titleEl.innerText = "Edit Transaction";
-    saveBtnLbl.innerText = "Update Transaction";
+    titleEl.innerText = "แก้ไขรายการ";
+    saveBtnLbl.innerText = "อัปเดตรายการ";
     iconContainer.className = "p-2.5 rounded-xl bg-accentViolet/10 text-accentViolet animate-pulse";
     iconContainer.innerHTML = '<i data-lucide="edit-3" class="w-5 h-5"></i>';
 
@@ -221,8 +221,8 @@ function openTransactionModal(tx = null) {
     document.getElementById('tx-category').value = tx.category;
   } else {
     // Add transaction mode
-    titleEl.innerText = "Add Transaction";
-    saveBtnLbl.innerText = "Save Transaction";
+    titleEl.innerText = "เพิ่มรายการ";
+    saveBtnLbl.innerText = "บันทึกรายการ";
     iconContainer.className = "p-2.5 rounded-xl bg-accentIndigo/10 text-accentIndigo";
     iconContainer.innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5"></i>';
 
@@ -263,13 +263,13 @@ function renderSummary() {
   // Custom glowing indicators based on net earnings status
   if (summary.balance > 0) {
     balanceVal.className = "text-3xl font-bold tracking-tight text-accentEmerald";
-    balanceCard.className = "bg-darkCard border border-darkBorder rounded-2xl p-6 relative overflow-hidden backdrop-blur-md transition-all duration-300 glow-emerald";
+    balanceCard.className = "bg-white border border-slate-200/60 rounded-2xl p-6 relative overflow-hidden transition-all duration-300 glow-emerald";
   } else if (summary.balance < 0) {
     balanceVal.className = "text-3xl font-bold tracking-tight text-accentRose";
-    balanceCard.className = "bg-darkCard border border-darkBorder rounded-2xl p-6 relative overflow-hidden backdrop-blur-md transition-all duration-300 glow-rose";
+    balanceCard.className = "bg-white border border-slate-200/60 rounded-2xl p-6 relative overflow-hidden transition-all duration-300 glow-rose";
   } else {
-    balanceVal.className = "text-3xl font-bold tracking-tight text-slate-100";
-    balanceCard.className = "bg-darkCard border border-darkBorder rounded-2xl p-6 relative overflow-hidden backdrop-blur-md transition-all duration-300";
+    balanceVal.className = "text-3xl font-bold tracking-tight text-slate-900";
+    balanceCard.className = "bg-white border border-slate-200/60 rounded-2xl p-6 relative overflow-hidden transition-all duration-300";
   }
 
   document.getElementById('val-income').innerText = formatCurrency(summary.income);
@@ -288,37 +288,37 @@ function renderSummary() {
     
     if (ratio < 50) {
       ratioBar.className = "h-full bg-gradient-to-r from-accentEmerald to-teal-500 rounded-full transition-all duration-500";
-      ratioAdvice.innerText = `Excellent spending ratio! You saved ${(100 - ratio)}% of your income. Keep investing the difference.`;
+      ratioAdvice.innerText = `ยอดเยี่ยม! คุณออมได้ ${(100 - ratio)}% ของรายรับ ลองนำส่วนที่เหลือไปลงทุน`;
       ratioIconContainer.className = "p-2 bg-emerald-500/10 text-accentEmerald rounded-lg mt-0.5";
       ratioIconContainer.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4"></i>';
     } else if (ratio < 85) {
       ratioBar.className = "h-full bg-gradient-to-r from-accentIndigo to-accentViolet rounded-full transition-all duration-500";
-      ratioAdvice.innerText = `Moderate status. You spent ${ratio}% of your income. Look for small optimization opportunities.`;
+      ratioAdvice.innerText = `พอใช้ได้ คุณใช้จ่ายไป ${ratio}% ของรายรับ ลองหาทางลดรายจ่ายเล็กน้อย`;
       ratioIconContainer.className = "p-2 bg-indigo-500/10 text-accentIndigo rounded-lg mt-0.5";
       ratioIconContainer.innerHTML = '<i data-lucide="lightbulb" class="w-4 h-4"></i>';
     } else {
       ratioBar.className = "h-full bg-gradient-to-r from-accentRose to-orange-500 rounded-full transition-all duration-500";
-      ratioAdvice.innerText = `High spending ratio! Expenses occupy ${ratio}% of income. Review subscription logs and recurring costs.`;
+      ratioAdvice.innerText = `รายจ่ายสูงมาก! คุณใช้ไปถึง ${ratio}% ของรายรับ ควรตรวจสอบค่าใช้จ่ายประจำและสมาชิกต่างๆ`;
       ratioIconContainer.className = "p-2 bg-rose-500/10 text-accentRose rounded-lg mt-0.5";
       ratioIconContainer.innerHTML = '<i data-lucide="alert-triangle" class="w-4 h-4"></i>';
     }
     
-    document.getElementById('lbl-ratio-desc').innerText = `Spending $${summary.expense.toLocaleString()} against $${summary.income.toLocaleString()} total earnings.`;
+    document.getElementById('lbl-ratio-desc').innerText = `ใช้จ่าย $${summary.expense.toLocaleString()} จากรายรับทั้งหมด $${summary.income.toLocaleString()}`;
   } else {
     ratioText.innerText = '0%';
     ratioBar.style.width = '0%';
     ratioBar.className = "h-full bg-slate-700 rounded-full transition-all duration-500";
     
     if (summary.expense > 0) {
-      ratioAdvice.innerText = `Logged expenses ($${summary.expense.toLocaleString()}) but no matching income yet. Please update income metrics.`;
+      ratioAdvice.innerText = `มีรายจ่าย ($${summary.expense.toLocaleString()}) แต่ยังไม่มีรายรับ กรุณาเพิ่มรายรับด้วย`;
       ratioIconContainer.className = "p-2 bg-rose-500/10 text-accentRose rounded-lg mt-0.5";
       ratioIconContainer.innerHTML = '<i data-lucide="trending-down" class="w-4 h-4"></i>';
-      document.getElementById('lbl-ratio-desc').innerText = "Running visual calculations with deficit values.";
+      document.getElementById('lbl-ratio-desc').innerText = "กำลังคำนวณโดยไม่มีรายรับ";
     } else {
-      ratioAdvice.innerText = "Start logging your income and expenses to view smart budget suggestions.";
-      ratioIconContainer.className = "p-2 bg-slate-800 text-slate-400 rounded-lg mt-0.5";
+      ratioAdvice.innerText = "เริ่มบันทึกรายรับและรายจ่ายเพื่อดูคำแนะนำงบประมาณอัจฉริยะ";
+      ratioIconContainer.className = "p-2 bg-slate-100 text-slate-400 rounded-lg mt-0.5";
       ratioIconContainer.innerHTML = '<i data-lucide="info" class="w-4 h-4"></i>';
-      document.getElementById('lbl-ratio-desc').innerText = "No active monthly stats collected yet.";
+      document.getElementById('lbl-ratio-desc').innerText = "ยังไม่มีข้อมูลสถิติรายเดือน";
     }
   }
   lucide.createIcons();
@@ -378,9 +378,9 @@ function renderCategoryChart() {
         legend: {
           position: 'right',
           labels: {
-            color: '#cbd5e1',
+            color: '#64748b',
             font: {
-              family: 'Outfit',
+              family: 'Google Sans',
               size: 11
             },
             padding: 12,
@@ -390,8 +390,8 @@ function renderCategoryChart() {
         },
         tooltip: {
           backgroundColor: '#0f172a',
-          titleFont: { family: 'Outfit', weight: 'bold' },
-          bodyFont: { family: 'Outfit' },
+          titleFont: { family: 'Google Sans', weight: 'bold' },
+          bodyFont: { family: 'Google Sans' },
           borderColor: 'rgba(255,255,255,0.08)',
           borderWidth: 1,
           callbacks: {
@@ -448,7 +448,7 @@ function renderTransactionsList() {
   
   filtered.forEach(t => {
     const tr = document.createElement('tr');
-    tr.className = "hover:bg-slate-900/40 transition-colors border-b border-darkBorder/20";
+    tr.className = "hover:bg-slate-100/40 transition-colors border-b border-slate-200/20";
     
     const formattedAmount = Number(t.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const isIncome = t.type === 'income';
@@ -457,27 +457,27 @@ function renderTransactionsList() {
     const day = dObj.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
     const year = dObj.getFullYear();
     
-    const amountClass = isIncome ? 'text-accentEmerald font-semibold' : 'text-slate-100 font-medium';
+    const amountClass = isIncome ? 'text-accentEmerald font-semibold' : 'text-slate-900 font-medium';
     const amountPrefix = isIncome ? '+$' : '-$';
     const badgeBg = isIncome ? 'bg-emerald-500/10 text-accentEmerald border-emerald-500/20' : 'bg-rose-500/10 text-accentRose border-rose-500/20';
     const typeIcon = isIncome ? 'trending-up' : 'trending-down';
     
     tr.innerHTML = `
-      <td class="py-4 px-6 text-sm text-slate-300 whitespace-nowrap">
+        <td class="py-4 px-6 text-sm text-slate-700 whitespace-nowrap">
         <div class="font-medium">${day}</div>
-        <div class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">${year}</div>
+        <div class="text-[10px] text-slate-600 font-semibold uppercase tracking-wider">${year}</div>
       </td>
       <td class="py-4 px-6 text-sm">
-        <div class="text-slate-100 font-semibold">${t.note || `<span class="italic text-slate-500">No Note</span>`}</div>
-        <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+        <div class="text-slate-800 font-semibold">${t.note || `<span class="italic text-slate-600">ไม่มีบันทึก</span>`}</div>
+        <div class="text-[10px] text-slate-600 mt-1 flex items-center gap-1">
           <span class="inline-flex items-center gap-1 border rounded px-1.5 py-0.5 text-[9px] ${badgeBg}">
             <i data-lucide="${typeIcon}" class="w-2.5 h-2.5"></i>
-            ${t.type}
+            ${t.type === 'income' ? 'รายรับ' : 'รายจ่าย'}
           </span>
         </div>
       </td>
       <td class="py-4 px-6 text-sm whitespace-nowrap">
-        <span class="text-xs bg-slate-900 border border-darkBorder text-slate-300 px-2.5 py-1 rounded-lg font-medium inline-block">
+        <span class="text-xs bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-lg font-medium inline-block">
           ${t.category}
         </span>
       </td>
@@ -516,13 +516,13 @@ window.editTransactionClick = function(id) {
  * Handle Delete button click
  */
 window.deleteTransactionClick = async function(id) {
-  if (confirm('Are you sure you want to delete this transaction?')) {
-    showLoading('Deleting transaction...');
+  if (confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?')) {
+    showLoading('กำลังลบรายการ...');
     try {
       await deleteTransaction(id);
-      showToast('Transaction deleted successfully', 'success');
+      showToast('ลบรายการเรียบร้อยแล้ว', 'success');
     } catch (err) {
-      showToast(`Error: ${err.message}`, 'error');
+      showToast(`เกิดข้อผิดพลาด: ${err.message}`, 'error');
     } finally {
       hideLoading();
     }
@@ -570,7 +570,7 @@ function showToast(message, type = 'success') {
 /**
  * Manage loading overlay
  */
-function showLoading(msg = 'Fetching data...') {
+function showLoading(msg = 'กำลังโหลดข้อมูล...') {
   const overlay = document.getElementById('loading-overlay');
   const msgEl = document.getElementById('loading-message');
   msgEl.innerText = msg;
@@ -586,7 +586,7 @@ function hideLoading() {
  * Try to connect to Apps Script and authenticate
  */
 async function testAndConnect(url, token) {
-  showLoading('Connecting and authenticating...');
+  showLoading('กำลังเชื่อมต่อและยืนยันตัวตน...');
   try {
     const oldUrl = BASE_URL;
     const oldToken = state.token;
@@ -619,16 +619,16 @@ async function testAndConnect(url, token) {
       document.getElementById('auth-screen').classList.add('hidden');
       document.getElementById('main-app').classList.remove('hidden');
       
-      showToast('Successfully connected to Google Sheets!', 'success');
+      showToast('เชื่อมต่อ Google Sheets สำเร็จ!', 'success');
       
       await init();
     } else {
       BASE_URL = oldUrl;
       state.token = oldToken;
-      throw new Error('Authentication failed. Invalid secret token.');
+      throw new Error('การยืนยันตัวตนล้มเหลว กรุณาตรวจสอบ token');
     }
   } catch (err) {
-    showToast(`Connection failed: ${err.message || err.toString()}`, 'error');
+    showToast(`การเชื่อมต่อล้มเหลว: ${err.message || err.toString()}`, 'error');
     throw err;
   } finally {
     hideLoading();
@@ -672,17 +672,17 @@ function setupEventListeners() {
     
     document.getElementById('auth-screen').classList.remove('hidden');
     document.getElementById('main-app').classList.add('hidden');
-    showToast('Disconnected from Google Sheets', 'info');
+    showToast('ตัดการเชื่อมต่อจาก Google Sheets แล้ว', 'info');
   });
 
   // Month select change
   document.getElementById('month-picker').addEventListener('change', async (e) => {
     state.selectedMonth = e.target.value;
-    showLoading('Loading transactions...');
+    showLoading('กำลังโหลดรายการ...');
     try {
       await loadTransactions();
     } catch (err) {
-      showToast(`Error: ${err.message}`, 'error');
+      showToast(`เกิดข้อผิดพลาด: ${err.message}`, 'error');
     } finally {
       hideLoading();
     }
@@ -718,7 +718,7 @@ function setupEventListeners() {
     const note = document.getElementById('tx-note').value.trim();
     
     if (!category) {
-      showToast('Please select a category', 'error');
+      showToast('กรุณาเลือกหมวดหมู่', 'error');
       return;
     }
     
@@ -731,18 +731,18 @@ function setupEventListeners() {
     };
     
     closeTransactionModal();
-    showLoading(id ? 'Updating transaction...' : 'Adding transaction...');
+    showLoading(id ? 'กำลังอัปเดตรายการ...' : 'กำลังเพิ่มรายการ...');
     
     try {
       if (id) {
         await updateTransaction({ ...data, id });
-        showToast('Transaction updated successfully', 'success');
+        showToast('อัปเดตรายการเรียบร้อยแล้ว', 'success');
       } else {
         await addTransaction(data);
-        showToast('Transaction added successfully', 'success');
+        showToast('เพิ่มรายการเรียบร้อยแล้ว', 'success');
       }
     } catch (err) {
-      showToast(`Action failed: ${err.message}`, 'error');
+      showToast(`ดำเนินการไม่สำเร็จ: ${err.message}`, 'error');
     } finally {
       hideLoading();
     }
@@ -774,18 +774,18 @@ window.addEventListener('DOMContentLoaded', async () => {
   lucide.createIcons();
   
   if (BASE_URL && state.token) {
-    showLoading('Restoring connection...');
+    showLoading('กำลังกู้คืนการเชื่อมต่อ...');
     try {
       await init();
       document.getElementById('auth-screen').classList.add('hidden');
       document.getElementById('main-app').classList.remove('hidden');
-      showToast('Session restored successfully', 'success');
+      showToast('กู้คืนเซสชันสำเร็จ', 'success');
     } catch (err) {
       console.error('Failed auto-init:', err);
       localStorage.removeItem('token');
       document.getElementById('auth-screen').classList.remove('hidden');
       document.getElementById('main-app').classList.add('hidden');
-      showToast('Saved session is invalid. Please reconnect.', 'error');
+      showToast('เซสชันที่บันทึกไว้ไม่ถูกต้อง กรุณาเชื่อมต่อใหม่', 'error');
     } finally {
       hideLoading();
     }

@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Finance Tracker</title>
-  <!-- Google Fonts: Outfit -->
+  <title>บันทึกการเงินส่วนตัว</title>
+  <!-- Google Fonts: Google Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS v3 CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -25,7 +25,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Outfit', 'sans-serif'],
+            sans: ['Google Sans', 'sans-serif'],
           },
           colors: {
             darkBg: '#0b0f19',
@@ -82,7 +82,7 @@
     }
   </style>
 </head>
-<body class="bg-darkBg text-slate-100 min-h-full font-sans antialiased selection:bg-indigo-500/30 overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 min-h-full font-sans antialiased selection:bg-indigo-500/30 overflow-x-hidden">
 
   <!-- Background decorative gradients -->
   <div class="absolute top-0 left-1/4 -translate-x-1/2 w-96 h-96 bg-accentIndigo/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
@@ -90,12 +90,12 @@
   <div class="absolute bottom-10 left-10 w-80 h-80 bg-accentEmerald/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
   <!-- Loading Overlay -->
-  <div id="loading-overlay" class="fixed inset-0 bg-darkBg/95 backdrop-blur-md z-50 flex flex-col items-center justify-center transition-all duration-300 pointer-events-none opacity-0 flex">
+  <div id="loading-overlay" class="fixed inset-0 bg-slate-50/95 z-50 flex flex-col items-center justify-center transition-all duration-300 pointer-events-none opacity-0 flex">
     <div class="relative w-16 h-16">
       <div class="absolute inset-0 rounded-full border-4 border-slate-800"></div>
       <div class="absolute inset-0 rounded-full border-4 border-accentIndigo border-t-transparent animate-spin"></div>
     </div>
-    <p class="mt-4 text-slate-400 font-medium text-sm tracking-wide" id="loading-message">Fetching data...</p>
+    <p class="mt-4 text-slate-600 font-medium text-sm tracking-wide" id="loading-message">Fetching data...</p>
   </div>
 
   <!-- Toast Notification System -->
@@ -103,65 +103,65 @@
 
   <!-- Authentication & Connection Setup Screen -->
   <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4 animate-fade-in">
-    <div class="bg-darkCard/80 border border-darkBorder rounded-3xl p-8 max-w-lg w-full backdrop-blur-xl shadow-2xl glow-indigo">
+    <div class="bg-white/95 border border-slate-200/60 rounded-3xl p-8 max-w-lg w-full shadow-sm">
       <div class="flex flex-col items-center mb-8 text-center">
         <div class="w-16 h-16 bg-gradient-to-tr from-accentIndigo to-accentViolet rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-4">
           <i data-lucide="wallet" class="w-8 h-8 text-white"></i>
         </div>
-        <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-          Personal Finance Tracker
+        <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-accentIndigo bg-clip-text text-transparent">
+          บันทึกการเงินส่วนตัว
         </h1>
-        <p class="text-slate-400 text-sm mt-1">Connect your Google Sheets backend to begin</p>
+        <p class="text-slate-600 text-sm mt-1">เชื่อมต่อ Google Sheets เพื่อเริ่มต้นใช้งาน</p>
       </div>
 
       <form id="auth-form" class="space-y-6">
         <div>
-          <label for="input-gas-url" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-            Google Apps Script Web App URL
+          <label for="input-gas-url" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+            URL ของ Google Apps Script Web App
           </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
               <i data-lucide="link" class="w-4 h-4"></i>
             </div>
             <input type="url" id="input-gas-url" required
-              class="w-full bg-slate-900/60 border border-darkBorder rounded-xl py-3 pl-10 pr-4 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-accentIndigo/60 focus:ring-2 focus:ring-accentIndigo/20 transition-all"
-              placeholder="https://script.google.com/macros/s/.../exec">
+              class="w-full bg-slate-100/60 border border-slate-200/60 rounded-xl py-3 pl-10 pr-4 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-accentIndigo/60 focus:ring-2 focus:ring-accentIndigo/20 transition-all"
+              placeholder="https://script.google.com/macros/s/.../exec" dir="ltr">
           </div>
         </div>
 
         <div>
-          <label for="input-auth-token" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-            Secret Auth Token
+          <label for="input-auth-token" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+            รหัสลับ (Auth Token)
           </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
               <i data-lucide="lock" class="w-4 h-4"></i>
             </div>
             <input type="password" id="input-auth-token" required
-              class="w-full bg-slate-900/60 border border-darkBorder rounded-xl py-3 pl-10 pr-4 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-accentIndigo/60 focus:ring-2 focus:ring-accentIndigo/20 transition-all"
-              placeholder="e.g. my_secret_token_123">
+              class="w-full bg-slate-100/60 border border-slate-200/60 rounded-xl py-3 pl-10 pr-4 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-accentIndigo/60 focus:ring-2 focus:ring-accentIndigo/20 transition-all"
+              placeholder="เช่น my_secret_token_123" dir="ltr">
           </div>
         </div>
 
         <button type="submit" id="btn-connect"
           class="w-full bg-gradient-to-r from-accentIndigo to-accentViolet hover:from-indigo-500 hover:to-violet-500 text-white font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-          <span>Connect & Authenticate</span>
+          <span>เชื่อมต่อและยืนยันตัวตน</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </button>
       </form>
 
       <!-- Quick Instructions collapsible -->
-      <div class="mt-8 border-t border-darkBorder/60 pt-6">
+      <div class="mt-8 border-t border-slate-200/40 pt-6">
         <details class="group">
-          <summary class="flex justify-between items-center font-medium text-slate-300 text-xs uppercase tracking-wider cursor-pointer list-none select-none">
-            <span>Setup Guide & Deployment Instructions</span>
-            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+          <summary class="flex justify-between items-center font-medium text-slate-500 text-xs uppercase tracking-wider cursor-pointer list-none select-none">
+            <span>คู่มือติดตั้งและการ Deploy</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-600 group-open:rotate-180 transition-transform"></i>
           </summary>
-          <div class="mt-4 text-xs text-slate-400 space-y-3 leading-relaxed animate-fade-in">
-            <p>1. Copy the code in <code class="text-indigo-400 font-mono">Code.gs</code> to your Google Sheet's Apps Script editor (Extensions &gt; Apps Script).</p>
-            <p>2. In the Apps Script console, run the <code class="text-indigo-400 font-mono">setupSheets</code> function first to create transaction and category tables, and then run <code class="text-indigo-400 font-mono">setupSecret</code> to save the secret token.</p>
-            <p>3. Deploy as a Web App: click <strong class="text-slate-200">Deploy &gt; New deployment</strong>, select <strong class="text-slate-200">Web app</strong>, configure execute as <strong class="text-slate-200">Me</strong>, and access to <strong class="text-slate-200">Anyone</strong>.</p>
-            <p>4. Authorize access, copy the Web App URL, paste it here, input your token, and connect.</p>
+          <div class="mt-4 text-xs text-slate-600 space-y-3 leading-relaxed animate-fade-in">
+            <p>1. คัดลอกโค้ดจาก <code class="text-indigo-400 font-mono">Code.gs</code> ไปวางใน Apps Script Editor ของ Google Sheet (Extensions &gt; Apps Script)</p>
+            <p>2. ใน Apps Script ให้รันฟังก์ชัน <code class="text-indigo-400 font-mono">setupSheets</code> ก่อน เพื่อสร้างตาราง จากนั้นรัน <code class="text-indigo-400 font-mono">setupSecret</code> เพื่อบันทึก token ลับ</p>
+            <p>3. Deploy เป็น Web App: คลิก <strong class="text-slate-700">Deploy &gt; New deployment</strong> เลือก <strong class="text-slate-700">Web app</strong> ตั้งค่า Execute as: <strong class="text-slate-700">Me</strong> และ Access: <strong class="text-slate-700">Anyone</strong></p>
+            <p>4. อนุญาตสิทธิ์ คัดลอก URL ของ Web App มาวางในช่องด้านบน ใส่ token แล้วกดเชื่อมต่อ</p>
           </div>
         </details>
       </div>
@@ -172,18 +172,19 @@
   <div id="main-app" class="hidden min-h-screen flex flex-col animate-fade-in">
     
     <!-- Top Navigation Bar -->
-    <header class="border-b border-darkBorder bg-darkBg/60 backdrop-blur-md sticky top-0 z-30">
+    <header class="border-b border-slate-200/60 bg-slate-50/60 sticky top-0 z-30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-gradient-to-tr from-accentIndigo to-accentViolet rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/10">
             <i data-lucide="wallet" class="w-5 h-5 text-white"></i>
           </div>
-          <div>
-            <h1 class="text-xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Personal Finance Tracker</h1>
+          <div class="hidden sm:block">
+            <!-- App name (hidden on small screens) -->
+            <h1 class="text-xl font-bold bg-gradient-to-r from-slate-900 to-accentIndigo bg-clip-text text-transparent">บันทึกการเงินส่วนตัว</h1>
             <div class="flex items-center gap-1.5 mt-0.5">
               <span class="w-1.5 h-1.5 rounded-full bg-accentEmerald animate-pulse"></span>
-              <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">Connected to GAS</span>
+              <span class="text-[10px] font-semibold text-slate-600 tracking-wider uppercase">เชื่อมต่อแล้ว</span>
             </div>
           </div>
         </div>
@@ -192,19 +193,19 @@
           <!-- Month selector -->
           <div class="relative">
             <input type="month" id="month-picker"
-              class="bg-slate-900/80 border border-darkBorder rounded-xl px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-accentIndigo/30 focus:border-accentIndigo transition-all cursor-pointer font-medium">
+              class="bg-slate-100/80 border border-slate-200/60 rounded-xl px-3 py-2 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-accentIndigo/30 focus:border-accentIndigo transition-all cursor-pointer font-medium">
           </div>
 
           <!-- Add Transaction button -->
-          <button id="btn-new-transaction"
-            class="bg-accentIndigo hover:bg-indigo-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/25 transition-all flex items-center gap-1.5">
+          <button id="btn-new-transaction" aria-label="เพิ่มรายการ"
+            class="bg-accentIndigo hover:bg-indigo-500 text-white font-semibold text-sm px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/25 transition-all flex items-center gap-1.5">
             <i data-lucide="plus" class="w-4 h-4"></i>
-            <span>Add Transaction</span>
+            <span class="hidden sm:inline">เพิ่มรายการ</span>
           </button>
 
           <!-- Logout button -->
-          <button id="btn-logout" title="Disconnect Backend"
-            class="p-2.5 text-slate-400 hover:text-rose-400 bg-slate-900/60 border border-darkBorder hover:border-rose-900/30 rounded-xl transition-all">
+          <button id="btn-logout" title="ตัดการเชื่อมต่อ"
+            class="p-2.5 text-slate-600 hover:text-rose-400 bg-slate-100/60 border border-slate-200/60 hover:border-rose-900/30 rounded-xl transition-all">
             <i data-lucide="log-out" class="w-4.5 h-4.5"></i>
           </button>
         </div>
@@ -219,45 +220,45 @@
       <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         <!-- Net Balance Card -->
-        <div id="card-balance" class="bg-darkCard border border-darkBorder rounded-2xl p-6 relative overflow-hidden backdrop-blur-md transition-all duration-300">
+        <div id="card-balance" class="bg-white border border-slate-200/60 rounded-2xl p-6 relative overflow-hidden transition-all duration-300">
           <div class="absolute top-0 right-0 w-24 h-24 rounded-full bg-accentIndigo/5 blur-xl pointer-events-none"></div>
           <div class="flex items-center justify-between mb-4">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Balance</span>
+            <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">ยอดคงเหลือสุทธิ</span>
             <div class="p-2 rounded-lg bg-indigo-500/10 text-accentIndigo">
               <i data-lucide="scale" class="w-5 h-5"></i>
             </div>
           </div>
-          <h3 id="val-balance" class="text-3xl font-bold tracking-tight text-white">-</h3>
-          <p class="text-xs text-slate-400 mt-2">Active Month Total</p>
+          <h3 id="val-balance" class="text-3xl font-bold tracking-tight text-slate-900">-</h3>
+          <p class="text-xs text-slate-600 mt-2">รวมเดือนที่เลือก</p>
         </div>
 
         <!-- Monthly Income Card -->
-        <div id="card-income" class="bg-darkCard border border-darkBorder rounded-2xl p-6 relative overflow-hidden backdrop-blur-md transition-all duration-300">
+        <div id="card-income" class="bg-white border border-slate-200/60 rounded-2xl p-6 relative overflow-hidden transition-all duration-300">
           <div class="absolute top-0 right-0 w-24 h-24 rounded-full bg-accentEmerald/5 blur-xl pointer-events-none"></div>
           <div class="flex items-center justify-between mb-4">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Income</span>
+            <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">รายรับ</span>
             <div class="p-2 rounded-lg bg-emerald-500/10 text-accentEmerald">
               <i data-lucide="trending-up" class="w-5 h-5"></i>
             </div>
           </div>
-          <h3 id="val-income" class="text-3xl font-bold tracking-tight text-white">-</h3>
+          <h3 id="val-income" class="text-3xl font-bold tracking-tight text-slate-900">-</h3>
           <p class="text-xs text-emerald-400/80 mt-2 flex items-center gap-1">
-            <i data-lucide="plus" class="w-3 h-3"></i> Total earnings
+            <i data-lucide="plus" class="w-3 h-3"></i> รายรับทั้งหมด
           </p>
         </div>
 
         <!-- Monthly Expenses Card -->
-        <div id="card-expense" class="bg-darkCard border border-darkBorder rounded-2xl p-6 relative overflow-hidden backdrop-blur-md transition-all duration-300">
+        <div id="card-expense" class="bg-white border border-slate-200/60 rounded-2xl p-6 relative overflow-hidden transition-all duration-300">
           <div class="absolute top-0 right-0 w-24 h-24 rounded-full bg-accentRose/5 blur-xl pointer-events-none"></div>
           <div class="flex items-center justify-between mb-4">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Expenses</span>
+            <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">รายจ่าย</span>
             <div class="p-2 rounded-lg bg-rose-500/10 text-accentRose">
               <i data-lucide="trending-down" class="w-5 h-5"></i>
             </div>
           </div>
-          <h3 id="val-expense" class="text-3xl font-bold tracking-tight text-white">-</h3>
+          <h3 id="val-expense" class="text-3xl font-bold tracking-tight text-slate-900">-</h3>
           <p class="text-xs text-rose-400/80 mt-2 flex items-center gap-1">
-            <i data-lucide="minus" class="w-3 h-3"></i> Total spending
+            <i data-lucide="minus" class="w-3 h-3"></i> รายจ่ายทั้งหมด
           </p>
         </div>
 
@@ -267,56 +268,56 @@
       <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         <!-- Doughnut Expense Category Breakdown -->
-        <div class="bg-darkCard border border-darkBorder rounded-2xl p-6 flex flex-col justify-between backdrop-blur-md">
+        <div class="bg-white border border-slate-200/60 rounded-2xl p-6 flex flex-col justify-between">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h4 class="font-bold text-slate-200">Expense Breakdown</h4>
-              <p class="text-xs text-slate-400 mt-0.5">By category for this month</p>
+              <h4 class="font-bold text-slate-800">การแจกแจงรายจ่าย</h4>
+              <p class="text-xs text-slate-600 mt-0.5">แยกตามหมวดหมู่ในเดือนนี้</p>
             </div>
-            <i data-lucide="pie-chart" class="w-5 h-5 text-slate-400"></i>
+            <i data-lucide="pie-chart" class="w-5 h-5 text-slate-600"></i>
           </div>
           
           <div class="relative flex items-center justify-center h-64 w-full">
             <div id="chart-no-data" class="absolute inset-0 flex flex-col items-center justify-center text-slate-500 text-sm gap-2">
               <i data-lucide="info" class="w-8 h-8 opacity-40"></i>
-              <span>No transactions recorded this month</span>
+              <span>ยังไม่มีรายการในเดือนนี้</span>
             </div>
             <canvas id="category-chart"></canvas>
           </div>
         </div>
 
         <!-- Financial Summary / Monthly Trend Gauge -->
-        <div class="bg-darkCard border border-darkBorder rounded-2xl p-6 flex flex-col justify-between backdrop-blur-md">
+        <div class="bg-white border border-slate-200/60 rounded-2xl p-6 flex flex-col justify-between">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h4 class="font-bold text-slate-200">Savings & Ratio Analyze</h4>
-              <p class="text-xs text-slate-400 mt-0.5">Your monthly balance performance</p>
+              <h4 class="font-bold text-slate-800">การออมและวิเคราะห์สัดส่วน</h4>
+              <p class="text-xs text-slate-600 mt-0.5">ประสิทธิภาพการเงินรายเดือน</p>
             </div>
-            <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-400"></i>
+            <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-600"></i>
           </div>
 
           <div class="h-64 flex flex-col justify-center space-y-6">
             <!-- Progress Bar / Expense Ratio -->
             <div>
               <div class="flex justify-between items-center text-xs font-semibold uppercase tracking-wider mb-2">
-                <span class="text-slate-400">Expense-to-Income Ratio</span>
-                <span id="txt-ratio" class="text-slate-200">0%</span>
+                <span class="text-slate-600">สัดส่วนรายจ่ายต่อรายรับ</span>
+                <span id="txt-ratio" class="text-slate-700">0%</span>
               </div>
-              <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden">
+              <div class="w-full bg-slate-200 rounded-full h-3.5 overflow-hidden">
                 <div id="bar-ratio" class="h-full bg-gradient-to-r from-accentIndigo to-accentViolet rounded-full transition-all duration-500 w-0"></div>
               </div>
-              <p id="lbl-ratio-desc" class="text-xs text-slate-400 mt-2">No income or expense data to calculate.</p>
+              <p id="lbl-ratio-desc" class="text-xs text-slate-600 mt-2">ยังไม่มีข้อมูลรายรับหรือรายจ่าย</p>
             </div>
 
             <!-- Summary Status Callout -->
-            <div class="bg-slate-900/40 border border-darkBorder/60 rounded-xl p-4 flex items-start gap-3">
+            <div class="bg-slate-100/40 border border-slate-200/60 rounded-xl p-4 flex items-start gap-3">
               <div class="p-2 bg-indigo-500/10 text-accentIndigo rounded-lg mt-0.5" id="status-icon-container">
                 <i data-lucide="lightbulb" class="w-4 h-4"></i>
               </div>
               <div>
-                <h5 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Apex Insight</h5>
-                <p id="lbl-status-advice" class="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Start logging your income and expenses to view smart budget suggestions.
+                <h5 class="text-xs font-bold text-slate-700 uppercase tracking-wider">คำแนะนำการเงิน</h5>
+                <p id="lbl-status-advice" class="text-xs text-slate-600 mt-1 leading-relaxed">
+                  เริ่มบันทึกรายรับและรายจ่ายเพื่อดูคำแนะนำงบประมาณอัจฉริยะ
                 </p>
               </div>
             </div>
@@ -326,13 +327,13 @@
       </section>
 
       <!-- Transactions Management Section -->
-      <section class="bg-darkCard border border-darkBorder rounded-2xl overflow-hidden backdrop-blur-md">
+      <section class="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
         
         <!-- Section Header with Search / Actions -->
-        <div class="p-6 border-b border-darkBorder flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="p-6 border-b border-slate-200/60 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h4 class="font-bold text-slate-200">Transactions Ledger</h4>
-            <p class="text-xs text-slate-400 mt-0.5">Edit, filter, and track transactions</p>
+            <h4 class="font-bold text-slate-800">บัญชีรายการธุรกรรม</h4>
+            <p class="text-xs text-slate-600 mt-0.5">แก้ไข กรอง และติดตามรายการทั้งหมด</p>
           </div>
 
           <div class="flex flex-wrap items-center gap-3">
@@ -342,16 +343,16 @@
                 <i data-lucide="search" class="w-4 h-4"></i>
               </span>
               <input type="text" id="search-input"
-                class="w-full bg-slate-900/60 border border-darkBorder rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-accentIndigo/60 focus:ring-1 focus:ring-accentIndigo transition-all placeholder-slate-500"
-                placeholder="Search notes...">
+                class="w-full bg-slate-100/60 border border-slate-200/60 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-accentIndigo/60 focus:ring-1 focus:ring-accentIndigo transition-all placeholder-slate-400"
+                placeholder="ค้นหาบันทึก...">
             </div>
 
             <!-- Type Filter Dropdown -->
             <select id="filter-type"
-              class="bg-slate-900/60 border border-darkBorder rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-accentIndigo transition-all font-medium text-slate-300 cursor-pointer">
-              <option value="all">All Types</option>
-              <option value="income">Income Only</option>
-              <option value="expense">Expense Only</option>
+              class="bg-slate-100/60 border border-slate-200/60 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-accentIndigo transition-all font-medium text-slate-600 cursor-pointer">
+              <option value="all">ทุกประเภท</option>
+              <option value="income">รายรับเท่านั้น</option>
+              <option value="expense">รายจ่ายเท่านั้น</option>
             </select>
           </div>
         </div>
@@ -360,12 +361,12 @@
         <div class="overflow-x-auto w-full">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="border-b border-darkBorder/40 bg-slate-900/20 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
-                <th class="py-4 px-6">Date</th>
-                <th class="py-4 px-6">Details</th>
-                <th class="py-4 px-6">Category</th>
-                <th class="py-4 px-6 text-right">Amount</th>
-                <th class="py-4 px-6 text-right">Actions</th>
+              <tr class="border-b border-slate-200/40 bg-slate-50/20 text-slate-600 text-[10px] font-bold uppercase tracking-wider">
+                <th class="py-4 px-6">วันที่</th>
+                <th class="py-4 px-6">รายละเอียด</th>
+                <th class="py-4 px-6">หมวดหมู่</th>
+                <th class="py-4 px-6 text-right">จำนวนเงิน</th>
+                <th class="py-4 px-6 text-right">จัดการ</th>
               </tr>
             </thead>
             <tbody id="transactions-body" class="divide-y divide-darkBorder/30">
@@ -374,12 +375,12 @@
           </table>
 
           <!-- Empty Ledger State -->
-          <div id="ledger-empty-state" class="py-16 flex flex-col items-center justify-center text-slate-500 text-sm gap-2">
-            <div class="p-4 bg-slate-900/40 rounded-full border border-darkBorder/60 text-slate-400 mb-2">
+            <div id="ledger-empty-state" class="py-16 flex flex-col items-center justify-center text-slate-600 text-sm gap-2">
+            <div class="p-4 bg-slate-100/40 rounded-full border border-slate-200/60 text-slate-600 mb-2">
               <i data-lucide="receipt" class="w-8 h-8"></i>
             </div>
-            <span class="font-medium text-slate-400">No records found</span>
-            <span class="text-xs text-slate-500">Add a transaction to get started.</span>
+            <span class="font-medium text-slate-600">ไม่พบรายการ</span>
+            <span class="text-xs text-slate-500">เพิ่มรายการเพื่อเริ่มต้นใช้งาน</span>
           </div>
         </div>
 
@@ -388,11 +389,11 @@
     </main>
 
     <!-- Simple footer -->
-    <footer class="border-t border-darkBorder py-6 mt-12 bg-slate-950/20">
+    <footer class="border-t border-slate-200/40 py-6 mt-12 bg-slate-50/20">
       <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-        <p>&copy; 2026 Personal Finance Tracker. Local execution client.</p>
+        <p>&copy; 2026 บันทึกการเงินส่วนตัว</p>
         <div class="flex items-center gap-4">
-          <span class="hover:text-slate-300 transition-colors cursor-help" id="footer-connection-details">Unknown Endpoint</span>
+          <span class="hover:text-slate-300 transition-colors cursor-help" id="footer-connection-details">ยังไม่ได้เชื่อมต่อ</span>
         </div>
       </div>
     </footer>
@@ -400,10 +401,10 @@
 
   <!-- Transaction Create/Edit Modal Drawer -->
   <div id="transaction-modal" class="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
-    <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 max-w-md w-full shadow-2xl animate-fade-in relative">
+    <div class="bg-white border border-slate-200/60 rounded-3xl p-6 max-w-md w-full shadow-sm animate-fade-in relative">
       
       <!-- Close Button -->
-      <button id="modal-close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-900/60 transition-colors">
+      <button id="modal-close" class="absolute top-4 right-4 text-slate-600 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100/60 transition-colors">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
@@ -413,8 +414,8 @@
           <i data-lucide="plus-circle" class="w-5 h-5"></i>
         </div>
         <div>
-          <h4 id="modal-title" class="font-bold text-lg text-slate-100">Add Transaction</h4>
-          <p class="text-xs text-slate-400">Enter transaction details below</p>
+          <h4 id="modal-title" class="font-bold text-lg text-slate-900">เพิ่มรายการ</h4>
+          <p class="text-xs text-slate-600">กรอกรายละเอียดรายการด้านล่าง</p>
         </div>
       </div>
 
@@ -424,42 +425,42 @@
 
         <!-- Type Selector -->
         <div>
-          <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Type</label>
+          <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-2">ประเภท</label>
           <div class="grid grid-cols-2 gap-2">
             <button type="button" id="type-income"
-              class="py-2.5 px-4 rounded-xl border border-darkBorder text-sm font-semibold transition-all flex items-center justify-center gap-2 select-none hover:bg-slate-900/40">
+              class="py-2.5 px-4 rounded-xl border border-slate-200/60 text-sm font-semibold transition-all flex items-center justify-center gap-2 select-none hover:bg-slate-100/40">
               <i data-lucide="trending-up" class="w-4 h-4 text-accentEmerald"></i>
-              <span>Income</span>
+              <span>รายรับ</span>
             </button>
             <button type="button" id="type-expense"
-              class="py-2.5 px-4 rounded-xl border border-darkBorder text-sm font-semibold transition-all flex items-center justify-center gap-2 select-none hover:bg-slate-900/40">
+              class="py-2.5 px-4 rounded-xl border border-slate-200/60 text-sm font-semibold transition-all flex items-center justify-center gap-2 select-none hover:bg-slate-100/40">
               <i data-lucide="trending-down" class="w-4 h-4 text-accentRose"></i>
-              <span>Expense</span>
+              <span>รายจ่าย</span>
             </button>
           </div>
         </div>
 
         <!-- Date Picker -->
         <div>
-          <label for="tx-date" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>
+          <label for="tx-date" class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">วันที่</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-600">
               <i data-lucide="calendar" class="w-4 h-4"></i>
             </span>
             <input type="date" id="tx-date" required
-              class="w-full bg-slate-900/60 border border-darkBorder rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-accentIndigo/60 transition-all">
+              class="w-full bg-slate-100/60 border border-slate-200/60 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-accentIndigo/60 transition-all">
           </div>
         </div>
 
         <!-- Category Dropdown -->
         <div>
-          <label for="tx-category" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Category</label>
+          <label for="tx-category" class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">หมวดหมู่</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-600">
               <i data-lucide="tag" class="w-4 h-4"></i>
             </span>
             <select id="tx-category" required
-              class="w-full bg-slate-900/60 border border-darkBorder rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-accentIndigo/60 transition-all cursor-pointer">
+              class="w-full bg-slate-100/60 border border-slate-200/60 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-accentIndigo/60 transition-all cursor-pointer">
               <!-- Dynamically populated -->
             </select>
           </div>
@@ -467,27 +468,27 @@
 
         <!-- Amount -->
         <div>
-          <label for="tx-amount" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Amount</label>
+          <label for="tx-amount" class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">จำนวนเงิน</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-medium text-sm">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-600 font-medium text-sm">
               $
             </span>
             <input type="number" id="tx-amount" step="any" min="0.01" required
-              class="w-full bg-slate-900/60 border border-darkBorder rounded-xl pl-8 pr-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-accentIndigo/60 transition-all font-semibold"
-              placeholder="0.00">
+              class="w-full bg-slate-100/60 border border-slate-200/60 rounded-xl pl-8 pr-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-accentIndigo/60 transition-all font-semibold"
+              placeholder="0.00" dir="ltr">
           </div>
         </div>
 
         <!-- Note -->
         <div>
-          <label for="tx-note" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Note</label>
+          <label for="tx-note" class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">บันทึก</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-600">
               <i data-lucide="file-text" class="w-4 h-4"></i>
             </span>
             <input type="text" id="tx-note"
-              class="w-full bg-slate-900/60 border border-darkBorder rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-accentIndigo/60 transition-all"
-              placeholder="e.g. Weekly groceries (optional)">
+              class="w-full bg-slate-100/60 border border-slate-200/60 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-accentIndigo/60 transition-all"
+              placeholder="เช่น ค่าอาหาร, ค่าเดินทาง (ไม่บังคับ)">
           </div>
         </div>
 
@@ -495,7 +496,7 @@
         <button type="submit" id="btn-save-transaction"
           class="w-full bg-accentIndigo hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-2">
           <i data-lucide="check" class="w-4 h-4"></i>
-          <span id="lbl-save-button">Save Transaction</span>
+          <span id="lbl-save-button">บันทึกรายการ</span>
         </button>
       </form>
 
