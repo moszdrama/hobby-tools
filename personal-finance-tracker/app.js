@@ -10,6 +10,31 @@ const state = {
   selectedMonth: new Date().toISOString().slice(0, 7)
 };
 
+// ─── LocalStorage helpers for categories cache ───────────────────────────────
+const CATEGORIES_CACHE_KEY = 'cached_categories';
+const CATEGORIES_SYNC_TIME_KEY = 'categories_last_sync';
+
+function saveCategoriesCache(categories) {
+  localStorage.setItem(CATEGORIES_CACHE_KEY, JSON.stringify(categories));
+  const now = new Date().toISOString();
+  localStorage.setItem(CATEGORIES_SYNC_TIME_KEY, now);
+  return now;
+}
+
+function loadCategoriesCache() {
+  const raw = localStorage.getItem(CATEGORIES_CACHE_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+function getCategoriesSyncTime() {
+  return localStorage.getItem(CATEGORIES_SYNC_TIME_KEY) || null;
+}
+
+function clearCategoriesCache() {
+  localStorage.removeItem(CATEGORIES_CACHE_KEY);
+  localStorage.removeItem(CATEGORIES_SYNC_TIME_KEY);
+}
+
 // Global variables for visual representation
 let categoryChartInstance = null;
 let activeFormType = 'expense'; // default for new transactions
@@ -64,10 +89,29 @@ async function api(route, method = 'GET', data = {}) {
 
 /**
  * Initialize application data
+ * Loads categories from LocalStorage cache (if available) to avoid
+ * redundant network requests on every page load.
  */
 async function init() {
-  state.categories = await api('categories');
+  const cached = loadCategoriesCache();
+  if (cached && cached.length > 0) {
+    state.categories = cached;
+  } else {
+    // No cache — fetch from server and save
+    state.categories = await api('categories');
+    saveCategoriesCache(state.categories);
+  }
   await loadTransactions();
+}
+
+/**
+ * Force-sync categories from server and update cache
+ */
+async function syncCategories() {
+  state.categories = await api('categories');
+  const syncTime = saveCategoriesCache(state.categories);
+  updateCategoryDropdown(activeFormType);
+  return syncTime;
 }
 
 /**
@@ -636,6 +680,49 @@ async function testAndConnect(url, token) {
 }
 
 /**
+ * Open Settings Modal
+ */
+function openSettingsModal() {
+  const modal = document.getElementById('settings-modal');
+  modal.classList.remove('opacity-0', 'pointer-events-none');
+  refreshSettingsSyncTime();
+  // Show current endpoint
+  const endpointEl = document.getElementById('settings-endpoint-display');
+  if (endpointEl) {
+    const url = localStorage.getItem('gas_url') || '';
+    endpointEl.innerText = url ? url : 'ยังไม่ได้เชื่อมต่อ';
+    endpointEl.title = url;
+  }
+  lucide.createIcons();
+}
+
+/**
+ * Close Settings Modal
+ */
+function closeSettingsModal() {
+  const modal = document.getElementById('settings-modal');
+  modal.classList.add('opacity-0', 'pointer-events-none');
+}
+
+/**
+ * Refresh the displayed last-sync timestamp inside settings modal
+ */
+function refreshSettingsSyncTime() {
+  const el = document.getElementById('settings-last-sync-time');
+  if (!el) return;
+  const t = getCategoriesSyncTime();
+  if (t) {
+    const d = new Date(t);
+    el.innerText = d.toLocaleString('th-TH', {
+      dateStyle: 'medium',
+      timeStyle: 'short'
+    });
+  } else {
+    el.innerText = 'ยังไม่เคย Sync';
+  }
+}
+
+/**
  * Register global application event listeners
  */
 function setupEventListeners() {
@@ -665,6 +752,7 @@ function setupEventListeners() {
   document.getElementById('btn-logout').addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('gas_url');
+    clearCategoriesCache();
     BASE_URL = '';
     state.token = '';
     state.transactions = [];
@@ -673,6 +761,40 @@ function setupEventListeners() {
     document.getElementById('auth-screen').classList.remove('hidden');
     document.getElementById('main-app').classList.add('hidden');
     showToast('ตัดการเชื่อมต่อจาก Google Sheets แล้ว', 'info');
+  });
+
+  // Settings modal open/close
+  document.getElementById('btn-settings').addEventListener('click', () => {
+    openSettingsModal();
+  });
+  document.getElementById('settings-modal-close').addEventListener('click', () => {
+    closeSettingsModal();
+  });
+  // Close settings modal on backdrop click
+  document.getElementById('settings-modal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('settings-modal')) {
+      closeSettingsModal();
+    }
+  });
+
+  // Sync categories button inside settings modal
+  document.getElementById('btn-sync-categories').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-sync-categories');
+    const originalHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i><span>กำลัง Sync...</span>`;
+    lucide.createIcons();
+    try {
+      await syncCategories();
+      refreshSettingsSyncTime();
+      showToast('Sync หมวดหมู่สำเร็จ!', 'success');
+    } catch (err) {
+      showToast(`Sync ล้มเหลว: ${err.message}`, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+      lucide.createIcons();
+    }
   });
 
   // Month select change

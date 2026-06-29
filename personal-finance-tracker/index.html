@@ -203,6 +203,12 @@
             <span class="hidden sm:inline">เพิ่มรายการ</span>
           </button>
 
+          <!-- Settings button -->
+          <button id="btn-settings" title="ตั้งค่า"
+            class="p-2.5 text-slate-600 hover:text-accentIndigo bg-slate-100/60 border border-slate-200/60 hover:border-indigo-500/30 hover:bg-indigo-500/5 rounded-xl transition-all">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+          </button>
+
           <!-- Logout button -->
           <button id="btn-logout" title="ตัดการเชื่อมต่อ"
             class="p-2.5 text-slate-600 hover:text-rose-400 bg-slate-100/60 border border-slate-200/60 hover:border-rose-900/30 rounded-xl transition-all">
@@ -500,6 +506,81 @@
         </button>
       </form>
 
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="bg-white border border-slate-200/60 rounded-3xl p-6 max-w-md w-full shadow-sm animate-fade-in relative">
+
+      <!-- Close Button -->
+      <button id="settings-modal-close" class="absolute top-4 right-4 text-slate-600 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100/60 transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="mb-6 flex items-center gap-3">
+        <div class="p-2.5 rounded-xl bg-accentIndigo/10 text-accentIndigo">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-lg text-slate-900">การตั้งค่า</h4>
+          <p class="text-xs text-slate-600">จัดการการเชื่อมต่อและข้อมูล</p>
+        </div>
+      </div>
+
+      <!-- Settings Sections -->
+      <div class="space-y-4">
+
+        <!-- Category Sync Section -->
+        <div class="bg-slate-100/50 border border-slate-200/60 rounded-2xl p-4 space-y-3">
+          <div class="flex items-center gap-2 mb-1">
+            <i data-lucide="tag" class="w-4 h-4 text-accentIndigo"></i>
+            <h5 class="text-sm font-bold text-slate-800">หมวดหมู่รายการ</h5>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            ข้อมูลหมวดหมู่จะถูกบันทึกไว้ใน LocalStorage เพื่อลดการเรียก API ทุกครั้งที่โหลดหน้าเว็บ
+            กด Sync เพื่อดึงข้อมูลใหม่จาก Google Sheets
+          </p>
+
+          <!-- Last sync time row -->
+          <div class="flex items-center gap-2 bg-white/70 border border-slate-200/50 rounded-xl px-3.5 py-2.5">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-500 flex-shrink-0"></i>
+            <div class="flex flex-col">
+              <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Sync ล่าสุด</span>
+              <span id="settings-last-sync-time" class="text-xs font-medium text-slate-700 mt-0.5">ยังไม่เคย Sync</span>
+            </div>
+          </div>
+
+          <!-- Sync button -->
+          <button id="btn-sync-categories"
+            class="w-full flex items-center justify-center gap-2 bg-accentIndigo hover:bg-indigo-500 active:scale-[0.98] text-white font-semibold text-sm py-2.5 px-4 rounded-xl shadow-md shadow-indigo-500/10 hover:shadow-indigo-500/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            <span>Sync หมวดหมู่จาก Google Sheets</span>
+          </button>
+        </div>
+
+        <!-- Connection Info Section -->
+        <div class="bg-slate-100/50 border border-slate-200/60 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 mb-1">
+            <i data-lucide="link" class="w-4 h-4 text-accentEmerald"></i>
+            <h5 class="text-sm font-bold text-slate-800">ข้อมูลการเชื่อมต่อ</h5>
+          </div>
+          <div class="flex items-start gap-2 bg-white/70 border border-slate-200/50 rounded-xl px-3.5 py-2.5">
+            <i data-lucide="server" class="w-3.5 h-3.5 text-slate-500 flex-shrink-0 mt-0.5"></i>
+            <div class="flex flex-col min-w-0">
+              <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Endpoint</span>
+              <span class="text-xs font-medium text-slate-700 mt-0.5 break-all" id="settings-endpoint-display">-</span>
+            </div>
+          </div>
+          <button onclick="document.getElementById('settings-modal').classList.add('opacity-0','pointer-events-none'); document.getElementById('btn-logout').click();"
+            class="w-full flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-accentRose font-semibold text-sm py-2.5 px-4 rounded-xl transition-all active:scale-[0.98]">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span>ตัดการเชื่อมต่อ</span>
+          </button>
+        </div>
+
+      </div>
     </div>
   </div>
 
