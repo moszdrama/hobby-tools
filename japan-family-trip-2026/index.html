@@ -214,7 +214,7 @@
         .modal-card {
             background: #ffffff;
             width: 100%;
-            max-width: 550px;
+            max-width: 580px;
             max-height: 85vh;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.25);
@@ -322,16 +322,17 @@
                 <div>✈️ <b>ขาไป:</b> ถึง NRT 9 ต.ค. 08:00</div>
                 <div>🛫 <b>ขากลับ:</b> ออกจาก NRT 13 ต.ค. 15:00</div>
                 <div>
-                    🚗 <b>รถเช่า:</b> Nissan Serena + ETC (9-10 ต.ค.)
-                    <button class="info-btn" onclick="openModal('modal-etc')">ℹ️ ดูวิธีใช้ ETC</button>
+                    🚗 <b>รถเช่า:</b> Nissan Serena (9-10 ต.ค.)
+                    <button class="info-btn" onclick="openModal('modal-car')">ℹ️ รับ-คืนรถ</button>
+                    <button class="info-btn" onclick="openModal('modal-etc')">ℹ️ บัตร ETC</button>
                 </div>
                 <div>
                     🚆 <b>ในโตเกียว:</b> Tokyo Subway 72 Hours
-                    <button class="info-btn" onclick="openModal('modal-subway')">ℹ️ ดูรายละเอียดตั๋ว</button>
+                    <button class="info-btn" onclick="openModal('modal-subway')">ℹ️ ตั๋ว Subway</button>
                 </div>
                 <div>
                     🚄 <b>กลับสนามบิน:</b> Keisei Skyliner
-                    <button class="info-btn" onclick="openModal('modal-skyliner')">ℹ️ ดูตั๋ว Skyliner</button>
+                    <button class="info-btn" onclick="openModal('modal-skyliner')">ℹ️ ตั๋ว Skyliner</button>
                 </div>
                 <div>🏨 <b>คืน 1:</b> Lake Kawaguch Cottage Minami</div>
                 <div>🏨 <b>คืน 2-4:</b> Sakura Cross Hotel Ueno-Iriya</div>
@@ -339,8 +340,9 @@
 
             <!-- Quick Pass Detail Buttons -->
             <div class="pass-buttons-bar">
-                <span style="font-size: 0.85rem; font-weight: bold; color: #64748b; display: flex; align-items: center;">คู่มือบัตร & พาส:</span>
-                <button class="info-btn info-btn-pill" onclick="openModal('modal-etc')">🚗 คู่มือบัตรทางด่วน ETC</button>
+                <span style="font-size: 0.85rem; font-weight: bold; color: #64748b; display: flex; align-items: center;">คู่มือบัตร & รถเช่า:</span>
+                <button class="info-btn info-btn-pill" onclick="openModal('modal-car')">🚗 คู่มือรับ-คืนรถเช่า</button>
+                <button class="info-btn info-btn-pill" onclick="openModal('modal-etc')">💳 คู่มือบัตรทางด่วน ETC</button>
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-subway')">🚆 คู่มือ Tokyo Subway Ticket</button>
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-skyliner')">🚄 คู่มือ Keisei Skyliner</button>
             </div>
@@ -358,9 +360,10 @@
                     <div class="item-content">
                         <div class="item-title">
                             รับสัมภาระ & รับรถเช่าที่สนามบิน
+                            <button class="info-btn" onclick="openModal('modal-car')">ℹ️ วิธีรับรถเช่า</button>
                             <button class="info-btn" onclick="openModal('modal-etc')">ℹ️ บัตร ETC</button>
                         </div>
-                        <div class="item-desc">รับรถตู้ Nissan Serena + รับบัตร ETC ที่เคาน์เตอร์ เสียบใส่ช่องอ่านบัตรในรถ พร้อมออกเดินทางสู่ฟูจิ</div>
+                        <div class="item-desc">รับรถตู้ Nissan Serena + ตรวจเอกสารใบขับขี่สากล รับบัตร ETC พร้อมออกเดินทางสู่ฟูจิ</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Nippon+Rent-A-Car+Narita+Airport" target="_blank">📍 Nippon Rent-A-Car Narita</a>
                         </div>
@@ -451,9 +454,10 @@
                     <div class="item-content">
                         <div class="item-title">
                             ขับเข้าโตเกียว -> ส่งของโรงแรม -> คืนรถ Ueno
+                            <button class="info-btn" onclick="openModal('modal-car')">ℹ️ วิธีคืนรถ</button>
                             <button class="info-btn" onclick="openModal('modal-etc')">ℹ️ จ่ายค่าบัตร ETC</button>
                         </div>
-                        <div class="item-desc">ส่งทุกคนและกระเป๋าที่โรงแรม แล้วนำรถไปคืนที่ Nippon Rent-A-Car สาขา Ueno เจ้าหน้าที่จะคิดค่าทางด่วนจากบัตร ETC จ่ายด้วยบัตรเครดิต/เงินสด</div>
+                        <div class="item-desc">แวะส่งทุกคนและสัมภาระที่โรงแรมก่อน เติมน้ำมันเต็มถัง (Regular) แล้วนำรถไปคืนที่ Nippon Rent-A-Car สาขา Ueno พร้อมเคลียร์ค่าทางด่วน ETC</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Sakura+Cross+Hotel+Ueno-Iriya+Annex" target="_blank">📍 โรงแรม Sakura Cross</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Nippon+Rent-A-Car+Ueno+Station" target="_blank">📍 Nippon Rent-A-Car Ueno</a>
@@ -617,7 +621,7 @@
         <div class="tips-card">
             <h4>💡 คำแนะนำสำหรับครอบครัว:</h4>
             <ul>
-                <li>สามารถกดปุ่ม <b>ℹ️ Info</b> เพื่อเปิดดูรายละเอียดของ บัตร ETC, Tokyo Subway Pass และ Skyliner ได้ตลอดเวลา</li>
+                <li>สามารถกดปุ่ม <b>ℹ️ Info</b> เพื่อเปิดดูรายละเอียดของ การรับ-คืนรถเช่า, บัตร ETC, Tokyo Subway Pass และ Skyliner ได้ตลอดเวลา</li>
                 <li>สามารถแตะเปิดลิงก์ <b>📍 Google Maps</b> เพื่อดูเส้นทางและพิกัดได้ทันที</li>
                 <li>ในโตเกียวหากเริ่มเหนื่อย สามารถเรียก Taxi นั่งระยะสั้น 1-3 กม. เพื่อช่วยเซฟแรงคุณพ่อคุณแม่ได้เลย</li>
             </ul>
@@ -626,11 +630,56 @@
 
     <!-- ================= MODALS ================= -->
 
+    <!-- MODAL 0: การเช่ารถ & คืนรถ -->
+    <div id="modal-car" class="modal-overlay" onclick="closeModalOnBackdrop(event, 'modal-car')">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>🚗 คู่มือการรับรถ & คืนรถ (Nippon Rent-A-Car)</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-car')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4>1. เอกสารที่ต้องเตรียม (สำคัญมาก ⚠️)</h4>
+                <ul>
+                    <li><b>ใบขับขี่สากล (IDP):</b> แบบอนุสัญญาเจนีวา 1949 (เล่มสีเทา อายุ 1 ปี) ของผู้ขับทุกคน</li>
+                    <li><b>ใบขับขี่ไทยตัวจริง (Smart Card):</b> ต้องไม่หมดอายุ</li>
+                    <li><b>พาสปอร์ตตัวจริง</b> ของผู้เช่าและคนขับ</li>
+                    <li><b>บัตรเครดิต:</b> ชื่อตรงกับผู้เช่า สำหรับชำระเงิน</li>
+                </ul>
+
+                <h4>2. ขั้นตอนการรับรถที่สนามบินนาริตะ (9 ต.ค.)</h4>
+                <ul>
+                    <li>ไปที่เคาน์เตอร์ <b>Nippon Rent-A-Car</b> (Terminal 1 หรือ 2) เจ้าหน้าที่จะพาไปจุดส่งมอบรถ</li>
+                    <li><b>ประกันรถ:</b> แนะนำเลือกประกันแบบครอบคลุมสูงสุด (NOC Waiver / Full Coverage) เพื่อความอุ่นใจ</li>
+                    <li><b>รับบัตร ETC:</b> ตรวจดูว่าเจ้าหน้าที่เสียบบัตร ETC ในช่องอ่านบัตรของรถเรียบร้อยแล้ว</li>
+                    <li><b>ตรวจเช็กรอยรอบคัน:</b> ถ่ายรูปหรือวิดีโอรอบคันรถเก็บไว้ร่วมกับเจ้าหน้าที่</li>
+                    <li><b>จัดวางกระเป๋า:</b> พับเบาะแถว 3 ขึ้น 1 ฝั่ง เพื่อวางกระเป๋าเดินทางใบใหญ่ 5 ใบ</li>
+                </ul>
+
+                <h4>3. กฎการขับขี่สำคัญในญี่ปุ่น</h4>
+                <ul>
+                    <li>พวงมาลัยขวา ขับชิดซ้ายเหมือนไทย</li>
+                    <li>🚦 <b>ไฟแดง:</b> ห้ามเลี้ยวซ้ายผ่านตลอดเด็ดขาด (ต้องรอไฟเขียวเท่านั้น)</li>
+                    <li>🛑 <b>ป้ายหยุด「止まれ」(Tomare):</b> ต้องเหยียบเบรกหยุดรถสนิท 3 วินาทีเสมอ ก่อนออกตัว</li>
+                </ul>
+
+                <h4>4. ขั้นตอนการคืนรถที่สาขา Ueno (10 ต.ค.)</h4>
+                <div class="modal-highlight">
+                    🏨 <b>1. แวะส่งคนและกระเป๋าที่โรงแรมก่อน:</b> ขับไปส่งคุณพ่อคุณแม่และกระเป๋าที่ <i>Sakura Cross Hotel</i> ก่อน เพื่อความสะดวกสบายและไม่ต้องลากกระเป๋าเดินจากร้านเช่ารถ<br><br>
+                    ⛽ <b>2. เติมน้ำมันเต็มถัง:</b> แวะปั๊มน้ำมันใกล้สาขา Ueno เติมน้ำมันแบบ <b>"Regular" (เบนซินหัวจ่ายสีแดง / レギュラー)</b> ให้เต็มถัง และ<b>เก็บใบเสร็จไว้แสดง</b><br><br>
+                    💳 <b>3. คืนรถ & จ่ายค่าทางด่วน:</b> นำรถเข้าคืนที่สาขา Ueno พนักงานจะตรวจสภาพรถ ดึงบัตร ETC สรุปยอด และให้ชำระค่าทางด่วนที่เคาน์เตอร์
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('modal-car')">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL 1: บัตร ETC -->
     <div id="modal-etc" class="modal-overlay" onclick="closeModalOnBackdrop(event, 'modal-etc')">
         <div class="modal-card">
             <div class="modal-header">
-                <h3>🚗 ข้อมูลบัตรทางด่วน ETC (Nippon Rent-A-Car)</h3>
+                <h3>💳 ข้อมูลบัตรทางด่วน ETC (Nippon Rent-A-Car)</h3>
                 <button class="modal-close-btn" onclick="closeModal('modal-etc')">&times;</button>
             </div>
             <div class="modal-body">
