@@ -11,6 +11,7 @@
             --secondary: #457b9d;
             --dark: #1d3557;
             --accent: #f4a261;
+            --food-accent: #e76f51;
             --card-bg: #ffffff;
             --info-color: #2563eb;
         }
@@ -138,6 +139,16 @@
             font-size: 0.9rem;
             padding-top: 2px;
         }
+        .timeline-item.food-item {
+            background: #fffdfa;
+            border-left: 3px solid var(--food-accent);
+            padding-left: 10px;
+            border-radius: 6px;
+            margin: 4px 0;
+        }
+        .timeline-item.food-item .time-badge {
+            color: var(--food-accent);
+        }
         .item-content { flex: 1; }
         .item-title {
             font-size: 1.05rem;
@@ -179,9 +190,26 @@
             background: #3b82f6;
             color: white;
         }
+        .maps-btn.food-btn {
+            background: #fff7ed;
+            color: #ea580c;
+            border-color: #ffedd5;
+        }
+        .maps-btn.food-btn:hover {
+            background: #ea580c;
+            color: white;
+        }
         .special-tag {
             background: #ffe4e6;
             color: #e11d48;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .food-tag {
+            background: #ffedd5;
+            color: #c2410c;
             font-size: 0.75rem;
             font-weight: bold;
             padding: 2px 6px;
@@ -348,7 +376,7 @@
             </div>
         </div>
 
-        <!-- DAY 1 -->
+        <!-- ================= DAY 1 ================= -->
         <div class="day-section">
             <div class="day-header">
                 <span>🍁 Day 1: ศุกร์ที่ 9 ต.ค. 2026</span>
@@ -369,21 +397,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="time-badge">10:00 - 12:30</div>
+
+                <!-- Day 1 Lunch -->
+                <div class="timeline-item food-item">
+                    <div class="time-badge">11:30 - 12:30</div>
                     <div class="item-content">
-                        <div class="item-title">ขับรถสู่ฟูจิ & พักรถมื้อเที่ยง</div>
-                        <div class="item-desc">วิ่งช่อง ETC ทางด่วน แวะจุดพักรถ Ebina SA ห้องน้ำสะอาด ทานมื้อเที่ยงง่ายๆ ชิมขนมปังเมล่อนชื่อดัง</div>
+                        <div class="item-title">
+                            🍱 มื้อกลางวัน: จุดพักรถ Ebina Service Area
+                            <span class="food-tag">มื้อกลางวัน</span>
+                        </div>
+                        <div class="item-desc">แวะพักรถมื้อเที่ยงที่ศูนย์อาหาร Ebina SA มีอาหารหลากหลาย (ราเมงหมูชาชู, ข้าวหน้าหมูทอด, ข้าวหน้าเนื้อย่าง ปลอดภัยสำหรับคนแพ้อาหารทะเล) และขนมปังเมล่อนชื่อดัง</div>
                         <div class="action-links">
-                            <a class="maps-btn" href="https://maps.google.com/?q=Ebina+Service+Area" target="_blank">📍 Ebina Service Area</a>
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Ebina+Service+Area" target="_blank">📍 Ebina Service Area (จุดพักรถ)</a>
                         </div>
                     </div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="time-badge">13:30 - 15:00</div>
                     <div class="item-content">
                         <div class="item-title">ชมวิวฟูจิริมทะเลสาบ @ Oishi Park</div>
-                        <div class="item-desc">ทางเดินราบเรียบ ชมพุ่มไม้โคเชียสีแดงและวิวฟูจิ มีคาเฟ่นั่งพักสบายๆ</div>
+                        <div class="item-desc">ทางเดินราบเรียบ ชมพุ่มไม้โคเชียสีแดงและวิวฟูจิ มีคาเฟ่นั่งพักสบายๆ ชิมไอศกรีมบลูเบอร์รี่</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Oishi+Park+Kawaguchiko" target="_blank">📍 Oishi Park</a>
                         </div>
@@ -393,7 +427,7 @@
                     <div class="time-badge">15:30 - 16:30</div>
                     <div class="item-content">
                         <div class="item-title">ช้อปปิ้งของสด ขนม & ผลไม้</div>
-                        <div class="item-desc">แวะซื้อผลไม้ญี่ปุ่น (องุ่นไซมัสคัส/พีช) และเครื่องดื่มไปทานที่บ้านพัก</div>
+                        <div class="item-desc">แวะซื้อผลไม้ญี่ปุ่น (องุ่นไซมัสคัส/พีช) เนื้อสัตว์ เครื่องดื่ม และขนมไปทานที่บ้านพัก</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=OGINO+Kawaguchiko+Store" target="_blank">📍 Ogino Supermarket</a>
                         </div>
@@ -403,26 +437,31 @@
                     <div class="time-badge">16:30 - 17:30</div>
                     <div class="item-content">
                         <div class="item-title">Check-in บ้านพักริมทะเลสาบ</div>
-                        <div class="item-desc">เข้าพักผ่อนในบรรยากาศส่วนตัว วิวธรรมชาติ</div>
+                        <div class="item-desc">เข้าพักผ่อนในบรรยากาศส่วนตัว วิวธรรมชาติริมทะเลสาบคาวากุจิโกะ</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami" target="_blank">📍 Lake Kawaguch Cottage Minami</a>
                         </div>
                     </div>
                 </div>
-                <div class="timeline-item">
+
+                <!-- Day 1 Dinner -->
+                <div class="timeline-item food-item">
                     <div class="time-badge">18:00 - 19:30</div>
                     <div class="item-content">
-                        <div class="item-title">มื้อเย็น: บะหมี่หม้อเหล็ก Hoto Fudou</div>
-                        <div class="item-desc">บะหมี่โฮโตะร้อนๆ ซุปฟักทองรสกลมกล่อม มีเมนูหมู/ผัก (คนแพ้อาหารทะเลทานได้สบาย)</div>
+                        <div class="item-title">
+                            🍲 มื้อเย็น: บะหมี่โฮโตะหม้อเหล็ก Hoto Fudou
+                            <span class="food-tag">มื้อเย็น</span>
+                        </div>
+                        <div class="item-desc">บะหมี่โฮโตะร้อนๆ ซุปผักและฟักทองรสกลมกล่อม เสิร์ฟในหม้อเหล็กโบราณ มีเมนูหมู/ผัก (คนแพ้อาหารทะเลทานได้ 100%)</div>
                         <div class="action-links">
-                            <a class="maps-btn" href="https://maps.google.com/?q=Houtou+Fudou+Higashikoiten" target="_blank">📍 Houtou Fudou Higashikoiten</a>
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Houtou+Fudou+Higashikoiten" target="_blank">📍 Houtou Fudou Higashikoiten</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- DAY 2 -->
+        <!-- ================= DAY 2 ================= -->
         <div class="day-section">
             <div class="day-header">
                 <span>🍁 Day 2: เสาร์ที่ 10 ต.ค. 2026</span>
@@ -433,7 +472,7 @@
                     <div class="time-badge">08:30 - 10:30</div>
                     <div class="item-content">
                         <div class="item-title">ชมบ่อน้ำใสศักดิ์สิทธิ์ Oshino Hakkai</div>
-                        <div class="item-desc">เดินพื้นราบชมบ่อน้ำใส 8 บ่อ ชิมโมจิย่างและมันเผาหวาน</div>
+                        <div class="item-desc">เดินพื้นราบชมบ่อน้ำใส 8 บ่อ ชิมโมจิย่างใบโยโมกิและมันเผาหวาน</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Oshino+Hakkai" target="_blank">📍 Oshino Hakkai</a>
                         </div>
@@ -449,8 +488,24 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Day 2 Lunch -->
+                <div class="timeline-item food-item">
+                    <div class="time-badge">12:00 - 13:15</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🍱 มื้อกลางวัน: หมูทอดทงคัตสึ & เซ็ตอาหารญี่ปุ่น Tonkatsu Rikyu
+                            <span class="food-tag">มื้อกลางวัน</span>
+                        </div>
+                        <div class="item-desc">ร้านหมูทอดทงคัตสึชื่อดังริมทะเลสาบ หมูกรอบนอกนุ่มใน ข้าวสวยและซุปมิโซะเติมได้ (ไม่มีอาหารทะเล ปลอดภัยและทานง่ายสำหรับผู้สูงอายุ)</div>
+                        <div class="action-links">
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Tonkatsu+Rikyu+Kawaguchiko" target="_blank">📍 Tonkatsu Rikyu Kawaguchiko</a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="timeline-item">
-                    <div class="time-badge">13:00 - 16:30</div>
+                    <div class="time-badge">13:15 - 16:30</div>
                     <div class="item-content">
                         <div class="item-title">
                             ขับเข้าโตเกียว -> ส่งของโรงแรม -> คืนรถ Ueno
@@ -465,22 +520,37 @@
                     </div>
                 </div>
                 <div class="timeline-item">
-                    <div class="time-badge">17:00 - 20:00</div>
+                    <div class="time-badge">17:00 - 18:30</div>
                     <div class="item-content">
                         <div class="item-title">
                             เดินเล่นตลาด Ameyoko & เริ่มใช้ Subway Pass
                             <button class="info-btn" onclick="openModal('modal-subway')">ℹ️ Tokyo Subway Pass</button>
                         </div>
-                        <div class="item-desc">เริ่มเปิดใช้ตั๋ว Tokyo Subway Ticket 72 Hours เดินช้อปปิ้งของฝาก ขนม ผลไม้สด ราเมง ข้าวหน้าเนื้อย่าง</div>
+                        <div class="item-desc">เริ่มเปิดใช้ตั๋ว Tokyo Subway Ticket 72 Hours เดินช้อปปิ้งของฝาก ขนม ผลไม้สด เสื้อผ้า ของใช้</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Ameyoko+Shopping+District" target="_blank">📍 ตลาด Ameyoko</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 Dinner -->
+                <div class="timeline-item food-item">
+                    <div class="time-badge">18:30 - 20:00</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🥩 มื้อเย็น: กิวคัตสึ เนื้อชุบแป้งทอดเตาหิน Gyukatsu Motomura Ueno
+                            <span class="food-tag">มื้อเย็น</span>
+                        </div>
+                        <div class="item-desc">เนื้อวัวชุบเกล็ดขนมปังทอดกรอบด้านนอก ย่างบนเตาหินส่วนตัวให้สุกตามชอบ เนื้อนุ่มละลาย รสชาติกลมกล่อม (เมนูเนื้อวัวล้วน คนแพ้อาหารทะเลทานได้สบาย)</div>
+                        <div class="action-links">
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Gyukatsu+Motomura+Ueno" target="_blank">📍 Gyukatsu Motomura Ueno</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- DAY 3 -->
+        <!-- ================= DAY 3 ================= -->
         <div class="day-section">
             <div class="day-header">
                 <span>🍁 Day 3: อาทิตย์ที่ 11 ต.ค. 2026</span>
@@ -494,9 +564,26 @@
                         <div class="item-desc">นั่งรถไฟใต้ดินด้วยตั๋ว Subway Pass ทางเดินราบเรียบ มีลิฟต์ขึ้นวิหาร ชิมขนมโบราณ ซื้อของฝาก</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Sens%C5%8D-ji+Temple" target="_blank">📍 วัด Sensoji (Asakusa)</a>
+                            <a class="maps-btn" href="https://maps.google.com/?q=Nakamise-dori+Street+Asakusa" target="_blank">📍 ถนน Nakamise-dori</a>
                         </div>
                     </div>
                 </div>
+
+                <!-- Day 3 Lunch -->
+                <div class="timeline-item food-item">
+                    <div class="time-badge">11:45 - 13:00</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🥩 มื้อกลางวัน: ข้าวหน้าเนื้อย่าง / สุกี้ยากี้ Asakusa Imahan
+                            <span class="food-tag">มื้อกลางวัน</span>
+                        </div>
+                        <div class="item-desc">ร้านสุกี้ยากี้เนื้อวัวระดับตำนานกว่า 120 ปีแห่งอาซากุสะ หรือเลือกทานข้าวหน้าเนื้อสุกี้ยากี้ (Gyudon) คุณภาพเยี่ยม นั่งสบาย บรรยากาศญี่ปุ่นแท้ๆ</div>
+                        <div class="action-links">
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Asakusa+Imahan" target="_blank">📍 Asakusa Imahan (เนื้อสุกี้ยากี้)</a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="timeline-item">
                     <div class="time-badge">13:30 - 15:00</div>
                     <div class="item-content">
@@ -504,6 +591,7 @@
                         <div class="item-desc">สวนร่มรื่น นั่งพักริมบึงบัว ลมเย็นสบาย มีม้านั่งตลอดทาง</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Ueno+Onshi+Park" target="_blank">📍 สวน Ueno Park</a>
+                            <a class="maps-btn" href="https://maps.google.com/?q=Shinobazu+Pond+Ueno" target="_blank">📍 บึง Shinobazu Pond</a>
                         </div>
                     </div>
                 </div>
@@ -518,23 +606,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="timeline-item">
+
+                <!-- Day 3 Dinner (Special Wagyu Buffet) -->
+                <div class="timeline-item food-item">
                     <div class="time-badge">19:00 - 21:00</div>
                     <div class="item-content">
                         <div class="item-title">
-                            🥩 มื้อพิเศษ: บุฟเฟต์เนื้อวากิวพรีเมียม 
+                            🥩 มื้อพิเศษ: บุฟเฟต์เนื้อวากิวพรีเมียม Rokkasen Shinjuku
                             <span class="special-tag">SPECIAL MEAL</span>
+                            <span class="food-tag">มื้อเย็น</span>
                         </div>
-                        <div class="item-desc">บุฟเฟต์เนื้อวากิว Matsusaka / A5 ปิ้งย่าง & สุกี้ยากี้ (สั่งคอร์สเนื้อล้วน คนแพ้อาหารทะเลทานได้ 100%)</div>
+                        <div class="item-desc">บุฟเฟต์เนื้อวากิว Matsusaka / A5 ปิ้งย่าง & ชาบู สุกี้ยากี้ เนื้อลายหินอ่อนละลายในปาก (สั่งคอร์สเนื้อล้วน คนแพ้อาหารทะเลทานได้ 100% แนะนำจองล่วงหน้า)</div>
                         <div class="action-links">
-                            <a class="maps-btn" href="https://maps.google.com/?q=Yakiniku+Tei+Rokkasen+Shinjuku" target="_blank">📍 Yakiniku-Tei Rokkasen Shinjuku</a>
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Yakiniku+Tei+Rokkasen+Shinjuku" target="_blank">📍 Yakiniku-Tei Rokkasen Shinjuku</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- DAY 4 -->
+        <!-- ================= DAY 4 ================= -->
         <div class="day-section">
             <div class="day-header">
                 <span>🍁 Day 4: จันทร์ที่ 12 ต.ค. 2026</span>
@@ -551,11 +642,27 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Day 4 Lunch -->
+                <div class="timeline-item food-item">
+                    <div class="time-badge">12:00 - 13:30</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🍱 มื้อกลางวัน: หมูทอดทงคัตสึในตำนาน Maisen Tonkatsu Aoyama
+                            <span class="food-tag">มื้อกลางวัน</span>
+                        </div>
+                        <div class="item-desc">ร้านหมูทอดคัตสึชื่อดังอันดับ 1 ของโตเกียว สาขาหลัก Aoyama ดัดแปลงจากโรงอาบน้ำโบราณ กว้างขวาง นั่งสบาย หมูนุ่มจนใช้ตะเกียบตัดได้ (ปลอดอาหารทะเล)</div>
+                        <div class="action-links">
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Maisen+Tonkatsu+Aoyama+Main+Store" target="_blank">📍 Tonkatsu Maisen Aoyama</a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="timeline-item">
                     <div class="time-badge">14:00 - 16:30</div>
                     <div class="item-content">
                         <div class="item-title">ห้าแยกชิบูย่า & Shibuya PARCO</div>
-                        <div class="item-desc">แวะถ่ายรูปห้าแยก และช้อป Nintendo Store / Pokemon Center ในห้างติดแอร์</div>
+                        <div class="item-desc">แวะถ่ายรูปห้าแยก และช้อป Nintendo Store / Pokemon Center ในห้างติดแอร์ มีที่นั่งพักผ่อน</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Shibuya+Scramble+Crossing" target="_blank">📍 Shibuya Crossing</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Shibuya+PARCO" target="_blank">📍 Shibuya PARCO</a>
@@ -566,16 +673,31 @@
                     <div class="time-badge">17:00 - 19:00</div>
                     <div class="item-content">
                         <div class="item-title">Tokyo Character Street (สถานีโตเกียว)</div>
-                        <div class="item-desc">รวมช็อปการ์ตูนทางการกว่า 30 ร้าน (Ghibli, Sanrio, Ultraman, Jump Shop) เดินในห้องแอร์</div>
+                        <div class="item-desc">รวมช็อปการ์ตูนทางการกว่า 30 ร้าน (Ghibli, Sanrio, Ultraman, Jump Shop, Pokemon) เดินช้อปปิ้งในห้องแอร์</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Tokyo+Character+Street" target="_blank">📍 Tokyo Character Street</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 4 Dinner -->
+                <div class="timeline-item food-item">
+                    <div class="time-badge">19:30 - 21:00</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🍲 มื้อเย็น: สุกี้ยากี้ & ชาบูชาบู Nabezo Ueno
+                            <span class="food-tag">มื้อเย็น</span>
+                        </div>
+                        <div class="item-desc">บุฟเฟต์ชาบู-สุกี้ยากี้เนื้อวัว/หมูเกรดพรีเมียม ผักสดนานาชนิด ซุปน้ำดำสไตล์คันโต ทานง่าย อิ่มอร่อยสบายท้อง ใกล้สถานี Ueno</div>
+                        <div class="action-links">
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Nabezo+Ueno+Station" target="_blank">📍 Nabezo Ueno Station</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- DAY 5 -->
+        <!-- ================= DAY 5 ================= -->
         <div class="day-section">
             <div class="day-header">
                 <span>🍁 Day 5: อังคารที่ 13 ต.ค. 2026</span>
@@ -605,11 +727,27 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Day 5 Lunch at Airport -->
+                <div class="timeline-item food-item">
+                    <div class="time-badge">12:00 - 13:30</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🍱 มื้อกลางวัน: ร้านอาหารภายในสนามบินนาริตะ
+                            <span class="food-tag">มื้อกลางวัน</span>
+                        </div>
+                        <div class="item-desc">ทานอาหารญี่ปุ่นส่งท้ายที่โซนร้านอาหารสนามบิน (ชั้น 4 Terminal 1 หรือ 2) มีทั้งราเมง, ข้าวหน้าเนื้อ, อุด้ง, หมูทอดทงคัตสึ สะดวกสบายก่อนโหลดกระเป๋า</div>
+                        <div class="action-links">
+                            <a class="maps-btn food-btn" href="https://maps.google.com/?q=Narita+International+Airport+Terminal+2" target="_blank">📍 ร้านอาหาร Narita Airport T2</a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="timeline-item">
-                    <div class="time-badge">12:00 - 15:00</div>
+                    <div class="time-badge">13:30 - 15:00</div>
                     <div class="item-content">
                         <div class="item-title">เช็คอิน โหลดกระเป๋า & บินกลับไทย 15:00</div>
-                        <div class="item-desc">สนามบินนาริตะ (NRT) ช้อปปิ้ง Duty Free และเดินทางกลับโดยสวัสดิภาพ</div>
+                        <div class="item-desc">สนามบินนาริตะ (NRT) ช้อปปิ้ง Duty Free ขนมของฝาก (Tokyo Banana, Royce, Shiroi Koibito) และเดินทางกลับโดยสวัสดิภาพ</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Narita+International+Airport" target="_blank">📍 สนามบินนาริตะ</a>
                         </div>
@@ -621,9 +759,9 @@
         <div class="tips-card">
             <h4>💡 คำแนะนำสำหรับครอบครัว:</h4>
             <ul>
-                <li>สามารถกดปุ่ม <b>ℹ️ Info</b> เพื่อเปิดดูรายละเอียดของ การรับ-คืนรถเช่า, บัตร ETC, Tokyo Subway Pass และ Skyliner ได้ตลอดเวลา</li>
-                <li>สามารถแตะเปิดลิงก์ <b>📍 Google Maps</b> เพื่อดูเส้นทางและพิกัดได้ทันที</li>
-                <li>ในโตเกียวหากเริ่มเหนื่อย สามารถเรียก Taxi นั่งระยะสั้น 1-3 กม. เพื่อช่วยเซฟแรงคุณพ่อคุณแม่ได้เลย</li>
+                <li>ทุกมื้ออาหารคัดเลือกร้านที่ <b>มีเมนูเนื้อวัว/หมู/ไก่ล้วน</b> เพื่อความปลอดภัยสำหรับผู้ที่แพ้อาหารทะเล 100%</li>
+                <li>สามารถกดปุ่มสีส้ม <b>📍 Google Maps</b> ของแต่ละร้านเพื่อเปิดดูเมนู รูปอาหาร และเส้นทางนำทางได้ทันที</li>
+                <li>สามารถกดปุ่ม <b>ℹ️ Info</b> เพื่อเปิดดูรายละเอียดของ บัตร ETC, การเช่ารถ, Tokyo Subway Pass และ Skyliner ได้ตลอดเวลา</li>
             </ul>
         </div>
     </div>
