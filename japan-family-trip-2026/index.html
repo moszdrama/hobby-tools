@@ -297,7 +297,7 @@
             padding-bottom: 4px;
         }
         .modal-body h4:first-child { margin-top: 0; }
-        .modal-body ul {
+        .modal-body ul, .modal-body ol {
             padding-left: 20px;
             margin-bottom: 10px;
         }
@@ -350,16 +350,16 @@
                 <div>✈️ <b>ขาไป:</b> ถึง NRT 9 ต.ค. 08:00</div>
                 <div>🛫 <b>ขากลับ:</b> ออกจาก NRT 13 ต.ค. 15:00</div>
                 <div>
-                    🚗 <b>รถเช่า & เส้นทาง:</b> Nissan Serena (9-10 ต.ค.) วิ่งสาย E20 (Chuo Expwy)
+                    🚗 <b>รถเช่า & คืนรถ:</b> Nissan Serena คืนสาขา TX Asakusa (10 ต.ค.)
                     <button class="info-btn" onclick="openModal('modal-car')">ℹ️ รับ-คืนรถ</button>
                     <button class="info-btn" onclick="openModal('modal-etc')">ℹ️ บัตร ETC</button>
                 </div>
                 <div>
-                    🚆 <b>ในโตเกียว:</b> Tokyo Subway 72 Hours
+                    🚆 <b>ในโตเกียว:</b> Tokyo Subway 72 Hours (รับตั๋วที่ NRT Day 1)
                     <button class="info-btn" onclick="openModal('modal-subway')">ℹ️ ตั๋ว Subway</button>
                 </div>
                 <div>
-                    🚄 <b>กลับสนามบิน:</b> Keisei Skyliner
+                    🚄 <b>กลับสนามบิน:</b> Keisei Skyliner (กดตู้รับที่ Keisei Ueno)
                     <button class="info-btn" onclick="openModal('modal-skyliner')">ℹ️ ตั๋ว Skyliner</button>
                 </div>
                 <div>🏨 <b>คืน 1:</b> Lake Kawaguch Cottage Minami</div>
@@ -380,18 +380,23 @@
         <div class="day-section">
             <div class="day-header">
                 <span>🍁 Day 1: ศุกร์ที่ 9 ต.ค. 2026</span>
-                <span class="day-badge">มุ่งหน้าสู่ฟูจิผ่านเส้นทาง E20 & พักริมทะเลสาบ</span>
+                <span class="day-badge">ถึงนาริตะ & รับตั๋ว Subway & ขับ E20 สู่ฟูจิ</span>
             </div>
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="time-badge">08:00 - 10:00</div>
                     <div class="item-content">
                         <div class="item-title">
-                            รับสัมภาระ & รับรถเช่าที่สนามบิน
+                            รับสัมภาระ, รับตั๋ว Subway ที่ NRT & รับรถเช่า
+                            <button class="info-btn" onclick="openModal('modal-subway')">ℹ️ วิธีสแกนตั๋ว Subway</button>
                             <button class="info-btn" onclick="openModal('modal-car')">ℹ️ วิธีรับรถเช่า</button>
                             <button class="info-btn" onclick="openModal('modal-etc')">ℹ️ บัตร ETC</button>
                         </div>
-                        <div class="item-desc">รับรถตู้ Nissan Serena + ตรวจเอกสารใบขับขี่สากล รับบัตร ETC ตั้ง GPS มุ่งหน้าสู่ทางด่วนสาย Chuo Expressway (E20) สู่ฟูจิ</div>
+                        <div class="item-desc">
+                            1. ผ่าน ตม. รับกระเป๋าเดินทาง 5 ใบ<br>
+                            2. <b>สแกน QR Code จาก Klook รับตั๋วจริง Tokyo Subway Ticket 72 Hours (5 ใบ)</b> ที่ตู้จำหน่ายตั๋ว/เคาน์เตอร์ Keisei-Metro ภายในสนามบินนาริตะเตรียมไว้ล่วงหน้า (ตั๋วยังไม่นับเวลาจนกว่าจะใช้จริงวันที่ 10 ต.ค.)<br>
+                            3. รับรถตู้ Nissan Serena + ตรวจเอกสารใบขับขี่สากล รับบัตร ETC ตั้ง GPS ออกเดินทางสู่ทางด่วนสาย Chuo Expressway (E20)
+                        </div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Nippon+Rent-A-Car+Narita+Airport" target="_blank">📍 Nippon Rent-A-Car Narita</a>
                         </div>
@@ -465,7 +470,7 @@
         <div class="day-section">
             <div class="day-header">
                 <span>🍁 Day 2: เสาร์ที่ 10 ต.ค. 2026</span>
-                <span class="day-badge">หมู่บ้านน้ำใส & เข้าโตเกียว คืนรถ</span>
+                <span class="day-badge">หมู่บ้านน้ำใส & คืนรถสาขา Asakusa & ตลาด Ameyoko</span>
             </div>
             <div class="timeline">
                 <div class="timeline-item">
@@ -504,18 +509,19 @@
                     </div>
                 </div>
 
+                <!-- Day 2 Return Car at Asakusa -->
                 <div class="timeline-item">
                     <div class="time-badge">13:15 - 16:30</div>
                     <div class="item-content">
                         <div class="item-title">
-                            ขับเข้าโตเกียว -> ส่งของโรงแรม -> คืนรถ Ueno
+                            ขับเข้าโตเกียว -> ส่งของโรงแรม -> คืนรถสาขา Asakusa
                             <button class="info-btn" onclick="openModal('modal-car')">ℹ️ วิธีคืนรถ</button>
                             <button class="info-btn" onclick="openModal('modal-etc')">ℹ️ จ่ายค่าบัตร ETC</button>
                         </div>
-                        <div class="item-desc">แวะส่งทุกคนและสัมภาระที่โรงแรมก่อน เติมน้ำมันเต็มถัง (Regular) แล้วนำรถไปคืนที่ Nippon Rent-A-Car สาขา Ueno พร้อมเคลียร์ค่าทางด่วน ETC</div>
+                        <div class="item-desc">แวะส่งคุณพ่อคุณแม่และสัมภาระที่โรงแรมก่อน (ห่างจาก Asakusa เพียง 1.5 กม.) จากนั้นเติมน้ำมันเต็มถัง (Regular) แล้วนำรถไปคืนที่ <b>Nippon Rent-A-Car สาขา TX Asakusa</b> พร้อมเคลียร์ค่าทางด่วนบัตร ETC ที่เคาน์เตอร์</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Sakura+Cross+Hotel+Ueno-Iriya+Annex" target="_blank">📍 โรงแรม Sakura Cross</a>
-                            <a class="maps-btn" href="https://maps.google.com/?q=Nippon+Rent-A-Car+Ueno+Station" target="_blank">📍 Nippon Rent-A-Car Ueno</a>
+                            <a class="maps-btn" href="https://maps.google.com/?q=Nippon+Rent-A-Car+TX+Asakusa" target="_blank">📍 Nippon Rent-A-Car TX Asakusa</a>
                         </div>
                     </div>
                 </div>
@@ -523,10 +529,10 @@
                     <div class="time-badge">17:00 - 18:30</div>
                     <div class="item-content">
                         <div class="item-title">
-                            เดินเล่นตลาด Ameyoko & เริ่มใช้ Subway Pass
+                            เริ่มใช้บัตร Subway Pass 72h & เดินเล่นตลาด Ameyoko
                             <button class="info-btn" onclick="openModal('modal-subway')">ℹ️ Tokyo Subway Pass</button>
                         </div>
-                        <div class="item-desc">เริ่มเปิดใช้ตั๋ว Tokyo Subway Ticket 72 Hours เดินช้อปปิ้งของฝาก ขนม ผลไม้สด เสื้อผ้า ของใช้</div>
+                        <div class="item-desc">นำบัตร <b>Tokyo Subway Ticket 72 Hours</b> (ที่รับไว้ตั้งแต่วันแรกที่นาริตะ) มาสอดเปิดใช้งานครั้งแรกที่สถานี Asakusa (นับเวลา 72 ชม. ถึง 13 ต.ค. 17:00) นั่งสาย Ginza Line มาลง Ueno ช้อปปิ้งของฝาก ขนม ผลไม้สด เสื้อผ้า</div>
                         <div class="action-links">
                             <a class="maps-btn" href="https://maps.google.com/?q=Ameyoko+Shopping+District" target="_blank">📍 ตลาด Ameyoko</a>
                         </div>
@@ -702,15 +708,23 @@
         <div class="day-section">
             <div class="day-header">
                 <span>🍁 Day 5: อังคารที่ 13 ต.ค. 2026</span>
-                <span class="day-badge">ช้อปส่งท้าย & เดินทางกลับไทย</span>
+                <span class="day-badge">ช้อปส่งท้าย & กดตู้รับตั๋ว Skyliner & เดินทางกลับไทย</span>
             </div>
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="time-badge">08:30 - 10:30</div>
                     <div class="item-content">
-                        <div class="item-title">เช็คเอาท์ & ซื้อของฝากตึกม่วง Takeya</div>
-                        <div class="item-desc">ฝากกระเป๋าที่สถานี Keisei Ueno แล้วเดินช้อปปิ้งขนมและของฝาก Tax-Free</div>
+                        <div class="item-title">
+                            เช็คเอาท์, ฝากกระเป๋า & สแกนตู้รับตั๋ว Skyliner ที่ Keisei Ueno
+                            <button class="info-btn" onclick="openModal('modal-skyliner')">ℹ️ ขั้นตอนกดตู้ Skyliner</button>
+                        </div>
+                        <div class="item-desc">
+                            1. ฝากกระเป๋าเดินทาง 5 ใบที่สถานี Keisei Ueno<br>
+                            2. <b>สแกน QR Code รับตั๋วจริง Keisei Skyliner (5 ใบ)</b> ที่ตู้สีฟ้าในสถานี Keisei Ueno เลือกรถรอบ <b>11:00 น.</b> และเลือกผังที่นั่งติดกัน 5 ที่<br>
+                            3. เดินช้อปปิ้งขนมและของฝากส่งท้ายที่ตึกม่วง Takeya
+                        </div>
                         <div class="action-links">
+                            <a class="maps-btn" href="https://maps.google.com/?q=Keisei+Ueno+Station" target="_blank">📍 สถานี Keisei Ueno</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Takeya+Ueno" target="_blank">📍 ตึกม่วง Takeya</a>
                         </div>
                     </div>
@@ -760,7 +774,10 @@
         <div class="tips-card">
             <h4>💡 คำแนะนำสำหรับครอบครัว:</h4>
             <ul>
+                <li><b>ตั๋ว Tokyo Subway Ticket 72 Hours:</b> ออกตั๋วจริง 5 ใบเตรียมไว้ตั้งแต่วันแรกที่สนามบินนาริตะ (ตั๋วจะเริ่มนับชั่วโมงตอนสอดใช้ครั้งแรกวันที่ 10 ต.ค.)</li>
+                <li><b>ตั๋ว Keisei Skyliner:</b> สแกน QR Code ออกตั๋วระบุที่นั่ง 5 ใบที่ตู้สีฟ้าสถานี Keisei Ueno (เลือกรอบ 11:00 น. นั่งติดกัน 5 ที่)</li>
                 <li>เส้นทางขับรถวันแรก: มุ่งหน้าจากสนามบินนาริตะเข้าสู่ทางด่วนสาย <b>E20 (Chuo Expressway)</b> มุ่งสู่ฟูจิ แวะพักรถที่ <b>EXPASA Dangozaka SA (下り)</b></li>
+                <li>การคืนรถวันที่ 10 ต.ค.: คืนที่ <b>Nippon Rent-A-Car สาขา TX Asakusa</b> (ใกล้โรงแรมเพียง 1.5 กม.)</li>
                 <li>ทุกมื้ออาหารคัดเลือกร้านที่ <b>มีเมนูเนื้อวัว/หมู/ไก่ล้วน</b> เพื่อความปลอดภัยสำหรับผู้ที่แพ้อาหารทะเล 100%</li>
                 <li>สามารถกดปุ่มสีส้ม <b>📍 Google Maps</b> ของแต่ละร้านเพื่อเปิดดูเมนู รูปอาหาร และเส้นทางนำทางได้ทันที</li>
                 <li>สามารถกดปุ่ม <b>ℹ️ Info</b> เพื่อเปิดดูรายละเอียดของ บัตร ETC, การเช่ารถ, Tokyo Subway Pass และ Skyliner ได้ตลอดเวลา</li>
@@ -802,11 +819,11 @@
                     <li>🛑 <b>ป้ายหยุด「止まれ」(Tomare):</b> ต้องเหยียบเบรกหยุดรถสนิท 3 วินาทีเสมอ ก่อนออกตัว</li>
                 </ul>
 
-                <h4>4. ขั้นตอนการคืนรถที่สาขา Ueno (10 ต.ค.)</h4>
+                <h4>4. ขั้นตอนการคืนรถที่สาขา Asakusa (10 ต.ค.)</h4>
                 <div class="modal-highlight">
-                    🏨 <b>1. แวะส่งคนและกระเป๋าที่โรงแรมก่อน:</b> ขับไปส่งคุณพ่อคุณแม่และกระเป๋าที่ <i>Sakura Cross Hotel</i> ก่อน เพื่อความสะดวกสบายและไม่ต้องลากกระเป๋าเดินจากร้านเช่ารถ<br><br>
-                    ⛽ <b>2. เติมน้ำมันเต็มถัง:</b> แวะปั๊มน้ำมันใกล้สาขา Ueno เติมน้ำมันแบบ <b>"Regular" (เบนซินหัวจ่ายสีแดง / レギュラー)</b> ให้เต็มถัง และ<b>เก็บใบเสร็จไว้แสดง</b><br><br>
-                    💳 <b>3. คืนรถ & จ่ายค่าทางด่วน:</b> นำรถเข้าคืนที่สาขา Ueno พนักงานจะตรวจสภาพรถ ดึงบัตร ETC สรุปยอด และให้ชำระค่าทางด่วนที่เคาน์เตอร์
+                    🏨 <b>1. แวะส่งคนและกระเป๋าที่โรงแรมก่อน:</b> ขับไปส่งคุณพ่อคุณแม่และสัมภาระที่ <i>Sakura Cross Hotel Ueno-Iriya Annex</i> ก่อน (ห่างจาก Asakusa เพียง 1.5 กม.)<br><br>
+                    ⛽ <b>2. เติมน้ำมันเต็มถัง:</b> แวะปั๊มน้ำมันใกล้สาขา Asakusa เติมน้ำมันแบบ <b>"Regular" (เบนซินหัวจ่ายสีแดง / レギュラー)</b> ให้เต็มถัง และ<b>เก็บใบเสร็จไว้แสดง</b><br><br>
+                    📍 <b>3. คืนรถที่สาขา TX Asakusa:</b> นำรถเข้าคืนที่ <b>Nippon Rent-A-Car สาขา TX Asakusa (3-27-4 Nishiasakusa)</b> พนักงานจะตรวจสภาพรถ ดึงบัตร ETC สรุปยอด และให้ชำระค่าทางด่วนที่เคาน์เตอร์
                 </div>
             </div>
             <div class="modal-footer">
@@ -840,8 +857,8 @@
 
                 <h4>4. การจ่ายเงิน (สะดวกมาก)</h4>
                 <div class="modal-highlight">
-                    💳 <b>จ่ายตอนคืนรถ (10 ต.ค.) ที่สาขา Ueno:</b> เจ้าหน้าที่จะนำบัตร ETC ไปรูดคิดยอดค่าทางด่วนทั้งหมด สามารถจ่ายด้วย<b>บัตรเครดิตหรือเงินสด</b>ได้ทันที<br>
-                    <i>(ประมาณการค่าทางด่วน นาริตะ &rarr; E20 Chuo Expwy &rarr; ฟูจิ &rarr; Ueno: ประมาณ 7,000 – 9,000 เยน)</i>
+                    💳 <b>จ่ายตอนคืนรถ (10 ต.ค.) ที่สาขา Asakusa:</b> เจ้าหน้าที่จะนำบัตร ETC ไปรูดคิดยอดค่าทางด่วนทั้งหมด สามารถจ่ายด้วย<b>บัตรเครดิตหรือเงินสด</b>ได้ทันที<br>
+                    <i>(ประมาณการค่าทางด่วน นาริตะ &rarr; E20 Chuo Expwy &rarr; ฟูจิ &rarr; Asakusa: ประมาณ 7,000 – 9,000 เยน)</i>
                 </div>
             </div>
             <div class="modal-footer">
@@ -867,19 +884,24 @@
 
                 <h4>2. การนับเวลาแบบ "ชั่วโมง" (นับคุ้มมาก)</h4>
                 <div class="modal-highlight">
-                    ⏱️ ตั๋วจะเริ่มนับเวลาตั้งแต่นาทีแรกที่สอดเข้าตู้กั้น เช่น เริ่มใช้ <b>10 ต.ค. เวลา 17:00 น.</b> จะสามารถใช้ได้ยาวถึง <b>13 ต.ค. เวลา 17:00 น.</b> ครอบคลุมทั้งทริปโตเกียวจนถึงเดินทางกลับสนามบิน!
+                    ⏱️ ตั๋วจะเริ่มนับเวลาตั้งแต่นาทีแรกที่สอดเข้าตู้กั้น เช่น รับบัตรมาตั้งแต่วันที่ 9 ต.ค. ที่นาริตะ แต่<b>เริ่มสอดใช้จริงวันที่ 10 ต.ค. เวลา 17:00 น.</b> ตั๋วจะใช้ได้ยาวถึง <b>13 ต.ค. เวลา 17:00 น.</b> ครอบคลุมทั้งทริปในโตเกียวจนเดินทางกลับ!
                 </div>
 
-                <h4>3. สายรถไฟที่ใช้ได้</h4>
+                <h4>3. ขั้นตอนการสแกนรับตั๋วจริงที่สนามบินนาริตะ (Day 1)</h4>
+                <ol>
+                    <li>ไปที่ตู้จำหน่ายตั๋วอัตโนมัติสีแดงของ Tokyo Metro / Keisei ภายในสนามบินนาริตะ</li>
+                    <li>กดปุ่มเลือก <b>"Language (ภาษาไทย)"</b> ที่มุมขวาบน</li>
+                    <li>กดปุ่ม <b>"QR Code"</b> บนหน้าจอ แล้วนำ QR Code ในแอป Klook ไปสแกนที่ช่องไฟสีแดงใต้ตู้</li>
+                    <li>ตู้จะพิมพ์บัตรจริง 5 ใบออกมาทันที เก็บใส่กระเป๋าไว้ใช้ในวันที่ 10 ต.ค.</li>
+                </ol>
+
+                <h4>4. สายรถไฟที่ใช้ได้</h4>
                 <ul>
                     <li><b>Tokyo Metro ทั้ง 9 สาย</b> (Ginza, Marunouchi, Hibiya, Tozai, Chiyoda, Yurakucho, Hanzomon, Namboku, Fukutoshin)</li>
                     <li><b>Toei Subway ทั้ง 4 สาย</b> (Asakusa, Mita, Shinjuku, Oedo)</li>
                     <li><i>(รวม 13 สาย กว่า 250 สถานี ครอบคลุม Ueno, Asakusa, Akihabara, Shibuya, Shinjuku, Tokyo Station ทั้งหมด)</i></li>
                     <li>❌ <i>ไม่รวมรถไฟสาย JR (เช่น JR Yamanote) และ Keisei Skyliner</i></li>
                 </ul>
-
-                <h4>4. วิธีซื้อและรับตั๋ว</h4>
-                <p>ซื้อล่วงหน้าผ่าน <b>Klook / KKday</b> จะได้ QR Code จากนั้นนำไปสแกนรับบัตรจริงที่ตู้จำหน่ายตั๋วสีแดงในสถานีรถไฟใต้ดินทุกแห่ง หรือรับที่สนามบินนาริตะ</p>
             </div>
             <div class="modal-footer">
                 <button onclick="closeModal('modal-subway')">ปิดหน้าต่าง</button>
@@ -891,28 +913,33 @@
     <div id="modal-skyliner" class="modal-overlay" onclick="closeModalOnBackdrop(event, 'modal-skyliner')">
         <div class="modal-card">
             <div class="modal-header">
-                <h3>🚄 ข้อมูลตั๋วรถไฟด่วน Keisei Skyliner</h3>
+                <h3>🚄 คู่มือการรับตั๋ว & ขึ้นรถไฟด่วน Keisei Skyliner</h3>
                 <button class="modal-close-btn" onclick="closeModal('modal-skyliner')">&times;</button>
             </div>
             <div class="modal-body">
-                <h4>1. ทำไมถึงแนะนำสำหรับครอบครัว?</h4>
-                <ul>
-                    <li><b>วิ่งตรงเร็วที่สุด:</b> จากสถานี Keisei Ueno ถึงสนามบินนาริตะ ใช้เวลาเพียง <b>41 นาที</b> (ความเร็ว 160 กม./ชม.)</li>
-                    <li><b>สะดวกสบาย:</b> เป็นที่นั่งสำรองทุกที่นั่ง (Reserved Seats) ไม่ต้องแย่งที่นั่ง</li>
-                    <li><b>พื้นที่วางกระเป๋า:</b> มีช่องวางกระเป๋าเดินทางใบใหญ่และกล้องวงจรปิด ปลอดภัย สะดวกสำหรับ 5 กระเป๋าใหญ่</li>
-                    <li><b>ไม่ต้องต่อรถ:</b> ขึ้นจากต้นทาง Ueno นั่งยาวรวดเดียวถึง Terminal 1 หรือ Terminal 2-3</li>
-                </ul>
+                <h4>1. ทำไมต้องออกตั๋วระบุที่นั่ง?</h4>
+                <p>รถไฟ Keisei Skyliner เป็นรถไฟด่วนแบบ <b>All-Reserved-Seat (ต้องระบุเที่ยวและที่นั่งทุกที่นั่ง)</b> จึงต้องนำ QR Code ไปกดเลือกเวลาและที่นั่งที่ตู้จำหน่ายตั๋วก่อนขึ้นรถไฟครับ</p>
 
-                <h4>2. ราคาค่าโดยสาร</h4>
+                <h4>2. จุดและเวลาที่แนะนำให้ออกตั๋ว</h4>
                 <div class="modal-highlight">
-                    💴 <b>ผู้ใหญ่:</b> ประมาณ <b>2,300 – 2,570 เยน</b> (~550 - 620 บาท) ต่อเที่ยว<br>
-                    💴 <b>เด็ก (6-11 ปี):</b> ประมาณ 1,150 – 1,290 เยน
+                    📍 <b>แนะนำ: ออกตั๋วที่สถานี Keisei Ueno ในเช้าวันที่ 13 ต.ค. (08:30 - 10:30 น.)</b> ตอนนำกระเป๋ามาฝาก หรือแวะออกตั๋วล่วงหน้าในวันที่ 10-11 ต.ค. ตอนเดินเที่ยวแถว Ueno ได้เช่นกัน
                 </div>
 
-                <h4>3. วิธีซื้อตั๋ว</h4>
+                <h4>3. 📲 ขั้นตอนการกดตู้รับตั๋วที่สถานี Keisei Ueno (ละเอียดทีละขั้นตอน):</h4>
+                <ol>
+                    <li>เดินไปที่ <b>ตู้จำหน่ายตั๋วอัตโนมัติ Skyliner (ตู้สีน้ำเงิน-ฟ้า)</b> บริเวณหน้าทางเข้าสถานี Keisei Ueno</li>
+                    <li>กดปุ่มเปลี่ยนภาษาเป็น <b>"Language (ภาษาไทย)"</b> ที่มุมขวาบนของหน้าจอ</li>
+                    <li>กดปุ่ม <b>"แลกตั๋ว QR Code / Exchange with QR code"</b> บนหน้าจอสัมผัส</li>
+                    <li>นำ QR Code ในโทรศัพท์มือถือ (จาก Klook) ไปจ่อสแกนที่ช่องไฟสีแดงใต้หน้าจอ</li>
+                    <li><b>เลือกเที่ยวเวลาเดินทาง:</b> เลือกรอบ <b>11:00 น.</b> (วิ่งตรง 41 นาที ถึงสนามบินนาริตะเวลา 11:41 น.)</li>
+                    <li><b>เลือกที่นั่ง (Seat Map):</b> กดเลือกที่นั่งบนผังตู้โดยสาร สามารถเลือก 5 ที่นั่งแถวเดียวกันหรือติดกันได้สบายๆ</li>
+                    <li>ตู้จะพิมพ์ตั๋วจริงที่ระบุ <b>หมายเลขตู้โดยสาร (Car No.) และ เลขที่นั่ง (Seat No.)</b> ออกมาครบ 5 ใบ</li>
+                </ol>
+
+                <h4>4. ข้อมูลการเดินทาง</h4>
                 <ul>
-                    <li><b>ซื้อล่วงหน้า (แนะนำ):</b> ซื้อผ่าน Klook / KKday หรือเว็บทางการ Keisei จะได้ราคาโปรโมชั่นถูกกว่าซื้อหน้าเคาน์เตอร์</li>
-                    <li><b>ออกตั๋วระบุที่นั่ง:</b> นำ QR Code ไปสแกนเลือกเวลาและรับตั๋วระบุที่นั่งที่ตู้จำหน่ายตั๋วอัตโนมัติที่สถานี Keisei Ueno ก่อนขึ้นรถไฟ</li>
+                    <li><b>ระยะเวลา:</b> 41 นาที จาก Keisei Ueno ตรงสู่ Narita Airport Terminal 1 / 2-3</li>
+                    <li><b>ที่วางสัมภาระ:</b> มีพื้นที่วางกระเป๋าเดินทางขนาดใหญ่ท้ายโบกี้พร้อมกล้อง CCTV สะดวกสบายสำหรับกระเป๋า 5 ใบ</li>
                 </ul>
             </div>
             <div class="modal-footer">
