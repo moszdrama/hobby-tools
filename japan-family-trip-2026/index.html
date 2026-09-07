@@ -4,338 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎌 Japan Family Trip 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #e63946;
-            --secondary: #457b9d;
-            --dark: #1d3557;
-            --accent: #f4a261;
-            --food-accent: #e76f51;
-            --card-bg: #ffffff;
-            --info-color: #2563eb;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-            line-height: 1.6;
-            padding: 16px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        header {
-            background: linear-gradient(135deg, #e63946, #457b9d);
-            color: white;
-            padding: 24px 20px;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        header h1 { font-size: 1.8rem; margin-bottom: 8px; }
-        header p { font-size: 1rem; opacity: 0.95; }
-        
-        .summary-card {
-            background: var(--card-bg);
-            padding: 18px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border-left: 5px solid var(--accent);
-        }
-        .summary-card h3 { color: var(--dark); margin-bottom: 12px; }
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-            font-size: 0.95rem;
-        }
-        .pass-buttons-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 14px;
-            padding-top: 12px;
-            border-top: 1px dashed #e2e8f0;
-        }
-
-        /* Info Badge / Button */
-        .info-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: #eff6ff;
-            color: var(--info-color);
-            border: 1px solid #bfdbfe;
-            padding: 3px 9px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            line-height: 1.2;
-            vertical-align: middle;
-        }
-        .info-btn:hover {
-            background: var(--info-color);
-            color: #ffffff;
-            border-color: var(--info-color);
-            transform: translateY(-1px);
-        }
-        .info-btn-pill {
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            color: #334155;
-        }
-        .info-btn-pill:hover {
-            background: var(--dark);
-            color: #ffffff;
-            border-color: var(--dark);
-        }
-
-        .day-section { margin-bottom: 24px; }
-        .day-header {
-            background: var(--dark);
-            color: white;
-            padding: 12px 18px;
-            border-radius: 12px 12px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-        .day-badge {
-            background: var(--accent);
-            color: #fff;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-        }
-        .timeline {
-            background: white;
-            border-radius: 0 0 12px 12px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .timeline-item {
-            display: flex;
-            gap: 14px;
-            padding: 14px 0;
-            border-bottom: 1px solid #edf2f7;
-            position: relative;
-        }
-        .timeline-item:last-child { border-bottom: none; }
-        .time-badge {
-            min-width: 95px;
-            font-weight: 700;
-            color: var(--secondary);
-            font-size: 0.9rem;
-            padding-top: 2px;
-        }
-        .timeline-item.food-item {
-            background: #fffdfa;
-            border-left: 3px solid var(--food-accent);
-            padding-left: 10px;
-            border-radius: 6px;
-            margin: 4px 0;
-        }
-        .timeline-item.food-item .time-badge {
-            color: var(--food-accent);
-        }
-        .item-content { flex: 1; }
-        .item-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #2b2d42;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .item-desc {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 8px;
-        }
-        .action-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-            margin-top: 4px;
-        }
-        .maps-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #eef2ff;
-            color: #3b82f6;
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid #c7d2fe;
-            transition: all 0.2s;
-        }
-        .maps-btn:hover {
-            background: #3b82f6;
-            color: white;
-        }
-        .maps-btn.food-btn {
-            background: #fff7ed;
-            color: #ea580c;
-            border-color: #ffedd5;
-        }
-        .maps-btn.food-btn:hover {
-            background: #ea580c;
-            color: white;
-        }
-        .special-tag {
-            background: #ffe4e6;
-            color: #e11d48;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-        .food-tag {
-            background: #ffedd5;
-            color: #c2410c;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-        .tips-card {
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-        }
-        .tips-card h4 { color: #065f46; margin-bottom: 8px; }
-
-        /* Modal Styles */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(3px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-            animation: fadeIn 0.2s ease-out;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-card {
-            background: #ffffff;
-            width: 100%;
-            max-width: 580px;
-            max-height: 85vh;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            animation: slideUp 0.25s ease-out;
-        }
-        .modal-header {
-            background: linear-gradient(135deg, var(--dark), var(--secondary));
-            color: #ffffff;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .modal-header h3 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .modal-close-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: #ffffff;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: 0.2s;
-        }
-        .modal-close-btn:hover {
-            background: rgba(255,255,255,0.4);
-        }
-        .modal-body {
-            padding: 20px;
-            overflow-y: auto;
-            font-size: 0.92rem;
-            color: #334155;
-        }
-        .modal-body h4 {
-            color: var(--dark);
-            margin: 14px 0 6px 0;
-            font-size: 1rem;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 4px;
-        }
-        .modal-body h4:first-child { margin-top: 0; }
-        .modal-body ul, .modal-body ol {
-            padding-left: 20px;
-            margin-bottom: 10px;
-        }
-        .modal-body li { margin-bottom: 6px; }
-        .modal-highlight {
-            background: #f8fafc;
-            border-left: 4px solid var(--secondary);
-            padding: 10px 14px;
-            border-radius: 4px;
-            margin: 10px 0;
-            font-size: 0.88rem;
-        }
-        .modal-footer {
-            padding: 12px 20px;
-            background: #f1f5f9;
-            text-align: right;
-            border-top: 1px solid #e2e8f0;
-        }
-        .modal-footer button {
-            background: var(--dark);
-            color: #fff;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
@@ -343,6 +15,21 @@
             <h1>🎌 Japan Family Trip 2026</h1>
             <p>8 – 13 ตุลาคม 2026 | ผู้ใหญ่ 5 ท่าน (รวมคุณพ่อคุณแม่ 60 ปี)</p>
         </header>
+
+        <!-- Global Progress Tracker with localStorage -->
+        <div class="progress-card" style="cursor: pointer;" onclick="openTaskModal('all')">
+            <div class="progress-header">
+                <span>✅ ความคืบหน้าสิ่งที่ต้องทำ (Checklist Progress)</span>
+                <span id="progress-text">0 / 18 รายการ (0%)</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="progress-bar" class="progress-bar-fill"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                <span style="font-size: 0.82rem; color: #64748b;">บันทึกลงเครื่องอัตโนมัติ (localStorage) • เพิ่ม Task เองได้</span>
+                <button class="info-btn" style="background: var(--dark); color: white; border: none; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem;" onclick="event.stopPropagation(); openTaskModal('all')">📋 เปิดจัดการ Tasks ❯</button>
+            </div>
+        </div>
 
         <div class="summary-card">
             <h3>📌 ข้อมูลสำคัญของทริป</h3>
@@ -373,16 +60,27 @@
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-etc')">💳 คู่มือบัตรทางด่วน ETC</button>
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-subway')">🚆 คู่มือ Tokyo Subway Ticket</button>
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-skyliner')">🚄 คู่มือ Keisei Skyliner</button>
+                <button class="info-btn info-btn-pill" style="background: #ecfdf5; border-color: #10b981; color: #047857;" onclick="openTaskModal('all')">📋 เช็คลิสต์สิ่งที่ต้องทำ (Tasks)</button>
             </div>
         </div>
 
         <!-- ================= DAY 1 ================= -->
         <div class="day-section">
             <div class="day-header">
-                <span>🍁 Day 1: ศุกร์ที่ 9 ต.ค. 2026</span>
-                <span class="day-badge">ถึงนาริตะ & รับตั๋ว Subway & ขับ E20 สู่ฟูจิ</span>
+                <div class="day-header-left">
+                    <span>🍁 Day 1: ศุกร์ที่ 9 ต.ค. 2026</span>
+                    <span class="day-badge">ถึงนาริตะ & รับตั๋ว Subway & ขับ E20 สู่ฟูจิ</span>
+                </div>
+                <button class="day-task-btn" onclick="openTaskModal(1)">📋 Task (<span class="day-task-counter" data-day="1">0/6</span>) ❯</button>
             </div>
             <div class="timeline">
+                
+                <!-- Day 1 Task Quick Banner -->
+                <div class="task-day-banner" onclick="openTaskModal(1)">
+                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 1:</b> <span class="day-task-summary" data-day="1">0/6 รายการ</span></span>
+                    <span class="task-banner-btn">เปิดดู / ตรวจสอบ / เพิ่ม Task ❯</span>
+                </div>
+
                 <div class="timeline-item">
                     <div class="time-badge">08:00 - 10:00</div>
                     <div class="item-content">
@@ -469,10 +167,20 @@
         <!-- ================= DAY 2 ================= -->
         <div class="day-section">
             <div class="day-header">
-                <span>🍁 Day 2: เสาร์ที่ 10 ต.ค. 2026</span>
-                <span class="day-badge">หมู่บ้านน้ำใส & คืนรถสาขา Asakusa & ตลาด Ameyoko</span>
+                <div class="day-header-left">
+                    <span>🍁 Day 2: เสาร์ที่ 10 ต.ค. 2026</span>
+                    <span class="day-badge">หมู่บ้านน้ำใส & คืนรถสาขา Asakusa & ตลาด Ameyoko</span>
+                </div>
+                <button class="day-task-btn" onclick="openTaskModal(2)">📋 Task (<span class="day-task-counter" data-day="2">0/5</span>) ❯</button>
             </div>
             <div class="timeline">
+                
+                <!-- Day 2 Task Quick Banner -->
+                <div class="task-day-banner" onclick="openTaskModal(2)">
+                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 2:</b> <span class="day-task-summary" data-day="2">0/5 รายการ</span></span>
+                    <span class="task-banner-btn">เปิดดู / ตรวจสอบ / เพิ่ม Task ❯</span>
+                </div>
+
                 <div class="timeline-item">
                     <div class="time-badge">08:30 - 10:30</div>
                     <div class="item-content">
@@ -559,10 +267,20 @@
         <!-- ================= DAY 3 ================= -->
         <div class="day-section">
             <div class="day-header">
-                <span>🍁 Day 3: อาทิตย์ที่ 11 ต.ค. 2026</span>
-                <span class="day-badge">วัดอาซากุสะ & ของเล่น Akihabara</span>
+                <div class="day-header-left">
+                    <span>🍁 Day 3: อาทิตย์ที่ 11 ต.ค. 2026</span>
+                    <span class="day-badge">วัดอาซากุสะ & ของเล่น Akihabara</span>
+                </div>
+                <button class="day-task-btn" onclick="openTaskModal(3)">📋 Task (<span class="day-task-counter" data-day="3">0/2</span>) ❯</button>
             </div>
             <div class="timeline">
+                
+                <!-- Day 3 Task Quick Banner -->
+                <div class="task-day-banner" onclick="openTaskModal(3)">
+                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 3:</b> <span class="day-task-summary" data-day="3">0/2 รายการ</span></span>
+                    <span class="task-banner-btn">เปิดดู / ตรวจสอบ / เพิ่ม Task ❯</span>
+                </div>
+
                 <div class="timeline-item">
                     <div class="time-badge">09:00 - 11:30</div>
                     <div class="item-content">
@@ -634,10 +352,20 @@
         <!-- ================= DAY 4 ================= -->
         <div class="day-section">
             <div class="day-header">
-                <span>🍁 Day 4: จันทร์ที่ 12 ต.ค. 2026</span>
-                <span class="day-badge">ศาลเจ้าเมจิ & ชิบูย่า & Character Street</span>
+                <div class="day-header-left">
+                    <span>🍁 Day 4: จันทร์ที่ 12 ต.ค. 2026</span>
+                    <span class="day-badge">ศาลเจ้าเมจิ & ชิบูย่า & Character Street</span>
+                </div>
+                <button class="day-task-btn" onclick="openTaskModal(4)">📋 Task (<span class="day-task-counter" data-day="4">0/2</span>) ❯</button>
             </div>
             <div class="timeline">
+                
+                <!-- Day 4 Task Quick Banner -->
+                <div class="task-day-banner" onclick="openTaskModal(4)">
+                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 4:</b> <span class="day-task-summary" data-day="4">0/2 รายการ</span></span>
+                    <span class="task-banner-btn">เปิดดู / ตรวจสอบ / เพิ่ม Task ❯</span>
+                </div>
+
                 <div class="timeline-item">
                     <div class="time-badge">09:30 - 11:30</div>
                     <div class="item-content">
@@ -707,10 +435,20 @@
         <!-- ================= DAY 5 ================= -->
         <div class="day-section">
             <div class="day-header">
-                <span>🍁 Day 5: อังคารที่ 13 ต.ค. 2026</span>
-                <span class="day-badge">ช้อปส่งท้าย & กดตู้รับตั๋ว Skyliner & เดินทางกลับไทย</span>
+                <div class="day-header-left">
+                    <span>🍁 Day 5: อังคารที่ 13 ต.ค. 2026</span>
+                    <span class="day-badge">ช้อปส่งท้าย & กดตู้รับตั๋ว Skyliner & เดินทางกลับไทย</span>
+                </div>
+                <button class="day-task-btn" onclick="openTaskModal(5)">📋 Task (<span class="day-task-counter" data-day="5">0/5</span>) ❯</button>
             </div>
             <div class="timeline">
+                
+                <!-- Day 5 Task Quick Banner -->
+                <div class="task-day-banner" onclick="openTaskModal(5)">
+                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 5:</b> <span class="day-task-summary" data-day="5">0/5 รายการ</span></span>
+                    <span class="task-banner-btn">เปิดดู / ตรวจสอบ / เพิ่ม Task ❯</span>
+                </div>
+
                 <div class="timeline-item">
                     <div class="time-badge">08:30 - 10:30</div>
                     <div class="item-content">
@@ -774,13 +512,10 @@
         <div class="tips-card">
             <h4>💡 คำแนะนำสำหรับครอบครัว:</h4>
             <ul>
+                <li>ระบบจะจำรายการที่ <b>ติ๊กถูก (Mark as Done)</b> ไว้ในเครื่องอัตโนมัติ (LocalStorage) ไม่หายแม้ปิดหน้าต่างเว็บ</li>
                 <li><b>ตั๋ว Tokyo Subway Ticket 72 Hours:</b> ออกตั๋วจริง 5 ใบเตรียมไว้ตั้งแต่วันแรกที่สนามบินนาริตะ (ตั๋วจะเริ่มนับชั่วโมงตอนสอดใช้ครั้งแรกวันที่ 10 ต.ค.)</li>
                 <li><b>ตั๋ว Keisei Skyliner:</b> สแกน QR Code ออกตั๋วระบุที่นั่ง 5 ใบที่ตู้สีฟ้าสถานี Keisei Ueno (เลือกรอบ 11:00 น. นั่งติดกัน 5 ที่)</li>
-                <li>เส้นทางขับรถวันแรก: มุ่งหน้าจากสนามบินนาริตะเข้าสู่ทางด่วนสาย <b>E20 (Chuo Expressway)</b> มุ่งสู่ฟูจิ แวะพักรถที่ <b>EXPASA Dangozaka SA (下り)</b></li>
-                <li>การคืนรถวันที่ 10 ต.ค.: คืนที่ <b>Nippon Rent-A-Car สาขา TX Asakusa</b> (ใกล้โรงแรมเพียง 1.5 กม.)</li>
                 <li>ทุกมื้ออาหารคัดเลือกร้านที่ <b>มีเมนูเนื้อวัว/หมู/ไก่ล้วน</b> เพื่อความปลอดภัยสำหรับผู้ที่แพ้อาหารทะเล 100%</li>
-                <li>สามารถกดปุ่มสีส้ม <b>📍 Google Maps</b> ของแต่ละร้านเพื่อเปิดดูเมนู รูปอาหาร และเส้นทางนำทางได้ทันที</li>
-                <li>สามารถกดปุ่ม <b>ℹ️ Info</b> เพื่อเปิดดูรายละเอียดของ บัตร ETC, การเช่ารถ, Tokyo Subway Pass และ Skyliner ได้ตลอดเวลา</li>
             </ul>
         </div>
     </div>
@@ -948,37 +683,58 @@
         </div>
     </div>
 
-    <script>
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        }
+    <!-- MODAL: รายการสิ่งที่ต้องทำ (Daily Task Checklist & Custom Task Manager) -->
+    <div id="modal-tasks" class="modal-overlay" onclick="closeModalOnBackdrop(event, 'modal-tasks')">
+        <div class="modal-card task-modal-card">
+            <div class="modal-header">
+                <div>
+                    <h3 style="margin-bottom: 2px;">📋 รายการสิ่งที่ต้องทำ (Daily Tasks)</h3>
+                    <p style="font-size: 0.8rem; opacity: 0.9; margin: 0;">บันทึกอัตโนมัติในเครื่อง (localStorage) • เพิ่ม/ลบสิ่งที่ต้องทำเองได้</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeModal('modal-tasks')">&times;</button>
+            </div>
 
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        }
+            <!-- Tab Switcher -->
+            <div class="task-modal-tabs">
+                <button class="task-tab-btn active" onclick="switchTaskTab('all')">ทั้งหมด (All)</button>
+                <button class="task-tab-btn" onclick="switchTaskTab(1)">Day 1</button>
+                <button class="task-tab-btn" onclick="switchTaskTab(2)">Day 2</button>
+                <button class="task-tab-btn" onclick="switchTaskTab(3)">Day 3</button>
+                <button class="task-tab-btn" onclick="switchTaskTab(4)">Day 4</button>
+                <button class="task-tab-btn" onclick="switchTaskTab(5)">Day 5</button>
+            </div>
 
-        function closeModalOnBackdrop(event, modalId) {
-            if (event.target.id === modalId) {
-                closeModal(modalId);
-            }
-        }
+            <!-- Progress Inside Modal -->
+            <div style="padding: 10px 20px 6px 20px; background: #ffffff; border-bottom: 1px solid #f1f5f9;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: var(--dark); margin-bottom: 4px;">
+                    <span>ความคืบหน้ารวม</span>
+                    <span id="modal-progress-text">0 / 18 รายการ (0%)</span>
+                </div>
+                <div class="progress-bar-bg" style="height: 8px;">
+                    <div id="modal-progress-bar" class="progress-bar-fill"></div>
+                </div>
+            </div>
 
-        // Close on Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                const activeModals = document.querySelectorAll('.modal-overlay.active');
-                activeModals.forEach(m => m.classList.remove('active'));
-                document.body.style.overflow = 'auto';
-            }
-        });
-    </script>
+            <!-- Modal Content / Tasks rendered dynamically -->
+            <div class="modal-body" id="modal-task-body" style="padding: 16px 20px; max-height: 55vh; overflow-y: auto;">
+                <!-- Dynamically generated by renderTaskGroups() -->
+            </div>
+
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" style="background: #f8fafc; color: #dc2626; border: 1px solid #fca5a5; font-size: 0.8rem; padding: 6px 12px; border-radius: 8px;" onclick="resetAllTaskChecks()">🔄 ล้างที่ติ๊กไว้</button>
+                <button type="button" onclick="closeModal('modal-tasks')">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button (FAB) for Quick Task Access -->
+    <button id="fab-task" class="fab-task" onclick="openTaskModal('all')">
+        <span>📋</span>
+        <span>Tasks</span>
+        <span class="fab-badge" id="fab-task-count">0/18</span>
+    </button>
+
+    <!-- JavaScript for Modals & LocalStorage Tasks -->
+    <script src="js/app.js"></script>
 </body>
 </html>
