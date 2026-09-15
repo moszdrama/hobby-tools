@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maps API Tester - ตรวจสอบ API Key</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700');
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        #map-container {
+            min-height: 420px;
+            height: 480px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="p-4 md:p-8 text-gray-800">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- ปุ่มกลับหน้าหลัก -->
+        <div class="mb-6 flex items-center justify-between">
+            <a href="../index.html"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-xl shadow-sm border border-gray-200 hover:bg-gray-50 hover:text-primary transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                กลับหน้าหลัก
+            </a>
+            <span class="text-xs font-mono bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200">
+                Maps JavaScript API v=weekly
+            </span>
+        </div>
+
+        <!-- Header -->
+        <header class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-3xl shadow-lg shadow-blue-200 shrink-0">
+                🗺️
+            </div>
+            <div class="flex-1">
+                <h1 class="text-2xl font-bold text-gray-900">Maps API Tester</h1>
+                <p class="text-sm text-gray-500 mt-1">
+                    เครื่องมือทดสอบการทำงานของ <strong>Google Maps JavaScript API</strong> และตรวจสอบว่า <strong>API Key</strong> พร้อมใช้งานหรือไม่
+                </p>
+            </div>
+        </header>
+
+        <!-- API Key Input Section -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+            <h2 class="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <span>🔑</span> กำหนด Google Maps API Key
+            </h2>
+
+            <div class="space-y-4">
+                <div class="relative">
+                    <input type="password" id="apiKeyInput"
+                        placeholder="วาง API Key ที่ขึ้นต้นด้วย AIzaSy..."
+                        class="w-full pl-4 pr-24 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white text-sm font-mono text-gray-800 transition-all outline-none">
+                    
+                    <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                        <button type="button" id="toggleVisibilityBtn" onclick="toggleKeyVisibility()"
+                            class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors" title="แสดง/ซ่อน API Key">
+                            <svg id="eyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                        <button type="button" onclick="clearApiKey()"
+                            class="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-gray-100 transition-colors" title="ล้างข้อมูล">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-gray-500">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" id="rememberKey" checked class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>บันทึก API Key ในเบราว์เซอร์นี้ (localStorage)</span>
+                    </label>
+                    <span id="keyStatusNote" class="text-gray-400">รองรับ Maps JavaScript API</span>
+                </div>
+
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <button id="testBtn" onclick="startApiTest()"
+                        class="flex-1 sm:flex-initial px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-md shadow-blue-200 transition-all flex items-center justify-center gap-2 active:scale-95">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>ทดสอบและโหลดแผนที่</span>
+                    </button>
+                    <button onclick="reloadTest()"
+                        class="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        <span>รีเซ็ต</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result / Status Card -->
+        <div id="statusContainer" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-base font-semibold text-gray-900 flex items-center gap-2">
+                    <span>📡</span> ผลการตรวจสอบ (Test Status)
+                </h2>
+                <span id="statusBadge" class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">
+                    รอการทดสอบ
+                </span>
+            </div>
+
+            <!-- Detailed Status Display -->
+            <div id="statusDetails" class="p-4 rounded-xl bg-gray-50 border border-gray-200 text-sm">
+                <p class="text-gray-600 flex items-center gap-2">
+                    <span>ℹ️</span> กรุณากรอก API Key แล้วกด <strong>"ทดสอบและโหลดแผนที่"</strong>
+                </p>
+            </div>
+
+            <!-- Diagnostics List -->
+            <div id="diagnosticsList" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 hidden">
+                <div class="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-500">สคริปต์ API:</span>
+                    <span id="diagScript" class="text-xs font-bold text-gray-600">ยังไม่โหลด</span>
+                </div>
+                <div class="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-500">Authentication:</span>
+                    <span id="diagAuth" class="text-xs font-bold text-gray-600">รอผล</span>
+                </div>
+                <div class="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-500">Map Instance:</span>
+                    <span id="diagMap" class="text-xs font-bold text-gray-600">ยังไม่สร้าง</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Map Section -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div>
+                    <h2 class="text-base font-semibold text-gray-900 flex items-center gap-2">
+                        <span>🗺️</span> หน้าต่างแสดงแผนที่
+                    </h2>
+                    <p class="text-xs text-gray-500 mt-0.5">คลิกบนแผนที่เพื่อปักหมุดและดูพิกัดได้</p>
+                </div>
+
+                <!-- Quick Location Buttons -->
+                <div class="flex flex-wrap items-center gap-1.5 text-xs">
+                    <span class="text-gray-400 mr-1">ตำแหน่งทดสอบ:</span>
+                    <button onclick="panToLocation(13.7563, 100.5018, 'กรุงเทพฯ')"
+                        class="px-2.5 py-1 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 rounded-lg text-gray-700 transition-colors">
+                        กรุงเทพฯ
+                    </button>
+                    <button onclick="panToLocation(35.6762, 139.6503, 'โตเกียว')"
+                        class="px-2.5 py-1 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 rounded-lg text-gray-700 transition-colors">
+                        โตเกียว
+                    </button>
+                    <button onclick="panToLocation(40.7128, -74.0060, 'นิวยอร์ก')"
+                        class="px-2.5 py-1 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 rounded-lg text-gray-700 transition-colors">
+                        นิวยอร์ก
+                    </button>
+                    <button onclick="locateMe()"
+                        class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium rounded-lg transition-colors flex items-center gap-1">
+                        <span>📍</span> หาตำแหน่งฉัน
+                    </button>
+                </div>
+            </div>
+
+            <!-- Map Target Container -->
+            <div class="relative rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-inner">
+                <div id="map-container" class="w-full flex items-center justify-center">
+                    <div id="mapPlaceholder" class="text-center p-8 text-gray-400">
+                        <div class="text-5xl mb-3">📍</div>
+                        <p class="font-medium text-gray-600 text-base">แผนที่จะแสดงที่นี่เมื่อ API Key ถูกต้อง</p>
+                        <p class="text-xs text-gray-400 mt-1">กดปุ่ม "ทดสอบและโหลดแผนที่" เพื่อเริ่มต้น</p>
+                    </div>
+                    <div id="map" class="w-full h-full hidden" style="min-height: 460px;"></div>
+                </div>
+            </div>
+
+            <!-- Map Status & Coordinates Footer -->
+            <div id="mapCoordinatesBar" class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500 hidden">
+                <div class="flex items-center gap-2">
+                    <span class="font-semibold text-gray-700">พิกัดปัจจุบัน:</span>
+                    <span id="coordDisplay" class="font-mono bg-gray-100 px-2 py-0.5 rounded text-gray-800">13.7563, 100.5018</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="font-semibold text-gray-700">ระดับซูม:</span>
+                    <span id="zoomDisplay" class="font-mono bg-gray-100 px-2 py-0.5 rounded text-gray-800">12</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Troubleshooting & Guide Card -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+            <h3 class="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <span>💡</span> ข้อผิดพลาดที่พบบ่อย (Common Errors & Fixes)
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-600">
+                <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-amber-900 mb-1 flex items-center gap-1.5">
+                        <span>⚠️</span> API Not Activated
+                    </h4>
+                    <p class="leading-relaxed">
+                        คุณต้องเปิดใช้งาน <strong>Maps JavaScript API</strong> ใน Google Cloud Console (APIs & Services &gt; Enabled APIs & Services &gt; + ENABLE APIS AND SERVICES).
+                    </p>
+                </div>
+                <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-amber-900 mb-1 flex items-center gap-1.5">
+                        <span>🔒</span> Website / Referrer Restriction
+                    </h4>
+                    <p class="leading-relaxed">
+                        หากตั้งค่า <em>Application restrictions (HTTP referrers)</em> ต้องแน่ใจว่าได้ระบุ URL หรือโดเมนที่กำลังรันอยู่ (เช่น <code class="bg-white px-1 py-0.5 rounded">http://localhost:*</code> หรือ <code class="bg-white px-1 py-0.5 rounded">file://*</code>)
+                    </p>
+                </div>
+                <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-amber-900 mb-1 flex items-center gap-1.5">
+                        <span>💳</span> Billing Not Enabled
+                    </h4>
+                    <p class="leading-relaxed">
+                        โปรเจกต์ Google Cloud จำเป็นต้องผูกบัญชี Billing (แม้จะมีเครดิตฟรี $200 ต่อเดือนก็ตาม) มิเช่นนั้น Google จะปฏิเสธการเรียกใช้ API
+                    </p>
+                </div>
+                <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-amber-900 mb-1 flex items-center gap-1.5">
+                        <span>❌</span> Invalid Key / Expired
+                    </h4>
+                    <p class="leading-relaxed">
+                        API Key สะกดผิด ถูกลบ หรือมีช่องว่างเกินมา ให้ตรวจสอบและคัดลอกใหม่อีกครั้งจาก Credentials
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const STORAGE_KEY = 'google_maps_test_api_key';
+        let mapInstance = null;
+        let testMarker = null;
+        let testInfoWindow = null;
+        let authFailed = false;
+        let testTimeoutTimer = null;
+
+        // Load saved key on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedKey = localStorage.getItem(STORAGE_KEY);
+            if (savedKey) {
+                document.getElementById('apiKeyInput').value = savedKey;
+            }
+        });
+
+        // Toggle Key Visibility (Password/Text)
+        function toggleKeyVisibility() {
+            const input = document.getElementById('apiKeyInput');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path>
+                `;
+            } else {
+                input.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                `;
+            }
+        }
+
+        // Clear API Key
+        function clearApiKey() {
+            document.getElementById('apiKeyInput').value = '';
+            localStorage.removeItem(STORAGE_KEY);
+        }
+
+        // Hook for Google Maps Authentication Failure
+        window.gm_authFailure = function () {
+            authFailed = true;
+            if (testTimeoutTimer) clearTimeout(testTimeoutTimer);
+
+            setDiagnostics({
+                script: 'โหลดแล้ว',
+                auth: '❌ ล้มเหลว (Auth Failure)',
+                map: 'เกิดข้อผิดพลาด'
+            });
+
+            setStatusBadge('error', 'Authentication Failed');
+            showAuthErrorDetails();
+        };
+
+        function showAuthErrorDetails() {
+            const statusDetails = document.getElementById('statusDetails');
+            statusDetails.className = 'p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-900';
+            statusDetails.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl shrink-0">❌</div>
+                    <div>
+                        <h4 class="font-bold text-red-800 text-base mb-1">การตรวจสอบ API Key ล้มเหลว (gm_authFailure)</h4>
+                        <p class="mb-2">Google Maps API ปฏิเสธการเรียกใช้งานด้วย Key นี้ สาเหตุที่เป็นไปได้สูงที่สุดได้แก่:</p>
+                        <ul class="list-disc list-inside space-y-1 text-xs text-red-700">
+                            <li><strong>API Key ไม่ถูกต้อง</strong> หรือถูกลบไปแล้ว</li>
+                            <li><strong>ยังไม่ได้เปิดใช้งาน Maps JavaScript API</strong> ในโปรเจกต์ Google Cloud</li>
+                            <li><strong>โดเมนหรือ URL นี้ติด HTTP Referrer Restriction</strong></li>
+                            <li><strong>ยังไม่ได้เปิด Billing</strong> หรือมีปัญหาเรื่องการผูกบัตรเครดิตใน Google Cloud Console</li>
+                        </ul>
+                        <div class="mt-3">
+                            <a href="https://console.cloud.google.com/google/maps-apis/overview" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold text-red-800 underline hover:text-red-950">
+                                ตรวจสอบการตั้งค่าใน Google Cloud Console &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Hide map and show placeholder
+            document.getElementById('map').classList.add('hidden');
+            document.getElementById('mapPlaceholder').classList.remove('hidden');
+            document.getElementById('mapCoordinatesBar').classList.add('hidden');
+        }
+
+        // Set diagnostics summary
+        function setDiagnostics({ script, auth, map }) {
+            const list = document.getElementById('diagnosticsList');
+            list.classList.remove('hidden');
+
+            if (script) document.getElementById('diagScript').textContent = script;
+            if (auth) document.getElementById('diagAuth').textContent = auth;
+            if (map) document.getElementById('diagMap').textContent = map;
+        }
+
+        // Set status badge style and text
+        function setStatusBadge(type, text) {
+            const badge = document.getElementById('statusBadge');
+            badge.className = 'px-3 py-1 text-xs font-semibold rounded-full';
+            if (type === 'loading') {
+                badge.classList.add('bg-blue-100', 'text-blue-700', 'animate-pulse');
+            } else if (type === 'success') {
+                badge.classList.add('bg-green-100', 'text-green-700');
+            } else if (type === 'error') {
+                badge.classList.add('bg-red-100', 'text-red-700');
+            } else {
+                badge.classList.add('bg-gray-100', 'text-gray-600');
+            }
+            badge.textContent = text;
+        }
+
+        // Global callback for Google Maps script
+        window.initGoogleMapsTest = function () {
+            if (authFailed) return;
+            if (testTimeoutTimer) clearTimeout(testTimeoutTimer);
+
+            try {
+                setDiagnostics({
+                    script: 'โหลดสำเร็จ',
+                    auth: '✅ ผ่านการตรวจสอบ',
+                    map: 'กำลังสร้าง...'
+                });
+
+                const mapElement = document.getElementById('map');
+                const placeholder = document.getElementById('mapPlaceholder');
+                placeholder.classList.add('hidden');
+                mapElement.classList.remove('hidden');
+
+                const bangkok = { lat: 13.7563, lng: 100.5018 };
+
+                mapInstance = new google.maps.Map(mapElement, {
+                    center: bangkok,
+                    zoom: 12,
+                    mapTypeControl: true,
+                    streetViewControl: true,
+                    fullscreenControl: true,
+                    zoomControl: true
+                });
+
+                testMarker = new google.maps.Marker({
+                    position: bangkok,
+                    map: mapInstance,
+                    title: "กรุงเทพมหานคร",
+                    animation: google.maps.Animation.DROP
+                });
+
+                testInfoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="padding: 6px; font-family: sans-serif;">
+                            <h4 style="margin: 0 0 4px; font-weight: bold; color: #1e293b;">Google Maps API พร้อมใช้งาน! ✅</h4>
+                            <p style="margin: 0; font-size: 12px; color: #64748b;">API Key ของคุณทำงานได้ถูกต้อง</p>
+                        </div>
+                    `
+                });
+
+                testInfoWindow.open(mapInstance, testMarker);
+
+                testMarker.addListener('click', () => {
+                    testInfoWindow.open(mapInstance, testMarker);
+                });
+
+                // Listen to click on map to reposition marker
+                mapInstance.addListener('click', (e) => {
+                    const lat = e.latLng.lat();
+                    const lng = e.latLng.lng();
+                    testMarker.setPosition(e.latLng);
+                    testInfoWindow.setContent(`
+                        <div style="padding: 6px; font-family: sans-serif;">
+                            <p style="margin: 0; font-size: 12px; color: #334155;"><strong>พิกัดที่คลิก:</strong></p>
+                            <p style="margin: 2px 0 0; font-size: 11px; font-family: monospace; color: #2563eb;">${lat.toFixed(6)}, ${lng.toFixed(6)}</p>
+                        </div>
+                    `);
+                    testInfoWindow.open(mapInstance, testMarker);
+                    updateCoordsUI(lat, lng, mapInstance.getZoom());
+                });
+
+                mapInstance.addListener('zoom_changed', () => {
+                    document.getElementById('zoomDisplay').textContent = mapInstance.getZoom();
+                });
+
+                updateCoordsUI(bangkok.lat, bangkok.lng, 12);
+                document.getElementById('mapCoordinatesBar').classList.remove('hidden');
+
+                setDiagnostics({
+                    script: 'โหลดสำเร็จ',
+                    auth: '✅ ผ่านการตรวจสอบ',
+                    map: '✅ ใช้งานได้ปกติ'
+                });
+
+                setStatusBadge('success', 'ใช้งานได้ปกติ (Success)');
+
+                const statusDetails = document.getElementById('statusDetails');
+                statusDetails.className = 'p-4 rounded-xl bg-green-50 border border-green-200 text-sm text-green-900';
+                statusDetails.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="text-2xl shrink-0">✅</div>
+                        <div>
+                            <h4 class="font-bold text-green-800 text-base mb-1">ยอดเยี่ยม! API Key ใช้งานได้สมบูรณ์</h4>
+                            <p class="text-green-700 text-xs leading-relaxed">
+                                Maps JavaScript API ถูกโหลดและผ่านการ Authentication เรียบร้อยแล้ว แผนที่พร้อมให้บริการครบทุกฟีเจอร์พื้นฐาน
+                            </p>
+                        </div>
+                    </div>
+                `;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'API Key ใช้งานได้!',
+                    text: 'Google Maps JavaScript API โหลดสำเร็จและพร้อมใช้งาน',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+            } catch (err) {
+                console.error("Map initialization error:", err);
+                setDiagnostics({
+                    script: 'โหลดสำเร็จ',
+                    auth: 'ตรวจสอบไม่สำเร็จ',
+                    map: '❌ เกิดข้อผิดพลาด'
+                });
+                setStatusBadge('error', 'Init Error');
+                const statusDetails = document.getElementById('statusDetails');
+                statusDetails.className = 'p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-900';
+                statusDetails.innerHTML = `
+                    <p class="font-bold">เกิดข้อผิดพลาดในการแสดงผลแผนที่:</p>
+                    <p class="text-xs font-mono mt-1">${err.message}</p>
+                `;
+            }
+        };
+
+        function updateCoordsUI(lat, lng, zoom) {
+            document.getElementById('coordDisplay').textContent = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+            if (zoom) document.getElementById('zoomDisplay').textContent = zoom;
+        }
+
+        function startApiTest() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!key) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'กรุณาระบุ API Key',
+                    text: 'โปรดวาง Google Maps API Key ของคุณในช่องข้อความ'
+                });
+                return;
+            }
+
+            if (document.getElementById('rememberKey').checked) {
+                localStorage.setItem(STORAGE_KEY, key);
+            }
+
+            authFailed = false;
+            setStatusBadge('loading', 'กำลังตรวจสอบ...');
+
+            setDiagnostics({
+                script: 'กำลังโหลด...',
+                auth: 'กำลังตรวจสอบ...',
+                map: 'รอการโหลด...'
+            });
+
+            const statusDetails = document.getElementById('statusDetails');
+            statusDetails.className = 'p-4 rounded-xl bg-blue-50 border border-blue-200 text-sm text-blue-900';
+            statusDetails.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="animate-spin text-xl">🔄</div>
+                    <div>
+                        <p class="font-semibold">กำลังเชื่อมต่อกับ Google Maps API Server...</p>
+                        <p class="text-xs text-blue-700">กำลังตรวจสอบสิทธิ์ API Key และโหลดไลบรารีที่จำเป็น</p>
+                    </div>
+                </div>
+            `;
+
+            // If google maps is already loaded in page with previous key, we need to reload page with the key parameter or inject new script
+            if (window.google && window.google.maps) {
+                window.location.reload();
+                return;
+            }
+
+            // Remove existing script if any
+            const oldScript = document.getElementById('gmaps-script');
+            if (oldScript) oldScript.remove();
+
+            // Setup timeout check
+            testTimeoutTimer = setTimeout(() => {
+                if (!window.google || !window.google.maps) {
+                    setStatusBadge('error', 'Timeout / Failed');
+                    setDiagnostics({
+                        script: '❌ Timeout หรือถูกบล็อก',
+                        auth: 'ไม่ได้รับตอบกลับ',
+                        map: 'ไม่สำเร็จ'
+                    });
+                    statusDetails.className = 'p-4 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-900';
+                    statusDetails.innerHTML = `
+                        <div class="flex items-start gap-3">
+                            <div class="text-2xl shrink-0">⏳</div>
+                            <div>
+                                <h4 class="font-bold text-amber-800 text-base mb-1">การโหลดใช้เวลานานผิดปกติ (Timeout)</h4>
+                                <p class="text-xs text-amber-700 leading-relaxed">
+                                    เป็นไปได้ว่าเบราว์เซอร์ติด Ad Blocker, เครือข่ายมีไฟร์วอลล์บล็อก <code class="font-mono">maps.googleapis.com</code> หรือการตั้งค่า API Key ไม่ถูกต้อง
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }, 10000);
+
+            // Inject Maps Script
+            const script = document.createElement('script');
+            script.id = 'gmaps-script';
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=initGoogleMapsTest&libraries=places,geometry&v=weekly`;
+            script.async = true;
+            script.defer = true;
+            script.onerror = function () {
+                if (testTimeoutTimer) clearTimeout(testTimeoutTimer);
+                setStatusBadge('error', 'Network Error');
+                setDiagnostics({
+                    script: '❌ โหลดล้มเหลว (Script Error)',
+                    auth: 'ไม่สามารถเรียก API ได้',
+                    map: 'ไม่สำเร็จ'
+                });
+                statusDetails.className = 'p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-900';
+                statusDetails.innerHTML = `
+                    <p class="font-bold">❌ ไม่สามารถดาวน์โหลด Maps JavaScript API ได้:</p>
+                    <p class="text-xs mt-1">โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ต หรือปิด Ad Blocker ชั่วคราว</p>
+                `;
+            };
+
+            document.head.appendChild(script);
+        }
+
+        function panToLocation(lat, lng, title) {
+            if (!mapInstance) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'ยังไม่ได้โหลดแผนที่',
+                    text: 'กรุณาใส่ API Key และกดทดสอบแผนที่ก่อน'
+                });
+                return;
+            }
+            const pos = { lat, lng };
+            mapInstance.setCenter(pos);
+            mapInstance.setZoom(13);
+            testMarker.setPosition(pos);
+            testMarker.setTitle(title);
+            testInfoWindow.setContent(`
+                <div style="padding: 6px; font-family: sans-serif;">
+                    <h4 style="margin: 0 0 2px; font-weight: bold; color: #1e293b;">${title}</h4>
+                    <p style="margin: 0; font-size: 11px; font-family: monospace; color: #64748b;">${lat.toFixed(4)}, ${lng.toFixed(4)}</p>
+                </div>
+            `);
+            testInfoWindow.open(mapInstance, testMarker);
+            updateCoordsUI(lat, lng, 13);
+        }
+
+        function locateMe() {
+            if (!mapInstance) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'ยังไม่ได้โหลดแผนที่',
+                    text: 'กรุณาใส่ API Key และกดทดสอบแผนที่ก่อน'
+                });
+                return;
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userPos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        mapInstance.setCenter(userPos);
+                        mapInstance.setZoom(15);
+                        testMarker.setPosition(userPos);
+                        testMarker.setTitle("ตำแหน่งของคุณ");
+                        testInfoWindow.setContent(`
+                            <div style="padding: 6px; font-family: sans-serif;">
+                                <h4 style="margin: 0 0 2px; font-weight: bold; color: #2563eb;">📍 ตำแหน่งของคุณ</h4>
+                                <p style="margin: 0; font-size: 11px; font-family: monospace; color: #64748b;">${userPos.lat.toFixed(5)}, ${userPos.lng.toFixed(5)}</p>
+                            </div>
+                        `);
+                        testInfoWindow.open(mapInstance, testMarker);
+                        updateCoordsUI(userPos.lat, userPos.lng, 15);
+                    },
+                    (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สามารถระบุตำแหน่งได้',
+                            text: error.message
+                        });
+                    }
+                );
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'เบราว์เซอร์ไม่รองรับ',
+                    text: 'เบราว์เซอร์ของคุณไม่รองรับการค้นหาพิกัด Geolocation'
+                });
+            }
+        }
+
+        function reloadTest() {
+            window.location.reload();
+        }
+
+        // Auto test if key is already present in query param ?key=... or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryKey = urlParams.get('key');
+        if (queryKey) {
+            document.getElementById('apiKeyInput').value = queryKey;
+            setTimeout(startApiTest, 300);
+        }
+    </script>
+</body>
+
+</html>
