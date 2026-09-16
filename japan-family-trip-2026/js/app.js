@@ -35,6 +35,15 @@ const STORAGE_STATUS_KEY = 'japan_trip_2026_tasks';
 const STORAGE_CUSTOM_KEY = 'japan_trip_2026_custom_tasks';
 
 const DEFAULT_TASKS = {
+    0: [
+        { id: 'task_d0_passport', text: 'ตรวจเช็คพาสปอร์ตตัวจริง 5 เล่ม (อายุการใช้งานเหลือมากกว่า 6 เดือน)', critical: true },
+        { id: 'task_d0_idp', text: 'เตรียม <b>ใบขับขี่สากล (IDP 1949 เล่มสีเทา) + ใบขับขี่ไทย Smart Card</b> ของผู้ขับทุกคน', critical: true },
+        { id: 'task_d0_vjw', text: 'กรอกข้อมูล <b>Visit Japan Web</b> (ตม. & ศุลกากร) ครบ 5 ท่าน + บันทึกภาพหน้าจอ QR Code เก็บไว้', critical: true },
+        { id: 'task_d0_sim', text: 'ซื้อ <b>SIM Card / e-SIM ญี่ปุ่น</b> สำหรับเชื่อมต่อ Internet ตลอดทริป', critical: true },
+        { id: 'task_d0_tickets', text: 'บันทึก Voucher / QR Code ตั๋ว <b>Tokyo Subway 72h</b> และ <b>Keisei Skyliner</b> (พิมพ์สำรอง 1 ชุด)', critical: true },
+        { id: 'task_d0_money', text: 'แลกเงินสดเยน (JPY) สำหรับตู้กดน้ำ/ของกินเล่น/ค่าทางด่วน + เตรียม Travel Card / Credit Card', critical: false },
+        { id: 'task_d0_medicine', text: 'เตรียมยาประจำตัว ยาสามัญ และของใช้ส่วนตัวจำเป็นสำหรับคุณพ่อคุณแม่', critical: false }
+    ],
     1: [
         { id: 'task_d1_bag', text: 'รับกระเป๋าเดินทางครบ 5 ใบที่สายพานสนามบินนาริตะ', critical: true },
         { id: 'task_d1_subway', text: 'สแกนรับตั๋ว <b>Tokyo Subway Ticket 72 Hours (5 ใบ)</b> ที่ตู้สีแดงในสนามบินนาริตะ', critical: true },
@@ -68,6 +77,7 @@ const DEFAULT_TASKS = {
 };
 
 const DAY_TITLES = {
+    0: '📋 Day 0: ก่อนวันเดินทาง (เตรียมตัว & เอกสารล่วงหน้า)',
     1: '🍁 Day 1: ศุกร์ที่ 9 ต.ค. (นาริตะ ➔ ฟูจิ)',
     2: '🍁 Day 2: เสาร์ที่ 10 ต.ค. (ฟูจิ ➔ คืนรถ Asakusa ➔ โตเกียว)',
     3: '🍁 Day 3: อาทิตย์ที่ 11 ต.ค. (วัดอาซากุสะ ➔ บุฟเฟต์ Rokkasen)',
@@ -198,7 +208,7 @@ function renderTaskGroups() {
     const statuses = getTaskStatuses();
 
     let html = '';
-    const daysToShow = (currentActiveTab === 'all') ? [1, 2, 3, 4, 5] : [parseInt(currentActiveTab)];
+    const daysToShow = (currentActiveTab === 'all') ? [0, 1, 2, 3, 4, 5] : [parseInt(currentActiveTab)];
 
     daysToShow.forEach(day => {
         const defaultList = DEFAULT_TASKS[day] || [];
@@ -261,7 +271,7 @@ function updateAllCounters() {
     let totalAll = 0;
     let completedAll = 0;
 
-    for (let day = 1; day <= 5; day++) {
+    for (let day = 0; day <= 5; day++) {
         const defaultList = DEFAULT_TASKS[day] || [];
         const customList = customTasks[day] || [];
         const allList = [...defaultList, ...customList];

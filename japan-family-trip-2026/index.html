@@ -20,7 +20,7 @@
         <div class="progress-card" style="cursor: pointer;" onclick="openTaskModal('all')">
             <div class="progress-header">
                 <span>✅ ความคืบหน้าสิ่งที่ต้องทำ (Checklist Progress)</span>
-                <span id="progress-text">0 / 18 รายการ (0%)</span>
+                <span id="progress-text">0 / 27 รายการ (0%)</span>
             </div>
             <div class="progress-bar-bg">
                 <div id="progress-bar" class="progress-bar-fill"></div>
@@ -61,6 +61,107 @@
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-subway')">🚆 คู่มือ Tokyo Subway Ticket</button>
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-skyliner')">🚄 คู่มือ Keisei Skyliner</button>
                 <button class="info-btn info-btn-pill" style="background: #ecfdf5; border-color: #10b981; color: #047857;" onclick="openTaskModal('all')">📋 เช็คลิสต์สิ่งที่ต้องทำ (Tasks)</button>
+            </div>
+        </div>
+
+        <!-- ================= DAY 0 ================= -->
+        <div class="day-section">
+            <div class="day-header" style="background: linear-gradient(135deg, #1e293b, #334155);">
+                <div class="day-header-left">
+                    <span>📋 Day 0: สิ่งที่ต้องเตรียม & ทำก่อนวันเดินทาง</span>
+                    <span class="day-badge" style="background: #0284c7;">Pre-Trip Checklist</span>
+                </div>
+                <button class="day-task-btn" onclick="openTaskModal(0)">📋 Task (<span class="day-task-counter" data-day="0">0/7</span>) ❯</button>
+            </div>
+            <div class="timeline">
+                
+                <!-- Day 0 Task Quick Banner -->
+                <div class="task-day-banner" onclick="openTaskModal(0)">
+                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 0:</b> <span class="day-task-summary" data-day="0">0/7 รายการ</span></span>
+                    <span class="task-banner-btn">เปิดดู / ตรวจสอบ / เพิ่ม Task ❯</span>
+                </div>
+
+                <!-- Day 0 Item 1: Passport & IDP -->
+                <div class="timeline-item">
+                    <div class="time-badge" style="background: #f1f5f9; color: #475569;">เอกสารสำคัญ</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            📄 ตรวจสอบพาสปอร์ต & ใบขับขี่สากล + ใบขับขี่ไทย
+                            <button class="info-btn" onclick="openModal('modal-car')">ℹ️ เอกสารเช่ารถ</button>
+                        </div>
+                        <div class="item-desc">
+                            • <b>พาสปอร์ตตัวจริง 5 เล่ม:</b> วันหมดอายุต้องเหลือมากกว่า 6 เดือน ณ วันเดินทางกลับ<br>
+                            • <b>ใบขับขี่สากล (IDP):</b> แบบอนุสัญญาเจนีวา 1949 (เล่มสีเทา อายุ 1 ปี) สำหรับผู้ขับทุกคน<br>
+                            • <b>ใบขับขี่ไทยตัวจริง (Smart Card):</b> ต้องยังไม่หมดอายุ (จำเป็นต้องแสดงคู่กับใบขับขี่สากลเสมอ)<br>
+                            • <b>สำเนา & รูปถ่าย:</b> ถ่ายรูปหน้าพาสปอร์ตและใบขับขี่เก็บไว้ในโทรศัพท์มือถือของทุกคนเผื่อกรณีฉุกเฉิน
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 0 Item 2: Visit Japan Web -->
+                <div class="timeline-item">
+                    <div class="time-badge" style="background: #f1f5f9; color: #475569;">ออนไลน์</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🌐 กรอกข้อมูลในระบบ Visit Japan Web (ตม. & ศุลกากร)
+                            <a class="info-btn" href="https://www.vjw.digital.go.jp/" target="_blank">🔗 เว็บไซต์ทางการ VJW ↗</a>
+                        </div>
+                        <div class="item-desc">
+                            • เข้าเว็บไซต์ทางการ <a href="https://www.vjw.digital.go.jp/" target="_blank" style="color: #2563eb; font-weight: 600; text-decoration: underline;">Visit Japan Web</a> ล่วงหน้า 1-2 สัปดาห์ก่อนเดินทาง<br>
+                            • กรอกข้อมูลคนเดินทางทั้ง 5 ท่าน (เที่ยวบินขาเข้า, ที่พักคืนแรก: <i>Lake Kawaguch Cottage Minami</i>)<br>
+                            • ทำแบบฟอร์ม <b>ตรวจคนเข้าเมือง (Immigration)</b> และ <b>ศุลกากร (Customs Declaration)</b> ให้ครบถ้วน<br>
+                            • <b>สำคัญมาก:</b> บันทึกภาพหน้าจอ (Screenshot) QR Code ของแต่ละท่านเก็บไว้ในรูปภาพมือถือ เพื่อสแกนเข้าประเทศได้ทันทีแม้ยังไม่มีสัญญาณเน็ต
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 0 Item 3: SIM Card & Internet -->
+                <div class="timeline-item">
+                    <div class="time-badge" style="background: #f1f5f9; color: #475569;">อินเทอร์เน็ต</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            📱 ซื้อ Sim Card / e-SIM ญี่ปุ่นสำหรับ 5 เครื่อง
+                        </div>
+                        <div class="item-desc">
+                            • <b>e-SIM (แนะนำมากที่สุด):</b> ติดตั้งผ่าน QR Code ก่อนเดินทาง ไม่ต้องถอดสลับซิม เมื่อเครื่องแตะสนามบินนาริตะเปิด Data Roaming ใช้งานได้ทันที<br>
+                            • <b>SIM Card กายภาพ:</b> สั่งซื้อล่วงหน้าส่งถึงบ้าน หรือนัดรับที่สนามบินสุวรรณภูมิ/ดอนเมือง (เตรียมเข็มจิ้มถาดซิมไปด้วย)<br>
+                            • แนะนำตั้งค่าอินเทอร์เน็ตให้คุณพ่อคุณแม่ล่วงหน้าเพื่อความพร้อมเมื่อถึงสนามบิน
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 0 Item 4: Passes Voucher & Backup -->
+                <div class="timeline-item">
+                    <div class="time-badge" style="background: #f1f5f9; color: #475569;">ตั๋ว & พาส</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🎫 บันทึก QR Code ตั๋ว Subway 72h & Keisei Skyliner
+                            <button class="info-btn" onclick="openModal('modal-subway')">ℹ️ ตั๋ว Subway</button>
+                            <button class="info-btn" onclick="openModal('modal-skyliner')">ℹ️ ตั๋ว Skyliner</button>
+                        </div>
+                        <div class="item-desc">
+                            • <b>Tokyo Subway Ticket 72 Hours:</b> บันทึก QR Code จาก Klook เตรียมไว้สแกนรับตั๋วจริง 5 ใบที่สนามบินนาริตะ (Day 1)<br>
+                            • <b>Keisei Skyliner:</b> บันทึก QR Code ไว้สำหรับกดรับตั๋วระบุที่นั่งที่สถานี Keisei Ueno (Day 5)<br>
+                            • พิมพ์สำเนา Voucher ใส่กระดาษเก็บไว้ 1 ชุดเพื่อความอุ่นใจ
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 0 Item 5: Money & Medicine -->
+                <div class="timeline-item">
+                    <div class="time-badge" style="background: #f1f5f9; color: #475569;">การเงิน & สุขภาพ</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            💴 แลกเงินเยนสด, บัตร Travel Card & เตรียมยาประจำตัว
+                        </div>
+                        <div class="item-desc">
+                            • <b>เงินสดเยน (JPY):</b> แลกเงินสดเผื่อไว้สำหรับหยอดตู้กดน้ำ, ซื้อของกินเล่นร้านริมทาง, และจ่ายค่าทางด่วน ETC ในวันคืนรถ (~10,000-20,000 เยน/คน)<br>
+                            • <b>บัตร Travel Card / Credit Card:</b> แลกเงินเยนเข้าบัตร (เช่น YouTrip, Planet SCB, Krungthai Travel Card) และเปิดใช้งานต่างประเทศ<br>
+                            • <b>ยาประจำตัว & ยาสามัญ:</b> ยาความดัน, ยาแก้แพ้, ยาแก้ปวดลดไข้, พลาสเตอร์ยา, และยาประจำตัวสำหรับคุณพ่อคุณแม่พร้อมใบสั่งยา (ถ้ามี)
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -697,6 +798,7 @@
             <!-- Tab Switcher -->
             <div class="task-modal-tabs">
                 <button class="task-tab-btn active" onclick="switchTaskTab('all')">ทั้งหมด (All)</button>
+                <button class="task-tab-btn" onclick="switchTaskTab(0)">Day 0</button>
                 <button class="task-tab-btn" onclick="switchTaskTab(1)">Day 1</button>
                 <button class="task-tab-btn" onclick="switchTaskTab(2)">Day 2</button>
                 <button class="task-tab-btn" onclick="switchTaskTab(3)">Day 3</button>
@@ -708,7 +810,7 @@
             <div style="padding: 10px 20px 6px 20px; background: #ffffff; border-bottom: 1px solid #f1f5f9;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: var(--dark); margin-bottom: 4px;">
                     <span>ความคืบหน้ารวม</span>
-                    <span id="modal-progress-text">0 / 18 รายการ (0%)</span>
+                    <span id="modal-progress-text">0 / 27 รายการ (0%)</span>
                 </div>
                 <div class="progress-bar-bg" style="height: 8px;">
                     <div id="modal-progress-bar" class="progress-bar-fill"></div>
@@ -731,7 +833,7 @@
     <button id="fab-task" class="fab-task" onclick="openTaskModal('all')">
         <span>📋</span>
         <span>Tasks</span>
-        <span class="fab-badge" id="fab-task-count">0/18</span>
+        <span class="fab-badge" id="fab-task-count">0/27</span>
     </button>
 
     <!-- JavaScript for Modals & LocalStorage Tasks -->
