@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCX Strava Fixer - ซ่อมไฟล์ TCX กู้คืนเวลาและ Pace</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- JSZip for batch zip export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono%7CGoogle+Sans:400,500,600,700&display=swap');
+        
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .mono-font {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .drag-active {
+            border-color: #f97316 !important;
+            background-color: #fff7ed !important;
+        }
+
+        #map {
+            height: 380px;
+            border-radius: 0.75rem;
+            z-index: 10;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-orange-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors py-1.5 px-3 rounded-xl hover:bg-slate-100 text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>แดชบอร์ด</span>
+                </a>
+                <span class="text-slate-300">/</span>
+                <div class="flex items-center gap-2.5">
+                    <span class="p-2 bg-gradient-to-tr from-orange-500 to-amber-500 text-white rounded-xl shadow-md shadow-orange-500/20 text-base">
+                        <i class="fa-solid fa-person-running"></i>
+                    </span>
+                    <span class="text-lg font-bold text-slate-900 tracking-tight">TCX STRAVA FIXER</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    100% Client-Side Private
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
+
+        <!-- Hero Section & Explainer -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-orange-50/40 to-amber-50/30 border border-orange-100/80 p-6 sm:p-8 shadow-sm">
+            <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-orange-400/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div class="max-w-3xl space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider bg-orange-100/80 text-orange-700 border border-orange-200">
+                        <i class="fa-solid fa-bolt"></i> Smartwatch TCX Sync Repair
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight">
+                        ซ่อมแซมไฟล์ TCX กู้คืนเวลา <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500">Moving Time</span> และ Pace จริงบน Strava
+                    </h1>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                        แก้ปัญหาบั๊กนาฬิกา Smartwatch (Wear OS, Google Pixel Watch, Galaxy Watch) ที่บันทึก GPS แบบสะดุดหยุดนิ่ง 4–5 วินาที ทำให้ Strava ตัดเวลาวิ่งหายไป 15–20 นาทีและ Pace เพี้ยนเร็วเกินจริง
+                    </p>
+                </div>
+
+                <button id="toggle-info-btn" class="self-start lg:self-center shrink-0 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-sm font-medium shadow-xs transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-circle-question text-orange-500"></i>
+                    <span>สาเหตุและหลักการทำงาน</span>
+                </button>
+            </div>
+
+            <!-- Detailed Info Box (Collapsible) -->
+            <div id="info-box" class="hidden mt-6 pt-6 border-t border-orange-200/60 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-slate-600">
+                <div class="p-4 rounded-2xl bg-white/90 border border-slate-200 shadow-xs space-y-2">
+                    <div class="font-bold text-amber-700 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> 1. Smartwatch GPS Lag
+                    </div>
+                    <p>นาฬิกาบันทึก GPS แบบสะสมบัฟเฟอร์: บันทึกปกติ 4–5 วินาที แล้วสะดุดนิ่ง 4–5 วินาที (ขยับ < 2 เมตร, สปีดตก < 0.6 m/s) ก่อนจะสปีดกระโดดตาม</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-white/90 border border-slate-200 shadow-xs space-y-2">
+                    <div class="font-bold text-rose-700 flex items-center gap-2">
+                        <i class="fa-solid fa-scissors text-rose-500"></i> 2. Strava Moving Cut
+                    </div>
+                    <p>Strava ตั้งเกณฑ์ Moving Threshold ที่ 0.8 m/s (~2.9 km/h) ทุกช่วงกระตุกสั้นๆ จึงถูกนับเป็น "หยุดพัก" วิ่ง 1 ชม. เวลาจริงหายไป 15–20 นาที Pace เร็วหลอกตา</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-white/90 border border-slate-200 shadow-xs space-y-2">
+                    <div class="font-bold text-emerald-700 flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-emerald-500"></i> 3. Smart Resampling & Smoothing
+                    </div>
+                    <p>ระบบปรับ Trackpoints เป็น 1 วิสม่ำเสมอ, เกลี่ย GPS Moving Window, คงจุดหยุดพักจริง (Genuine Pauses) และตรึงระยะทางตรงเดิม 100%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Panel (Collapsible) -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm">
+            <div class="flex items-center justify-between cursor-pointer select-none" id="settings-header">
+                <div class="flex items-center gap-3">
+                    <span class="p-2.5 rounded-xl bg-orange-50 text-orange-600"><i class="fa-solid fa-sliders"></i></span>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm sm:text-base">ตั้งค่าพารามิเตอร์การซ่อมแซม (Settings)</h3>
+                        <p class="text-xs text-slate-500">ปรับแต่งขนาด Rolling Window และระยะเวลาขั้นต่ำของการหยุดพักจริง</p>
+                    </div>
+                </div>
+                <button class="text-slate-400 hover:text-slate-600 transition-transform duration-200" id="settings-arrow">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+            </div>
+
+            <div id="settings-body" class="hidden mt-5 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <!-- Smoothing Window -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center text-xs font-medium">
+                        <label class="text-slate-700">Smoothing Window (วินาที)</label>
+                        <span id="window-val" class="text-orange-600 font-bold">7 วิ</span>
+                    </div>
+                    <input type="range" id="window-slider" min="3" max="21" step="2" value="7" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                    <p class="text-[11px] text-slate-500">ขนาดหน้าต่าง Rolling Average สำหรับเกลี่ยพิกัด (แนะนำ: 7 วินาที)</p>
+                </div>
+
+                <!-- Min Stop Duration -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center text-xs font-medium">
+                        <label class="text-slate-700">Genuine Stop Duration (วินาที)</label>
+                        <span id="stop-val" class="text-orange-600 font-bold">15 วิ</span>
+                    </div>
+                    <input type="range" id="stop-slider" min="5" max="60" step="5" value="15" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                    <p class="text-[11px] text-slate-500">ระยะเวลาหยุดนิ่งที่ถือเป็นการหยุดจริง (เช่น ติดไฟแดง, พักดื่มน้ำ) จะไม่ถูกเกลี่ย</p>
+                </div>
+
+                <!-- Speed Threshold -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center text-xs font-medium">
+                        <label class="text-slate-700">Strava Speed Threshold (m/s)</label>
+                        <span id="thresh-val" class="text-orange-600 font-bold">0.8 m/s (2.88 km/h)</span>
+                    </div>
+                    <input type="range" id="thresh-slider" min="0.4" max="1.5" step="0.1" value="0.8" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                    <p class="text-[11px] text-slate-500">เกณฑ์ความเร็วขั้นต่ำที่ Strava ใช้ตัดสินว่ากำลังวิ่งอยู่</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Upload / Dropzone -->
+        <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-orange-500 bg-white hover:bg-orange-50/20 rounded-3xl p-8 sm:p-12 text-center transition-all duration-300 cursor-pointer group shadow-sm">
+            <input type="file" id="file-input" accept=".tcx" multiple class="hidden">
+            <div class="max-w-md mx-auto space-y-4 pointer-events-none">
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-orange-50 border border-orange-200 text-orange-500 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-md shadow-orange-500/10">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-800 group-hover:text-orange-600 transition-colors">
+                        ลากไฟล์ .tcx มาวางที่นี่ หรือคลิกเพื่อเลือกไฟล์
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-500">
+                        รองรับไฟล์ .tcx จาก Google Pixel Watch, Samsung Galaxy, Wear OS หรือแอปออกกำลังกายทุกยี่ห้อ (เลือกหลายไฟล์ได้พร้อมกัน)
+                    </p>
+                </div>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-xs mono-font">
+                    <i class="fa-solid fa-file-code text-orange-500"></i> *.tcx (TCX Training Center XML)
+                </div>
+            </div>
+        </div>
+
+        <!-- Batch Processing List (Shown when files are loaded) -->
+        <div id="batch-section" class="hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <h3 class="text-lg font-bold text-slate-800">รายการไฟล์ที่เลือก</h3>
+                    <span id="batch-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200">0 ไฟล์</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="download-all-btn" class="hidden px-3.5 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold transition shadow-md shadow-orange-600/20 flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-zipper"></i>
+                        <span>ดาวน์โหลดทั้งหมด (.ZIP)</span>
+                    </button>
+                    <button id="clear-all-btn" class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs font-medium transition border border-slate-200 shadow-xs flex items-center gap-1">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>ล้างทั้งหมด</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- File Tabs/Chips -->
+            <div id="file-chips" class="flex gap-2 overflow-x-auto pb-2">
+                <!-- Dynamic chips -->
+            </div>
+        </div>
+
+        <!-- Active Result Details View -->
+        <div id="result-view" class="hidden space-y-6">
+
+            <!-- Recovery Highlight Banner -->
+            <div class="rounded-2xl bg-gradient-to-r from-emerald-50 via-white to-orange-50/40 border border-emerald-200 p-5 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-emerald-800 font-bold text-base flex items-center gap-2">
+                            ซ่อมแซมข้อมูลสำเร็จ!
+                            <span id="res-badge-filename" class="text-xs font-normal text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-md mono-font"></span>
+                        </h4>
+                        <p class="text-slate-600 text-xs sm:text-sm mt-0.5">
+                            กู้คืนเวลาที่ขาดหายไปได้ <strong id="res-regained-time" class="text-emerald-700 font-extrabold text-sm sm:text-base mono-font">+00:00</strong> นาที พร้อมปรับสปีดและเพซกลับสู่ค่าการวิ่งจริง
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <button id="download-current-btn" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-sm shadow-md shadow-orange-500/20 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-download"></i>
+                        <span>ดาวน์โหลดไฟล์ TCX ซ่อมแล้ว</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Comparison Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Moving Time -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm relative overflow-hidden">
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1 flex items-center justify-between">
+                        <span>Strava Moving Time</span>
+                        <i class="fa-solid fa-stopwatch text-orange-500"></i>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <div id="stat-moving-new" class="text-2xl sm:text-3xl font-bold text-slate-900 mono-font">--:--</div>
+                        <div id="stat-moving-orig" class="text-xs text-rose-500 line-through mono-font">--:--</div>
+                    </div>
+                    <div class="mt-2 text-[11px] text-emerald-600 flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span id="stat-moving-diff">+0:00 กู้คืน</span>
+                    </div>
+                </div>
+
+                <!-- Pace -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm relative overflow-hidden">
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1 flex items-center justify-between">
+                        <span>Average Pace</span>
+                        <i class="fa-solid fa-gauge-high text-amber-500"></i>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <div id="stat-pace-new" class="text-2xl sm:text-3xl font-bold text-slate-900 mono-font">--:--</div>
+                        <div id="stat-pace-orig" class="text-xs text-rose-500 line-through mono-font">--:--</div>
+                    </div>
+                    <div class="mt-2 text-[11px] text-slate-500 flex items-center gap-1">
+                        <i class="fa-solid fa-check text-emerald-600"></i>
+                        <span>เพซจริงตามร่างกาย</span>
+                    </div>
+                </div>
+
+                <!-- Total Distance -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm relative overflow-hidden">
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1 flex items-center justify-between">
+                        <span>ระยะทางรวม (Distance)</span>
+                        <i class="fa-solid fa-route text-sky-500"></i>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <div id="stat-dist" class="text-2xl sm:text-3xl font-bold text-slate-900 mono-font">0.00</div>
+                        <div class="text-xs text-slate-500">กม.</div>
+                    </div>
+                    <div class="mt-2 text-[11px] text-slate-500 flex items-center gap-1">
+                        <i class="fa-solid fa-lock text-sky-500"></i>
+                        <span>ระยะทางคงเดิม 100%</span>
+                    </div>
+                </div>
+
+                <!-- Elapsed Time -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm relative overflow-hidden">
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1 flex items-center justify-between">
+                        <span>เวลารวม (Elapsed Time)</span>
+                        <i class="fa-regular fa-clock text-purple-500"></i>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <div id="stat-elapsed" class="text-2xl sm:text-3xl font-bold text-slate-900 mono-font">--:--</div>
+                        <div class="text-xs text-slate-500">นาที</div>
+                    </div>
+                    <div class="mt-2 text-[11px] text-slate-500 flex items-center gap-1">
+                        <span id="stat-stops-info">0 จุดหยุดพักจริง</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Diagnostics Table -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm">
+                <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-simple text-orange-500"></i> รายละเอียดการวิเคราะห์และซ่อมแซมจุดพิกัด (Diagnostics)
+                </h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left">
+                        <thead class="text-slate-500 bg-slate-50 uppercase text-[10px] tracking-wider border-b border-slate-100">
+                            <tr>
+                                <th class="p-3 rounded-l-xl">รายการ</th>
+                                <th class="p-3">ข้อมูลเดิม (Original)</th>
+                                <th class="p-3">ข้อมูลที่ซ่อมแล้ว (Repaired)</th>
+                                <th class="p-3 rounded-r-xl">ผลกระทบ</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-600">
+                            <tr>
+                                <td class="py-3 px-3 font-medium text-slate-800">จำนวน Trackpoints</td>
+                                <td id="diag-pts-orig" class="py-3 px-3 mono-font">-</td>
+                                <td id="diag-pts-new" class="py-3 px-3 mono-font font-bold text-orange-600">-</td>
+                                <td class="py-3 px-3 text-slate-500">Resampled ให้เป็น 1 วินาทีสม่ำเสมอ</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-3 font-medium text-slate-800">จุดสะดุด GPS Buffer (>2s)</td>
+                                <td id="diag-gaps" class="py-3 px-3 mono-font text-rose-500">-</td>
+                                <td class="py-3 px-3 mono-font text-emerald-600 font-semibold">0 จุด (เกลี่ยเรียบ)</td>
+                                <td class="py-3 px-3 text-slate-500">ลบรอยกระตุกที่ทำให้สปีดตกชั่วคราว</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-3 font-medium text-slate-800">จุดหยุดพักจริง (Genuine Pauses)</td>
+                                <td id="diag-stops-count" class="py-3 px-3 mono-font">-</td>
+                                <td id="diag-stops-preserved" class="py-3 px-3 mono-font text-emerald-600 font-semibold">-</td>
+                                <td class="py-3 px-3 text-slate-500">คงการหยุดพักจริง (เช่น ติดไฟแดง) ไว้อย่างถูกต้อง</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-3 font-medium text-slate-800">Timezone Offset</td>
+                                <td id="diag-tz" colspan="2" class="py-3 px-3 mono-font text-slate-700">-</td>
+                                <td class="py-3 px-3 text-slate-500">รักษาเวลาท้องถิ่นเดิมไม่ให้เลื่อน</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Route Map & Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Route Map -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot text-orange-500"></i> แผนที่เส้นทางการวิ่ง (GPS Track)
+                        </h4>
+                        <div class="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span> จุดเริ่ม
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500"></span> จุดสิ้นสุด
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-500"></span> จุดพัก
+                        </div>
+                    </div>
+                    <div id="map" class="w-full flex-1 min-h-[340px] border border-slate-100"></div>
+                </div>
+
+                <!-- Speed / Elevation Profile Chart -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-orange-500"></i> กราฟโปรไฟล์ (Profile Charts)
+                        </h4>
+                        <!-- Chart Tabs -->
+                        <div class="flex gap-1 bg-slate-100 p-1 rounded-xl text-[11px]">
+                            <button id="chart-tab-speed" class="px-3 py-1 rounded-lg font-medium text-white bg-orange-600 transition shadow-xs">ความเร็ว / สปีด</button>
+                            <button id="chart-tab-hr" class="px-3 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition">อัตราการเต้นหัวใจ</button>
+                            <button id="chart-tab-alt" class="px-3 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition">ความสูงชัน</button>
+                        </div>
+                    </div>
+                    <div class="w-full flex-1 min-h-[340px] relative">
+                        <canvas id="profileChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strava Re-upload Instructions -->
+            <div class="rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="p-2.5 rounded-xl bg-orange-50 text-orange-600 text-lg">
+                        <i class="fa-brands fa-strava"></i>
+                    </span>
+                    <div>
+                        <h4 class="text-base sm:text-lg font-bold text-slate-900">ขั้นตอนการนำไฟล์ที่ซ่อมแล้วไปอัปโหลดขึ้น Strava</h4>
+                        <p class="text-xs text-slate-500">วิธีแทนที่กิจกรรมเดิมเพื่อแสดงเวลาและเพซที่ถูกต้อง</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                        <div class="font-bold text-orange-700 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-orange-100 text-orange-700 text-xs flex items-center justify-center mono-font font-bold">1</span>
+                            ลบหรือซ่อนกิจกรรมเดิม
+                        </div>
+                        <p class="text-slate-600">
+                            เข้าไปที่ Strava (บนเว็บหรือแอป) เปิดกิจกรรมเดิมที่เวลาน้อยผิดปกติ กดเมนู <strong>Delete Activity</strong> (หรือตั้งค่าความเป็นส่วนตัวเป็น Only You หากต้องการเก็บไว้เทียบ)
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                        <div class="font-bold text-orange-700 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-orange-100 text-orange-700 text-xs flex items-center justify-center mono-font font-bold">2</span>
+                            อัปโหลดไฟล์ใหม่ขึ้น Strava
+                        </div>
+                        <p class="text-slate-600">
+                            เข้าเว็บไซต์ <a href="https://www.strava.com/upload/select" target="_blank" class="text-orange-600 underline font-medium hover:text-orange-700">strava.com/upload/select</a> แล้วลากไฟล์ <code class="mono-font text-orange-700 bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded">_fixed.tcx</code> ที่ดาวน์โหลดไปวาง
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                        <div class="font-bold text-orange-700 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-orange-100 text-orange-700 text-xs flex items-center justify-center mono-font font-bold">3</span>
+                            ตรวจสอบผลลัพธ์
+                        </div>
+                        <p class="text-slate-600">
+                            Strava จะประมวลผล Moving Time ใหม่ได้ครบตามเวลาจริง เพซเฉลี่ยจะกลับมาถูกต้อง และ Split แต่ละกิโลเมตรจะแม่นยำ 100%!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
+        <p>TCX Strava Fixer &bull; พัฒนาสำหรับแก้ไขปัญหา GPS Buffer Lag บน Smartwatch &bull; ไม่มีการส่งข้อมูลขึ้นเซิร์ฟเวอร์</p>
+    </footer>
+
+    <!-- Load Local Engine -->
+    <script src="tcx-engine.js"></script>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
