@@ -55,7 +55,7 @@ const DEFAULT_TASKS = {
     2: [
         { id: 'task_d2_checkout', text: 'เช็คเอาท์จากบ้านพัก Lake Kawaguch Cottage Minami ไม่ลืมสิ่งของ', critical: false },
         { id: 'task_d2_hotel_drop', text: '<b>แวะส่งคุณพ่อคุณแม่และกระเป๋า 5 ใบที่โรงแรม Sakura Cross ก่อน</b>', critical: true },
-        { id: 'task_d2_gas', text: '<b>เติมน้ำมันเต็มถัง "Regular" (หัวจ่ายสีแดง)</b> ที่ปั๊มใกล้ Asakusa + เก็บใบเสร็จ', critical: true },
+        { id: 'task_d2_gas', text: '<b>เติมน้ำมันเต็มถัง "Regular" (หัวจ่ายสีแดง)</b> ที่ปั๊ม ENEOS Ueno Yamabushi-cho + เก็บใบเสร็จ', critical: true },
         { id: 'task_d2_car_return', text: '<b>คืนรถที่ Nippon Rent-A-Car สาขา TX Asakusa & เคลียร์ค่าทางด่วนบัตร ETC</b>', critical: true },
         { id: 'task_d2_subway_start', text: '<b>สอดบัตร Tokyo Subway Ticket 72 Hours</b> เริ่มใช้งานครั้งแรกที่สถานี Asakusa / Tawaramachi', critical: true }
     ],
@@ -440,13 +440,23 @@ const DAY_LOCATIONS = {
             mapsUrl: 'https://maps.google.com/?q=Sakura+Cross+Hotel+Ueno-Iriya+Annex'
         },
         {
+            id: 'd2_gas_station',
+            name: 'ปั๊มน้ำมัน ENEOS 上野山伏町SS',
+            time: '16:00 - 16:15',
+            category: 'เติมน้ำมัน',
+            lat: 35.716849,
+            lng: 139.785304,
+            desc: 'เติมน้ำมัน Regular (หัวจ่ายสีแดง) เต็มถังก่อนคืนรถ บริการ Full Service (พนักงานเติมให้ แจ้ง "Regular Mantan") และเก็บใบเสร็จไว้แสดง',
+            mapsUrl: 'https://www.google.com/maps/search/?api=1&query=ENEOS+%E4%B8%8A%E9%87%8E%E5%B1%B1%E4%BC%8F%E7%94%BA%EF%BD%93%EF%BD%93'
+        },
+        {
             id: 'd2_car_return',
             name: 'คืนรถ Nippon Rent-A-Car TX Asakusa',
-            time: '16:00 - 16:45',
+            time: '16:15 - 16:45',
             category: 'คืนรถเช่า',
             lat: 35.7163,
             lng: 139.7917,
-            desc: 'เติมน้ำมันเต็มถัง (Regular) คืนรถที่สาขา Asakusa พร้อมเคลียร์ค่าทางด่วน ETC',
+            desc: 'คืนรถ Toyota Sienta ที่สาขา Asakusa แสดงใบเสร็จค่าน้ำมัน พร้อมเคลียร์ค่าทางด่วนบัตร ETC',
             mapsUrl: 'https://maps.google.com/?q=Nippon+Rent-A-Car+TX+Asakusa'
         },
         {
