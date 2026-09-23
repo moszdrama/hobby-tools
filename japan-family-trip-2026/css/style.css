@@ -973,6 +973,16 @@ header p { font-size: 1rem; opacity: 0.95; }
 }
 
 @media (max-width: 768px) {
+    .map-engine-bar {
+        display: none !important;
+    }
+    .map-footer-apikey-btn .map-btn-text {
+        display: none;
+    }
+    .map-footer-apikey-btn {
+        padding: 5px 10px;
+        font-size: 0.95rem;
+    }
     .map-modal-content {
         flex-direction: column;
         max-height: 75vh;

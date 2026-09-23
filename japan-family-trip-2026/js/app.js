@@ -47,7 +47,7 @@ const DEFAULT_TASKS = {
     1: [
         { id: 'task_d1_bag', text: 'รับกระเป๋าเดินทางครบ 5 ใบที่สายพานสนามบินนาริตะ', critical: true },
         { id: 'task_d1_subway', text: 'สแกนรับตั๋ว <b>Tokyo Subway Ticket 72 Hours (5 ใบ)</b> ที่ตู้สีแดงในสนามบินนาริตะ', critical: true },
-        { id: 'task_d1_car_etc', text: 'รับรถ Nissan Serena + เช็คบัตร <b>ETC</b> เสียบในช่องอ่านบัตรของรถเรียบร้อย', critical: true },
+        { id: 'task_d1_car_etc', text: 'รับรถ Toyota Sienta + เช็คบัตร <b>ETC</b> เสียบในช่องอ่านบัตรของรถเรียบร้อย', critical: true },
         { id: 'task_d1_car_check', text: 'ถ่ายรูป/วิดีโอตรวจรอยรอบคันรถร่วมกับพนักงาน Nippon Rent-A-Car', critical: true },
         { id: 'task_d1_rest_e20', text: 'แวะพักรถมื้อเที่ยงที่ <b>EXPASA Dangozaka SA (บนสาย E20)</b>', critical: true },
         { id: 'task_d1_supermarket', text: 'แวะซูเปอร์มาร์เก็ต Ogino ซื้อผลไม้/เสบียงก่อนเข้าบ้านพัก Minami', critical: false }
@@ -344,7 +344,7 @@ const DAY_LOCATIONS = {
             category: 'รับรถ & ตั๋ว',
             lat: 35.7653,
             lng: 140.3855,
-            desc: 'รับกระเป๋า 5 ใบ, สแกน QR ตั๋ว Subway 72h (5 ใบ) และรับรถ Nissan Serena พร้อมบัตร ETC',
+            desc: 'รับกระเป๋า 5 ใบ, สแกน QR ตั๋ว Subway 72h (5 ใบ) และรับรถ Toyota Sienta พร้อมบัตร ETC',
             mapsUrl: 'https://maps.google.com/?q=Nippon+Rent-A-Car+Narita+Airport'
         },
         {
@@ -434,8 +434,8 @@ const DAY_LOCATIONS = {
             name: 'โรงแรม Sakura Cross Hotel Ueno-Iriya',
             time: '15:30 - 16:00',
             category: 'ที่พัก',
-            lat: 35.7196,
-            lng: 139.7895,
+            lat: 35.72104541045482,
+            lng: 139.78644795162737,
             desc: 'แวะส่งคุณพ่อคุณแม่และกระเป๋า 5 ใบที่โรงแรมก่อนนำรถไปคืนที่สาขา Asakusa',
             mapsUrl: 'https://maps.google.com/?q=Sakura+Cross+Hotel+Ueno-Iriya+Annex'
         },
