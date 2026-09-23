@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -172,7 +173,10 @@
                     <span>🍁 Day 1: ศุกร์ที่ 9 ต.ค. 2026</span>
                     <span class="day-badge">ถึงนาริตะ & รับตั๋ว Subway & ขับ E20 สู่ฟูจิ</span>
                 </div>
-                <button class="day-task-btn" onclick="openTaskModal(1)">📋 Task (<span class="day-task-counter" data-day="1">0/6</span>) ❯</button>
+                <div class="day-header-actions">
+                    <button class="day-map-btn" onclick="openDayMap(1)">🗺️ แผนที่ ❯</button>
+                    <button class="day-task-btn" onclick="openTaskModal(1)">📋 Task (<span class="day-task-counter" data-day="1">0/6</span>) ❯</button>
+                </div>
             </div>
             <div class="timeline">
                 
@@ -197,6 +201,7 @@
                             3. รับรถตู้ Nissan Serena + ตรวจเอกสารใบขับขี่สากล รับบัตร ETC ตั้ง GPS ออกเดินทางสู่ทางด่วนสาย Chuo Expressway (E20)
                         </div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(1, 'd1_narita')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Nippon+Rent-A-Car+Narita+Airport" target="_blank">📍 Nippon Rent-A-Car Narita</a>
                         </div>
                     </div>
@@ -212,6 +217,7 @@
                         </div>
                         <div class="item-desc">จุดพักรถขนาดใหญ่ที่สุดบนทางด่วนสาย <b>E20 (Chuo Expressway ขาออก / Downbound)</b> มีศูนย์อาหารครบครัน ข้าวหน้าเนื้อวัวโคชู (Koshu Beef), ข้าวหน้าหมูทอดทงคัตสึ, ราเมง, ร้านเบเกอรี่, คาเฟ่ Starbucks, ร้านขายผลไม้สด ยามานาชิ (องุ่นไซมัสคัส/พีช) ห้องน้ำใหญ่สะอาดมาก เหมาะสำหรับผู้สูงอายุแวะพักสบายๆ</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(1, 'd1_dangozaka')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Dangozaka+Service+Area+Downbound" target="_blank">📍 EXPASA Dangozaka SA (E20)</a>
                         </div>
                     </div>
@@ -223,6 +229,7 @@
                         <div class="item-title">ชมวิวฟูจิริมทะเลสาบ @ Oishi Park</div>
                         <div class="item-desc">วิ่งต่อจาก E20 เข้าสู่ Kawaguchiko เดินชมพุ่มไม้โคเชียสีแดงและวิวฟูจิริมทะเลสาบ ทางเดินราบเรียบ มีคาเฟ่นั่งพักสบายๆ ชิมไอศกรีมบลูเบอร์รี่</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(1, 'd1_oishi')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Oishi+Park+Kawaguchiko" target="_blank">📍 Oishi Park</a>
                         </div>
                     </div>
@@ -233,6 +240,7 @@
                         <div class="item-title">ช้อปปิ้งของสด ขนม & ผลไม้</div>
                         <div class="item-desc">แวะซื้อผลไม้ญี่ปุ่น (องุ่นไซมัสคัส/พีช) เนื้อสัตว์ เครื่องดื่ม และขนมไปทานที่บ้านพัก</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(1, 'd1_ogino')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=OGINO+Kawaguchiko+Store" target="_blank">📍 Ogino Supermarket</a>
                         </div>
                     </div>
@@ -243,6 +251,7 @@
                         <div class="item-title">Check-in บ้านพักริมทะเลสาบ</div>
                         <div class="item-desc">เข้าพักผ่อนในบรรยากาศส่วนตัว วิวธรรมชาติริมทะเลสาบคาวากุจิโกะ</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(1, 'd1_cottage')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami" target="_blank">📍 Lake Kawaguch Cottage Minami</a>
                         </div>
                     </div>
@@ -258,6 +267,7 @@
                         </div>
                         <div class="item-desc">บะหมี่โฮโตะร้อนๆ ซุปผักและฟักทองรสกลมกล่อม เสิร์ฟในหม้อเหล็กโบราณ มีเมนูหมู/ผัก (คนแพ้อาหารทะเลทานได้ 100%)</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(1, 'd1_fudou')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Houtou+Fudou+Higashikoiten" target="_blank">📍 Houtou Fudou Higashikoiten</a>
                         </div>
                     </div>
@@ -272,7 +282,10 @@
                     <span>🍁 Day 2: เสาร์ที่ 10 ต.ค. 2026</span>
                     <span class="day-badge">หมู่บ้านน้ำใส & คืนรถสาขา Asakusa & ตลาด Ameyoko</span>
                 </div>
-                <button class="day-task-btn" onclick="openTaskModal(2)">📋 Task (<span class="day-task-counter" data-day="2">0/5</span>) ❯</button>
+                <div class="day-header-actions">
+                    <button class="day-map-btn" onclick="openDayMap(2)">🗺️ แผนที่ ❯</button>
+                    <button class="day-task-btn" onclick="openTaskModal(2)">📋 Task (<span class="day-task-counter" data-day="2">0/5</span>) ❯</button>
+                </div>
             </div>
             <div class="timeline">
                 
@@ -288,6 +301,7 @@
                         <div class="item-title">ชมบ่อน้ำใสศักดิ์สิทธิ์ Oshino Hakkai</div>
                         <div class="item-desc">เดินพื้นราบชมบ่อน้ำใส 8 บ่อ ชิมโมจิย่างใบโยโมกิและมันเผาหวาน</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_oshino')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Oshino+Hakkai" target="_blank">📍 Oshino Hakkai</a>
                         </div>
                     </div>
@@ -298,6 +312,7 @@
                         <div class="item-title">ล่องเรือชมวิวฟูจิ (Appare Boat)</div>
                         <div class="item-desc">นั่งเรือชิลๆ 20 นาที ชมวิวฟูจิ 360 องศา สบาย ไม่ต้องเดิน</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_boat')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Kawaguchiko+Sightseeing+Boat+Appare" target="_blank">📍 Kawaguchiko Sightseeing Boat</a>
                         </div>
                     </div>
@@ -313,6 +328,7 @@
                         </div>
                         <div class="item-desc">ร้านหมูทอดทงคัตสึชื่อดังริมทะเลสาบ หมูกรอบนอกนุ่มใน ข้าวสวยและซุปมิโซะเติมได้ (ไม่มีอาหารทะเล ปลอดภัยและทานง่ายสำหรับผู้สูงอายุ)</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_rikyu')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Tonkatsu+Rikyu+Kawaguchiko" target="_blank">📍 Tonkatsu Rikyu Kawaguchiko</a>
                         </div>
                     </div>
@@ -329,6 +345,8 @@
                         </div>
                         <div class="item-desc">แวะส่งคุณพ่อคุณแม่และสัมภาระที่โรงแรมก่อน (ห่างจาก Asakusa เพียง 1.5 กม.) จากนั้นเติมน้ำมันเต็มถัง (Regular) แล้วนำรถไปคืนที่ <b>Nippon Rent-A-Car สาขา TX Asakusa</b> พร้อมเคลียร์ค่าทางด่วนบัตร ETC ที่เคาน์เตอร์</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_hotel_drop')">🗺️ แผนที่โรงแรม</button>
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_car_return')">🗺️ แผนที่คืนรถ</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Sakura+Cross+Hotel+Ueno-Iriya+Annex" target="_blank">📍 โรงแรม Sakura Cross</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Nippon+Rent-A-Car+TX+Asakusa" target="_blank">📍 Nippon Rent-A-Car TX Asakusa</a>
                         </div>
@@ -343,6 +361,7 @@
                         </div>
                         <div class="item-desc">นำบัตร <b>Tokyo Subway Ticket 72 Hours</b> (ที่รับไว้ตั้งแต่วันแรกที่นาริตะ) มาสอดเปิดใช้งานครั้งแรกที่สถานี Asakusa (นับเวลา 72 ชม. ถึง 13 ต.ค. 17:00) นั่งสาย Ginza Line มาลง Ueno ช้อปปิ้งของฝาก ขนม ผลไม้สด เสื้อผ้า</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_ameyoko')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Ameyoko+Shopping+District" target="_blank">📍 ตลาด Ameyoko</a>
                         </div>
                     </div>
@@ -358,6 +377,7 @@
                         </div>
                         <div class="item-desc">เนื้อวัวชุบเกล็ดขนมปังทอดกรอบด้านนอก ย่างบนเตาหินส่วนตัวให้สุกตามชอบ เนื้อนุ่มละลาย รสชาติกลมกล่อม (เมนูเนื้อวัวล้วน คนแพ้อาหารทะเลทานได้สบาย)</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_motomura')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Gyukatsu+Motomura+Ueno" target="_blank">📍 Gyukatsu Motomura Ueno</a>
                         </div>
                     </div>
@@ -372,7 +392,10 @@
                     <span>🍁 Day 3: อาทิตย์ที่ 11 ต.ค. 2026</span>
                     <span class="day-badge">วัดอาซากุสะ & ของเล่น Akihabara</span>
                 </div>
-                <button class="day-task-btn" onclick="openTaskModal(3)">📋 Task (<span class="day-task-counter" data-day="3">0/2</span>) ❯</button>
+                <div class="day-header-actions">
+                    <button class="day-map-btn" onclick="openDayMap(3)">🗺️ แผนที่ ❯</button>
+                    <button class="day-task-btn" onclick="openTaskModal(3)">📋 Task (<span class="day-task-counter" data-day="3">0/2</span>) ❯</button>
+                </div>
             </div>
             <div class="timeline">
                 
@@ -388,6 +411,7 @@
                         <div class="item-title">ไหว้พระวัดอาซากุสะ & ถนนนากามิเสะ</div>
                         <div class="item-desc">นั่งรถไฟใต้ดินด้วยตั๋ว Subway Pass ทางเดินราบเรียบ มีลิฟต์ขึ้นวิหาร ชิมขนมโบราณ ซื้อของฝาก</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(3, 'd3_sensoji')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Sens%C5%8D-ji+Temple" target="_blank">📍 วัด Sensoji (Asakusa)</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Nakamise-dori+Street+Asakusa" target="_blank">📍 ถนน Nakamise-dori</a>
                         </div>
@@ -404,6 +428,7 @@
                         </div>
                         <div class="item-desc">ร้านสุกี้ยากี้เนื้อวัวระดับตำนานกว่า 120 ปีแห่งอาซากุสะ หรือเลือกทานข้าวหน้าเนื้อสุกี้ยากี้ (Gyudon) คุณภาพเยี่ยม นั่งสบาย บรรยากาศญี่ปุ่นแท้ๆ</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(3, 'd3_imahan')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Asakusa+Imahan" target="_blank">📍 Asakusa Imahan (เนื้อสุกี้ยากี้)</a>
                         </div>
                     </div>
@@ -415,6 +440,7 @@
                         <div class="item-title">เดินเล่นสวนอุเอโนะ & บึงชิโนบาซุ</div>
                         <div class="item-desc">สวนร่มรื่น นั่งพักริมบึงบัว ลมเย็นสบาย มีม้านั่งตลอดทาง</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(3, 'd3_ueno_park')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Ueno+Onshi+Park" target="_blank">📍 สวน Ueno Park</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Shinobazu+Pond+Ueno" target="_blank">📍 บึง Shinobazu Pond</a>
                         </div>
@@ -426,6 +452,7 @@
                         <div class="item-title">ช้อปปิ้งของเล่น & โมเดล Akihabara</div>
                         <div class="item-desc">ห้าง Yodobashi Akiba และตึก Radio Kaikan รวมของเล่น โมเดล ฟิกเกอร์ กล่องสุ่ม ทางเดินกว้าง ลิฟต์สะดวก</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(3, 'd3_akihabara')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Yodobashi+Camera+Multimedia+Akiba" target="_blank">📍 Yodobashi Akiba</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Akihabara+Radio+Kaikan" target="_blank">📍 Radio Kaikan</a>
                         </div>
@@ -443,6 +470,7 @@
                         </div>
                         <div class="item-desc">บุฟเฟต์เนื้อวากิว Matsusaka / A5 ปิ้งย่าง & ชาบู สุกี้ยากี้ เนื้อลายหินอ่อนละลายในปาก (สั่งคอร์สเนื้อล้วน คนแพ้อาหารทะเลทานได้ 100% แนะนำจองล่วงหน้า)</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(3, 'd3_rokkasen')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Yakiniku+Tei+Rokkasen+Shinjuku" target="_blank">📍 Yakiniku-Tei Rokkasen Shinjuku</a>
                         </div>
                     </div>
@@ -457,7 +485,10 @@
                     <span>🍁 Day 4: จันทร์ที่ 12 ต.ค. 2026</span>
                     <span class="day-badge">ศาลเจ้าเมจิ & ชิบูย่า & Character Street</span>
                 </div>
-                <button class="day-task-btn" onclick="openTaskModal(4)">📋 Task (<span class="day-task-counter" data-day="4">0/2</span>) ❯</button>
+                <div class="day-header-actions">
+                    <button class="day-map-btn" onclick="openDayMap(4)">🗺️ แผนที่ ❯</button>
+                    <button class="day-task-btn" onclick="openTaskModal(4)">📋 Task (<span class="day-task-counter" data-day="4">0/2</span>) ❯</button>
+                </div>
             </div>
             <div class="timeline">
                 
@@ -473,6 +504,7 @@
                         <div class="item-title">ศาลเจ้าเมจิ (Meiji Jingu)</div>
                         <div class="item-desc">ทางเดินใต้ร่มเงาป่าใหญ่ พื้นราบ เดินสบาย อากาศสดชื่น นั่งรถไฟใต้ดินสาย Fukutoshin / Chiyoda Line</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_meiji')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Meiji+Jingu+Shrine" target="_blank">📍 ศาลเจ้า Meiji Jingu</a>
                         </div>
                     </div>
@@ -488,6 +520,7 @@
                         </div>
                         <div class="item-desc">ร้านหมูทอดคัตสึชื่อดังอันดับ 1 ของโตเกียว สาขาหลัก Aoyama ดัดแปลงจากโรงอาบน้ำโบราณ กว้างขวาง นั่งสบาย หมูนุ่มจนใช้ตะเกียบตัดได้ (ปลอดอาหารทะเล)</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_maisen')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Maisen+Tonkatsu+Aoyama+Main+Store" target="_blank">📍 Tonkatsu Maisen Aoyama</a>
                         </div>
                     </div>
@@ -499,6 +532,7 @@
                         <div class="item-title">ห้าแยกชิบูย่า & Shibuya PARCO</div>
                         <div class="item-desc">แวะถ่ายรูปห้าแยก และช้อป Nintendo Store / Pokemon Center ในห้างติดแอร์ มีที่นั่งพักผ่อน</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_shibuya')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Shibuya+Scramble+Crossing" target="_blank">📍 Shibuya Crossing</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Shibuya+PARCO" target="_blank">📍 Shibuya PARCO</a>
                         </div>
@@ -510,6 +544,7 @@
                         <div class="item-title">Tokyo Character Street (สถานีโตเกียว)</div>
                         <div class="item-desc">รวมช็อปการ์ตูนทางการกว่า 30 ร้าน (Ghibli, Sanrio, Ultraman, Jump Shop, Pokemon) เดินช้อปปิ้งในห้องแอร์</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_character_street')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Tokyo+Character+Street" target="_blank">📍 Tokyo Character Street</a>
                         </div>
                     </div>
@@ -525,6 +560,7 @@
                         </div>
                         <div class="item-desc">บุฟเฟต์ชาบู-สุกี้ยากี้เนื้อวัว/หมู (มีคอร์สเนื้อวากิวและมัตสึซากะ) บาร์ผักและของหวานไม่อั้น ร้านตั้งอยู่ชั้น 2 ห้าง Ueno No Mori Sakura Terrace ติดสถานี Ueno นั่งสบาย เหมาะกับครอบครัว</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_shabu_sai')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Shabu+Sai+Ueno+no+Mori+Sakura+Terrace" target="_blank">📍 Shabu Sai Ueno Sakura Terrace</a>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Shabu-shabu+Onyasai+Ueno+Ekimae" target="_blank" style="margin-left:6px;">📍 หรือ Onyasai Ueno Ekimae</a>
                         </div>
@@ -540,7 +576,10 @@
                     <span>🍁 Day 5: อังคารที่ 13 ต.ค. 2026</span>
                     <span class="day-badge">ช้อปส่งท้าย & กดตู้รับตั๋ว Skyliner & เดินทางกลับไทย</span>
                 </div>
-                <button class="day-task-btn" onclick="openTaskModal(5)">📋 Task (<span class="day-task-counter" data-day="5">0/5</span>) ❯</button>
+                <div class="day-header-actions">
+                    <button class="day-map-btn" onclick="openDayMap(5)">🗺️ แผนที่ ❯</button>
+                    <button class="day-task-btn" onclick="openTaskModal(5)">📋 Task (<span class="day-task-counter" data-day="5">0/5</span>) ❯</button>
+                </div>
             </div>
             <div class="timeline">
                 
@@ -563,6 +602,8 @@
                             3. เดินช้อปปิ้งขนมและของฝากส่งท้ายที่ตึกม่วง Takeya
                         </div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(5, 'd5_keisei_ueno')">🗺️ แผนที่สถานี</button>
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(5, 'd5_takeya')">🗺️ แผนที่ตึกม่วง</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Keisei+Ueno+Station" target="_blank">📍 สถานี Keisei Ueno</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Takeya+Ueno" target="_blank">📍 ตึกม่วง Takeya</a>
                         </div>
@@ -577,6 +618,7 @@
                         </div>
                         <div class="item-desc">รถไฟด่วนวิ่งตรง 41 นาที มีที่นั่งสำรองและที่วางกระเป๋าใบใหญ่ สะดวกสบาย ไม่ต้องยกกระเป๋าขึ้นลงหลายรอบ</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(5, 'd5_keisei_ueno')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Keisei+Ueno+Station" target="_blank">📍 สถานี Keisei Ueno</a>
                         </div>
                     </div>
@@ -592,6 +634,7 @@
                         </div>
                         <div class="item-desc">ทานอาหารญี่ปุ่นส่งท้ายที่โซนร้านอาหารสนามบิน (ชั้น 4 Terminal 1 หรือ 2) มีทั้งราเมง, ข้าวหน้าเนื้อ, อุด้ง, หมูทอดทงคัตสึ สะดวกสบายก่อนโหลดกระเป๋า</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(5, 'd5_narita_lunch')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Narita+International+Airport+Terminal+2" target="_blank">📍 ร้านอาหาร Narita Airport T2</a>
                         </div>
                     </div>
@@ -603,6 +646,7 @@
                         <div class="item-title">เช็คอิน โหลดกระเป๋า & บินกลับไทย 15:00</div>
                         <div class="item-desc">สนามบินนาริตะ (NRT) ช้อปปิ้ง Duty Free ขนมของฝาก (Tokyo Banana, Royce, Shiroi Koibito) และเดินทางกลับโดยสวัสดิภาพ</div>
                         <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(5, 'd5_narita_lunch')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Narita+International+Airport" target="_blank">📍 สนามบินนาริตะ</a>
                         </div>
                     </div>
@@ -829,6 +873,100 @@
         </div>
     </div>
 
+    <!-- MODAL: Interactive Daily Map (Google Maps / OpenStreetMap) -->
+    <div id="modal-map" class="modal-overlay" onclick="closeModalOnBackdrop(event, 'modal-map')">
+        <div class="modal-card map-modal-card">
+            <div class="modal-header">
+                <div>
+                    <h3 id="map-modal-title" style="margin-bottom: 2px;">🗺️ แผนที่พิกัดท่องเที่ยว (Interactive Map)</h3>
+                    <p id="map-modal-subtitle" style="font-size: 0.8rem; opacity: 0.9; margin: 0;">คลิกรายการเพื่อเลื่อนหาหมุด (คลิกซ้ำเพื่อดูภาพรวมทั้งหมด)</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="map-settings-btn" onclick="openMapSettings()" title="ตั้งค่า Google Maps API Key">⚙️ API Key</button>
+                    <button type="button" class="modal-close-btn" onclick="closeModal('modal-map')">&times;</button>
+                </div>
+            </div>
+
+            <!-- Day Switcher Tabs inside Map Modal -->
+            <div class="map-modal-tabs">
+                <button type="button" class="map-tab-btn" data-day="1" onclick="switchMapDay(1)">Day 1 (นาริตะ-ฟูจิ)</button>
+                <button type="button" class="map-tab-btn" data-day="2" onclick="switchMapDay(2)">Day 2 (ฟูจิ-โตเกียว)</button>
+                <button type="button" class="map-tab-btn" data-day="3" onclick="switchMapDay(3)">Day 3 (อาซากุสะ-ชินจูกุ)</button>
+                <button type="button" class="map-tab-btn" data-day="4" onclick="switchMapDay(4)">Day 4 (ชิบูย่า-โตเกียว)</button>
+                <button type="button" class="map-tab-btn" data-day="5" onclick="switchMapDay(5)">Day 5 (อุเอโนะ-นาริตะ)</button>
+            </div>
+
+            <!-- Map Engine Indicator Bar -->
+            <div id="map-engine-bar" class="map-engine-bar">
+                <span id="map-engine-text">🗺️ แผนที่พิกัดสถานที่ท่องเที่ยว</span>
+                <button type="button" class="engine-switch-link" onclick="openMapSettings()">⚙️ ตั้งค่า API Key</button>
+            </div>
+
+            <!-- Modal Content Split-View -->
+            <div class="map-modal-content">
+                <!-- Map Viewport -->
+                <div class="map-canvas-wrapper">
+                    <div id="map-canvas"></div>
+                </div>
+
+                <!-- Places Panel -->
+                <div class="map-places-panel">
+                    <div class="map-places-header">
+                        <span id="map-places-count">📍 สถานที่ในวันนี้ (0 จุด)</span>
+                        <span style="font-size: 0.78rem; color: #64748b;">แตะเพื่อซูม (แตะซ้ำดูทั้งหมด)</span>
+                    </div>
+                    <div id="map-places-list" class="map-places-list">
+                        <!-- Dynamically populated by renderMapPlaces() -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" class="info-btn" onclick="openMapSettings()">⚙️ กำหนด Google Maps API Key</button>
+                <button type="button" onclick="closeModal('modal-map')">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Google Maps API Key Settings -->
+    <div id="modal-map-settings" class="modal-overlay" onclick="closeModalOnBackdrop(event, 'modal-map-settings')">
+        <div class="modal-card" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3>⚙️ ตั้งค่า Google Maps API Key</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('modal-map-settings')">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 16px 20px;">
+                <p style="font-size: 0.9rem; margin-bottom: 12px; color: #334155;">
+                    กรอก <b>Google Maps JavaScript API Key</b> ของคุณเพื่อใช้งานแผนที่ผ่าน Google Maps แท้ (บันทึกในเบราว์เซอร์เครื่องนี้อย่างปลอดภัยผ่าน <code>localStorage</code>)
+                </p>
+
+                <div class="map-key-status" id="map-key-status-box">
+                    <!-- Current key status -->
+                </div>
+
+                <div style="margin: 16px 0;">
+                    <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 6px; color: var(--dark);">
+                        Google Maps API Key:
+                    </label>
+                    <input type="text" id="gmaps-api-key-input" class="gmaps-input" placeholder="AIzaSy..." spellcheck="false" autocomplete="off">
+                </div>
+
+                <div class="modal-highlight" style="font-size: 0.82rem; line-height: 1.5;">
+                    💡 <b>คำแนะนำ:</b><br>
+                    • หากยังไม่มี Key สามารถขอรับฟรีได้จาก <a href="https://console.cloud.google.com/google/maps-apis/credentials" target="_blank" style="color: #2563eb; font-weight: 600; text-decoration: underline;">Google Cloud Console</a> (เปิดใช้งาน <i>Maps JavaScript API</i>)<br>
+                    • หากไม่ได้ใส่ Key ระบบจะแสดงแผนที่ผ่าน <b>OpenStreetMap</b> อัตโนมัติ สามารถดูหมุด พิกัด และคลิกเชื่อมโยงได้ครบถ้วนเช่นกัน
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" style="background: #f8fafc; color: #dc2626; border: 1px solid #fca5a5; font-size: 0.82rem; padding: 6px 12px; border-radius: 8px;" onclick="clearApiKey()">🗑️ ล้าง Key</button>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" style="background: #e2e8f0; color: #475569;" onclick="closeModal('modal-map-settings')">ยกเลิก</button>
+                    <button type="button" style="background: var(--info-color); color: #fff;" onclick="saveApiKey()">💾 บันทึก API Key</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Floating Action Button (FAB) for Quick Task Access -->
     <button id="fab-task" class="fab-task" onclick="openTaskModal('all')">
         <span>📋</span>
@@ -836,7 +974,8 @@
         <span class="fab-badge" id="fab-task-count">0/27</span>
     </button>
 
-    <!-- JavaScript for Modals & LocalStorage Tasks -->
+    <!-- Leaflet & App Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
