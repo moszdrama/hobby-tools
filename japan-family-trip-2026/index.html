@@ -1080,11 +1080,17 @@
                     <div id="map-gps-status" class="map-gps-status"></div>
                 </div>
 
-                <!-- Places Panel -->
-                <div class="map-places-panel">
-                    <div class="map-places-header">
-                        <span id="map-places-count">📍 สถานที่ในวันนี้ (0 จุด)</span>
-                        <span style="font-size: 0.78rem; color: #64748b;">แตะเพื่อซูม (แตะซ้ำดูทั้งหมด)</span>
+                <!-- Places Panel (Bottom Sheet on Mobile) -->
+                <div id="map-places-panel" class="map-places-panel">
+                    <div class="map-sheet-handle-bar" onclick="toggleMobileBottomSheet()">
+                        <div class="map-sheet-handle-pill"></div>
+                    </div>
+                    <div class="map-places-header" onclick="toggleMobileBottomSheet()">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span id="map-places-count">📍 สถานที่ในวันนี้ (0 จุด)</span>
+                            <span id="map-sheet-arrow" class="map-sheet-arrow">▲</span>
+                        </div>
+                        <span class="map-sheet-hint" style="font-size: 0.78rem; color: #64748b;">แตะเพื่อเปิด/ปิดรายการ</span>
                     </div>
                     <div id="map-places-list" class="map-places-list">
                         <!-- Dynamically populated by renderMapPlaces() -->

@@ -1114,10 +1114,30 @@ function updateEngineBar() {
     }
 }
 
+// Mobile Bottom Sheet Functions
+function toggleMobileBottomSheet() {
+    const panel = document.getElementById('map-places-panel');
+    if (!panel) return;
+    panel.classList.toggle('sheet-expanded');
+}
+
+function setMobileBottomSheet(expanded = false) {
+    const panel = document.getElementById('map-places-panel');
+    if (!panel) return;
+    if (expanded) {
+        panel.classList.add('sheet-expanded');
+    } else {
+        panel.classList.remove('sheet-expanded');
+    }
+}
+
 function openDayMap(day, spotId) {
     if (day !== 'tiktok' && !DAY_LOCATIONS[day]) day = 1;
     currentMapDay = day;
     currentFocusedSpotId = spotId || null;
+
+    // Reset bottom sheet to collapsed state when map opens
+    setMobileBottomSheet(false);
 
     openModal('modal-map');
     switchMapDay(day, spotId);

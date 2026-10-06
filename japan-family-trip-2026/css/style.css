@@ -920,6 +920,12 @@ header p { font-size: 1rem; opacity: 0.95; }
     border-left: 1px solid #e2e8f0;
     overflow: hidden;
 }
+.map-sheet-handle-bar {
+    display: none;
+}
+.map-sheet-arrow {
+    display: none;
+}
 .map-places-header {
     padding: 10px 14px;
     background: #f8fafc;
@@ -1328,41 +1334,111 @@ header p { font-size: 1rem; opacity: 0.95; }
         font-size: 0.75rem;
     }
 
-    /* Fullscreen Content Split: Map Viewport + Place Cards */
+    /* Mobile Content: Map takes full viewport, Bottom Sheet overlays at bottom */
     .map-modal-content {
         flex: 1 1 0% !important;
         min-height: 0 !important;
         max-height: none !important;
         height: auto !important;
-        flex-direction: column !important;
+        position: relative !important;
+        display: block !important;
         overflow: hidden !important;
     }
     .map-canvas-wrapper {
-        flex: none !important;
-        height: 40vh !important;
-        min-height: 220px !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        z-index: 1 !important;
     }
     #map-canvas {
-        min-height: 220px !important;
+        min-height: 0 !important;
+        width: 100% !important;
         height: 100% !important;
     }
+
+    /* Bottom Sheet Panel (Floats over bottom of map) */
     .map-places-panel {
-        flex: 1 1 0% !important;
-        min-width: 0 !important;
+        position: absolute !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
         max-width: 100% !important;
+        min-width: 0 !important;
+        background: #ffffff !important;
+        border-radius: 16px 16px 0 0 !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.18) !important;
+        z-index: 10 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         border-left: none !important;
         border-top: 1px solid #e2e8f0 !important;
-        max-height: none !important;
-        height: auto !important;
-        overflow-y: auto !important;
+        /* Default Collapsed State: Only show handle and header */
+        max-height: 52px !important;
+        overflow: hidden !important;
     }
+
+    /* Expanded State */
+    .map-places-panel.sheet-expanded {
+        max-height: 62% !important;
+        box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.28) !important;
+    }
+
+    /* Drag Handle Bar */
+    .map-sheet-handle-bar {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding-top: 6px !important;
+        padding-bottom: 2px !important;
+        cursor: pointer !important;
+        background: #ffffff !important;
+    }
+    .map-sheet-handle-pill {
+        width: 38px !important;
+        height: 4px !important;
+        background: #cbd5e1 !important;
+        border-radius: 4px !important;
+    }
+
     .map-places-header {
-        padding: 8px 12px !important;
-        font-size: 0.8rem !important;
+        padding: 6px 14px 10px 14px !important;
+        font-size: 0.84rem !important;
+        cursor: pointer !important;
+        background: #ffffff !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        user-select: none !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
     }
+    .map-sheet-arrow {
+        display: inline-block !important;
+        font-size: 0.72rem !important;
+        color: #2563eb !important;
+        transition: transform 0.25s ease !important;
+    }
+    .map-places-panel.sheet-expanded .map-sheet-arrow {
+        transform: rotate(180deg) !important;
+    }
+    .map-sheet-hint {
+        font-size: 0.75rem !important;
+        color: #64748b !important;
+    }
+
     .map-places-list {
-        padding: 8px 10px !important;
+        flex: 1 1 auto !important;
+        overflow-y: auto !important;
+        padding: 8px 12px 14px 12px !important;
         gap: 8px !important;
+        max-height: calc(62vh - 60px) !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
     /* Mobile Fixed Bottom Footer */
