@@ -1270,15 +1270,56 @@ header p { font-size: 1rem; opacity: 0.95; }
 }
 
 @media (max-width: 768px) {
+    /* Fullscreen Modal on Mobile */
+    #modal-map.modal-overlay {
+        padding: 0 !important;
+        background: #000000;
+    }
+    .map-modal-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Compact Header on Mobile */
+    .map-modal-header-compact {
+        padding: 10px 14px !important;
+    }
+    .map-modal-header-compact h3 {
+        font-size: 0.98rem !important;
+        line-height: 1.25 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 65vw !important;
+    }
+    .map-modal-header-compact .map-modal-subtitle {
+        display: none !important; /* Hide subtitle on mobile to save precious vertical space */
+    }
+    .map-modal-header-compact .modal-close-btn {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 1.3rem !important;
+    }
+
+    /* Tabs Bar on Mobile */
+    .map-modal-tabs {
+        padding: 8px 12px !important;
+        gap: 6px !important;
+    }
+    .map-tab-btn {
+        padding: 5px 12px !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Engine bar & GPS floating button */
     .map-engine-bar {
         display: none !important;
-    }
-    .map-footer-apikey-btn .map-btn-text {
-        display: none;
-    }
-    .map-footer-apikey-btn {
-        padding: 5px 10px;
-        font-size: 0.95rem;
     }
     .map-gps-btn {
         top: 8px;
@@ -1286,25 +1327,70 @@ header p { font-size: 1rem; opacity: 0.95; }
         padding: 5px 10px;
         font-size: 0.75rem;
     }
+
+    /* Fullscreen Content Split: Map Viewport + Place Cards */
     .map-modal-content {
-        flex-direction: column;
-        max-height: 75vh;
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        height: auto !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
     }
     .map-canvas-wrapper {
-        flex: none;
-        height: 250px;
-        min-height: 250px;
+        flex: none !important;
+        height: 40vh !important;
+        min-height: 220px !important;
     }
     #map-canvas {
-        min-height: 250px;
-        height: 250px;
+        min-height: 220px !important;
+        height: 100% !important;
     }
     .map-places-panel {
-        flex: 1;
-        min-width: 0;
-        max-width: 100%;
-        border-left: none;
-        border-top: 1px solid #e2e8f0;
-        max-height: calc(75vh - 250px);
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        border-left: none !important;
+        border-top: 1px solid #e2e8f0 !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow-y: auto !important;
+    }
+    .map-places-header {
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+    }
+    .map-places-list {
+        padding: 8px 10px !important;
+        gap: 8px !important;
+    }
+
+    /* Mobile Fixed Bottom Footer */
+    .map-modal-footer-fixed {
+        padding: 8px 14px !important;
+        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+        background: #ffffff !important;
+        border-top: 1px solid #cbd5e1 !important;
+        box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.08) !important;
+        z-index: 20 !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+    }
+    .map-footer-apikey-btn .map-btn-text {
+        display: none;
+    }
+    .map-footer-apikey-btn {
+        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
+    }
+    .map-footer-close-btn {
+        padding: 7px 18px !important;
+        font-size: 0.88rem !important;
+        background: var(--dark) !important;
+        color: #ffffff !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
     }
 }

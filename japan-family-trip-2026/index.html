@@ -1039,12 +1039,12 @@
     <!-- MODAL: Interactive Daily Map (Google Maps / OpenStreetMap) -->
     <div id="modal-map" class="modal-overlay" onclick="closeModalOnBackdrop(event, 'modal-map')">
         <div class="modal-card map-modal-card">
-            <div class="modal-header">
-                <div>
+            <div class="modal-header map-modal-header-compact">
+                <div style="min-width: 0; flex: 1;">
                     <h3 id="map-modal-title" style="margin-bottom: 2px;">🗺️ แผนที่พิกัดท่องเที่ยว (Interactive Map)</h3>
-                    <p id="map-modal-subtitle" style="font-size: 0.8rem; opacity: 0.9; margin: 0;">คลิกรายการเพื่อเลื่อนหาหมุด (คลิกซ้ำเพื่อดูภาพรวมทั้งหมด)</p>
+                    <p id="map-modal-subtitle" class="map-modal-subtitle" style="font-size: 0.8rem; opacity: 0.9; margin: 0;">คลิกรายการเพื่อเลื่อนหาหมุด (คลิกซ้ำเพื่อดูภาพรวมทั้งหมด)</p>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
                     <button type="button" class="map-settings-btn" onclick="openMapSettings()" title="ตั้งค่า Google Maps API Key">⚙️ API Key</button>
                     <button type="button" class="modal-close-btn" onclick="closeModal('modal-map')">&times;</button>
                 </div>
@@ -1092,9 +1092,9 @@
                 </div>
             </div>
 
-            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="modal-footer map-modal-footer-fixed" style="display: flex; justify-content: space-between; align-items: center;">
                 <button type="button" class="info-btn map-footer-apikey-btn" onclick="openMapSettings()" title="กำหนด Google Maps API Key">⚙️ <span class="map-btn-text">กำหนด Google Maps API Key</span></button>
-                <button type="button" onclick="closeModal('modal-map')">ปิดหน้าต่าง</button>
+                <button type="button" class="map-footer-close-btn" onclick="closeModal('modal-map')">ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>
