@@ -1665,6 +1665,115 @@ const ROUTE_DATA = {
             [35.5265, 138.7410]
         ]
     },
+    'run_kawaguchiko_bridge': {
+        id: 'run_kawaguchiko_bridge',
+        title: '🌉 วิ่งข้ามสะพาน Kawaguchiko Ohashi Loop (วิวฟูจิพาโนรามา 360°)',
+        subtitle: 'รูทสาย Endurance วิ่งข้ามสะพานใหญ่กลางทะเลสาบ วนรอบอ่าวตะวันออก ชมฟูจิสะท้อนน้ำเต็มตา',
+        type: 'run',
+        typeName: '🌉 วิ่งข้ามสะพาน (Bridge Loop)',
+        distance: '10.5 กม. (ลูปวงกลม)',
+        duration: '60 - 75 นาที',
+        elevation: 'มีสโลปขึ้น-ลงสะพานโอฮาชิ (+42 ม.)',
+        surface: 'ทางเท้าคอนกรีตเลียบน้ำ & ทางเท้าบนสะพานกว้าง ปลอดภัย',
+        highlight: 'วิ่งข้ามสะพานยาว 500 ม. กลางทะเลสาบ วิวฟูจิพาโนรามา 360 องศา สัมผัสลมหนาวยามเช้า',
+        color: '#059669',
+        gmapsDirUrl: 'https://www.google.com/maps/dir/Lake+Kawaguch+Cottage+Minami/Kawaguchiko+Ohashi+Bridge/Funatsuhama/Lake+Kawaguch+Cottage+Minami',
+        waypoints: [
+            {
+                name: 'จุดปล่อยตัว: บ้านพัก Lake Kawaguch Cottage Minami',
+                type: 'start',
+                lat: 35.5265,
+                lng: 138.7410,
+                desc: 'ออกสตาร์ทจากหน้าบ้านพัก เลี้ยวขวาวิ่งเลียบทางเท้าฝั่งเหนือ (Route 21) มุ่งหน้าสู่สะพานใหญ่',
+                mapsUrl: 'https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami'
+            },
+            {
+                name: 'จุดชมวิวแหลมนางาซากิ (Nagasaki Park)',
+                type: 'waypoint',
+                lat: 35.5245,
+                lng: 138.7490,
+                desc: 'วิ่งผ่านแหลมยื่นริมทะเลสาบ จุดถ่ายรูป Sakasa Fuji ฟูจิสะท้อนผิวน้ำอันดับ 1',
+                mapsUrl: 'https://maps.google.com/?q=Nagasaki+Park+Kawaguchiko'
+            },
+            {
+                name: 'ศาลเจ้าอุบุยะงาซากิ (เชิงสะพานโอฮาชิฝั่งเหนือ)',
+                type: 'waypoint',
+                lat: 35.5180,
+                lng: 138.7620,
+                desc: 'จุดเริ่มต้นขึ้นสะพาน Kawaguchiko Ohashi ทางเท้ากว้างขวาง ปลอดภัย แยกจากช่องทางรถยนต์',
+                mapsUrl: 'https://maps.google.com/?q=Ubuyagasaki+Shrine'
+            },
+            {
+                name: 'สะพาน Kawaguchiko Ohashi (กลางสะพาน - ไฮไลต์วิว 360°)',
+                type: 'turn',
+                lat: 35.5125,
+                lng: 138.7650,
+                desc: 'กึ่งกลางสะพานข้ามทะเลสาบความยาว 500 เมตร วิวฟูจิและผืนน้ำแบบพาโนรามา ไม่มีสิ่งปลูกสร้างบดบัง',
+                mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Ohashi+Bridge'
+            },
+            {
+                name: 'เชิงสะพานฝั่งใต้ & พิพิธภัณฑ์ Kawaguchiko Muse Museum',
+                type: 'waypoint',
+                lat: 35.5070,
+                lng: 138.7665,
+                desc: 'ข้ามสะพานถึงฝั่งใต้ เลี้ยวซ้ายเข้าทางเดินเลียบชายหาด Funatsuhama ผ่านสวนดอกลาเวนเดอร์/มิวเซียม',
+                mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Muse+Museum'
+            },
+            {
+                name: 'ลานริมน้ำ Funatsuhama & ท่าเรือล่องเรือ Appare Boat',
+                type: 'rest',
+                lat: 35.5045,
+                lng: 138.7740,
+                desc: 'ย่านท่าเรือหลักของคาวากุจิโกะ มีห้องน้ำสะอาด ตู้กดน้ำ และลานชมวิวริมทะเลสาบฝั่งตะวันออก',
+                mapsUrl: 'https://maps.google.com/?q=Funatsuhama+Kawaguchiko'
+            },
+            {
+                name: 'ถนนเลียบทะเลสาบย่านออนเซ็น Asakawa Onsen Street',
+                type: 'waypoint',
+                lat: 35.5130,
+                lng: 138.7725,
+                desc: 'วิ่งเลียบริมน้ำฝั่งตะวันออกผ่านเรียวกังและโรงแรมออนเซ็น มุ่งหน้ากลับสู่เชิงสะพานฝั่งเหนือ',
+                mapsUrl: 'https://maps.google.com/?q=Asakawa+Kawaguchiko'
+            },
+            {
+                name: 'เส้นชัย: ครบรอบ 10.5 กม. ที่ Cottage Minami',
+                type: 'end',
+                lat: 35.5265,
+                lng: 138.7410,
+                desc: 'วิ่งย้อนตามทางเท้า Route 21 กลับถึงบ้านพัก ครบรอบลูปสะพานและอ่าวตะวันออกอย่างสมบูรณ์แบบ',
+                mapsUrl: 'https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami'
+            }
+        ],
+        coordinates: [
+            [35.5265, 138.7410],
+            [35.5264, 138.7435],
+            [35.5260, 138.7460],
+            [35.5250, 138.7490],
+            [35.5235, 138.7525],
+            [35.5220, 138.7565],
+            [35.5195, 138.7595],
+            [35.5180, 138.7620],
+            [35.5150, 138.7635],
+            [35.5125, 138.7650],
+            [35.5095, 138.7660],
+            [35.5070, 138.7665],
+            [35.5055, 138.7685],
+            [35.5045, 138.7715],
+            [35.5045, 138.7740],
+            [35.5070, 138.7755],
+            [35.5100, 138.7750],
+            [35.5130, 138.7725],
+            [35.5160, 138.7670],
+            [35.5180, 138.7620],
+            [35.5195, 138.7595],
+            [35.5220, 138.7565],
+            [35.5235, 138.7525],
+            [35.5250, 138.7490],
+            [35.5260, 138.7460],
+            [35.5264, 138.7435],
+            [35.5265, 138.7410]
+        ]
+    },
     'run_imperial_palace': {
         id: 'run_imperial_palace',
         title: '🏃 วิ่งรอบพระราชวังอิมพีเรียลโตเกียว (Imperial Palace Loop)',
