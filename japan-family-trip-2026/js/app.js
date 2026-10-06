@@ -53,6 +53,7 @@ const DEFAULT_TASKS = {
         { id: 'task_d1_supermarket', text: 'แวะซูเปอร์มาร์เก็ต Ogino ซื้อผลไม้/เสบียงก่อนเข้าบ้านพัก Minami', critical: false }
     ],
     2: [
+        { id: 'task_d2_run', text: '<b>วิ่งเช้าตรู่เลียบทะเลสาบคาวากุจิโกะ</b> (06:00 - 07:30 น. รูทสวน Oishi Park ~5-6 กม. ชมวิวฟูจิยามเช้า)', critical: false },
         { id: 'task_d2_checkout', text: 'เช็คเอาท์จากบ้านพัก Lake Kawaguch Cottage Minami ไม่ลืมสิ่งของ', critical: false },
         { id: 'task_d2_hotel_drop', text: '<b>แวะส่งคุณพ่อคุณแม่และกระเป๋า 5 ใบที่โรงแรม Sakura Cross ก่อน</b>', critical: true },
         { id: 'task_d2_gas', text: '<b>เติมน้ำมันเต็มถัง "Regular" (หัวจ่ายสีแดง)</b> ที่ปั๊ม ENEOS Ueno Yamabushi-cho + เก็บใบเสร็จ', critical: true },
@@ -400,6 +401,16 @@ const DAY_LOCATIONS = {
         }
     ],
     2: [
+        {
+            id: 'd2_kawaguchiko_run',
+            name: 'วิ่งเช้าตรู่: ริมทะเลสาบคาวากุจิโกะ (รูทสวน Oishi Park)',
+            time: '06:00 - 07:30',
+            category: 'กิจกรรมเช้า',
+            lat: 35.5230,
+            lng: 138.7450,
+            desc: 'วิ่งรับลมหนาวยามเช้าเลียบทะเลสาบฝั่งเหนือ ชมวิวฟูจิสะท้อนน้ำ เส้นทางเรียบ ปลอดภัย มีทางเท้าตลอดสาย',
+            mapsUrl: 'https://maps.google.com/?q=Oishi+Park+Kawaguchiko'
+        },
         {
             id: 'd2_oshino',
             name: 'หมู่บ้านน้ำใส Oshino Hakkai',

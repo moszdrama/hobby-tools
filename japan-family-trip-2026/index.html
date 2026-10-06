@@ -21,7 +21,7 @@
         <div class="progress-card" style="cursor: pointer;" onclick="openTaskModal('all')">
             <div class="progress-header">
                 <span>✅ ความคืบหน้าสิ่งที่ต้องทำ (Checklist Progress)</span>
-                <span id="progress-text">0 / 28 รายการ (0%)</span>
+                <span id="progress-text">0 / 29 รายการ (0%)</span>
             </div>
             <div class="progress-bar-bg">
                 <div id="progress-bar" class="progress-bar-fill"></div>
@@ -395,15 +395,38 @@
                 </div>
                 <div class="day-header-actions">
                     <button class="day-map-btn" onclick="openDayMap(2)">🗺️ แผนที่ ❯</button>
-                    <button class="day-task-btn" onclick="openTaskModal(2)">📋 Task (<span class="day-task-counter" data-day="2">0/5</span>) ❯</button>
+                    <button class="day-task-btn" onclick="openTaskModal(2)">📋 Task (<span class="day-task-counter" data-day="2">0/6</span>) ❯</button>
                 </div>
             </div>
             <div class="timeline">
                 
                 <!-- Day 2 Task Quick Banner -->
                 <div class="task-day-banner" onclick="openTaskModal(2)">
-                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 2:</b> <span class="day-task-summary" data-day="2">0/5 รายการ</span></span>
+                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 2:</b> <span class="day-task-summary" data-day="2">0/6 รายการ</span></span>
                     <span class="task-banner-btn">เปิดดู / ตรวจสอบ / เพิ่ม Task ❯</span>
+                </div>
+
+                <!-- Day 2 Early Morning Running Activity -->
+                <div class="timeline-item">
+                    <div class="time-badge" style="background: #e0f2fe; color: #0369a1;">06:00 - 07:30</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🏃 วิ่งเช้าตรู่: เลียบทะเลสาบคาวากุจิโกะ วิวภูเขาไฟฟูจิสะท้อนน้ำ
+                            <span class="special-tag" style="background: #e0f2fe; color: #0284c7;">MORNING RUN</span>
+                        </div>
+                        <div class="item-desc">
+                            ตื่นรับอากาศบริสุทธิ์เย็นสบาย (~12-15°C) สูดโอโซนริมทะเลสาบ พร้อมชมวิวฟูจิยามเช้าและเงาสะท้อนน้ำ (Sakasa Fuji)<br>
+                            🗺️ <b>เส้นทางวิ่งแนะนำ (เริ่มจากหน้าบ้านพัก Lake Kawaguch Cottage Minami):</b><br>
+                            • <b>รูทไฮไลต์ (แนะนำ ~5-6 กม. ไป-กลับ):</b> ออกจากบ้านพักเลี้ยวขวา วิ่งเลียบทางเท้าเลียบทะเลสาบฝั่งเหนือ (Route 21) มุ่งหน้าไปทาง <b>สวน Oishi Park</b> ทางวิ่งเรียบ ปลอดภัย มีทางเท้าตลอดสาย วิวเปิดโล่งเห็นฟูจิเต็มตาตลอดทาง<br>
+                            • <b>รูทยาวสำหรับสาย Endurance (~10-12 กม.):</b> วิ่งข้ามสะพาน <b>Kawaguchiko Ohashi Bridge</b> วนรอบอ่าวฝั่งตะวันออก ชมวิวฟูจิข้ามสะพานแบบพาโนรามา 360 องศา
+                        </div>
+                        <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_kawaguchiko_run')">🗺️ ปักหมุดแผนที่</button>
+                            <a class="maps-btn" href="https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami" target="_blank">📍 จุดปล่อยตัว (หน้าบ้านพัก)</a>
+                            <a class="maps-btn" href="https://maps.google.com/?q=Oishi+Park+Kawaguchiko" target="_blank">📍 สวน Oishi Park (จุดกลับตัว)</a>
+                            <a class="maps-btn" href="https://maps.google.com/?q=Kawaguchiko+Ohashi+Bridge" target="_blank">📍 สะพาน Kawaguchiko Ohashi</a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="timeline-item">
@@ -1036,7 +1059,7 @@
             <div style="padding: 10px 20px 6px 20px; background: #ffffff; border-bottom: 1px solid #f1f5f9;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: var(--dark); margin-bottom: 4px;">
                     <span>ความคืบหน้ารวม</span>
-                    <span id="modal-progress-text">0 / 28 รายการ (0%)</span>
+                    <span id="modal-progress-text">0 / 29 รายการ (0%)</span>
                 </div>
                 <div class="progress-bar-bg" style="height: 8px;">
                     <div id="modal-progress-bar" class="progress-bar-fill"></div>
@@ -1167,7 +1190,7 @@
     <button id="fab-task" class="fab-task" onclick="openTaskModal('all')">
         <span>📋</span>
         <span>Tasks</span>
-        <span class="fab-badge" id="fab-task-count">0/28</span>
+        <span class="fab-badge" id="fab-task-count">0/29</span>
     </button>
 
     <!-- Leaflet & App Scripts -->
