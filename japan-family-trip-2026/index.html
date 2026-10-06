@@ -62,6 +62,117 @@
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-subway')">🚆 คู่มือ Tokyo Subway Ticket</button>
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-skyliner')">🚄 คู่มือ Keisei Skyliner</button>
                 <button class="info-btn info-btn-pill" style="background: #ecfdf5; border-color: #10b981; color: #047857;" onclick="openTaskModal('all')">📋 เช็คลิสต์สิ่งที่ต้องทำ (Tasks)</button>
+                <button class="info-btn info-btn-pill" style="background: #fff7ed; border-color: #fdba74; color: #ea580c;" onclick="openDayMap('tiktok')">🍴 แผนที่ 16 ร้านเด็ด TikTok (I AM EAT)</button>
+            </div>
+        </div>
+
+        <!-- ================= TIKTOK FOOD HIGHLIGHTS SHOWCASE ================= -->
+        <div class="tiktok-showcase-card">
+            <div class="tiktok-showcase-header">
+                <div class="tiktok-showcase-title">
+                    <span>🍴 ลายแทง 16 ร้านเด็ดโตเกียว 2026 จาก TikTok ช่อง I AM EAT (@iameatt)</span>
+                </div>
+                <button type="button" class="tiktok-showcase-btn" onclick="openDayMap('tiktok')">
+                    🗺️ เปิดแผนที่ลายแทงทั้ง 16 ร้าน ❯
+                </button>
+            </div>
+            <div class="tiktok-showcase-body">
+                <p style="font-size: 0.9rem; color: #475569; margin: 0 0 12px 0;">
+                    คัดสรรจากคลิปรีวิวตะลุยกินโตเกียวปี 2026 ของช่อง <b>I AM EAT</b> (เดินทางด้วยสายการบิน Vietjet บินตรงถึงเช้าเที่ยวต่อทันที) รวบรวมพิกัดร้านคาว หวาน มัทฉะ และคาเฟ่ไวรัล พร้อมปักหมุดบนแผนที่เชื่อมโยงกับจุดเที่ยวในทริปนี้:
+                </p>
+                <div class="tiktok-cat-grid">
+                    <!-- Cat 1: Sweets & Cafes -->
+                    <div class="tiktok-cat-card">
+                        <div class="tiktok-cat-title">🍰 ของหวาน & คาเฟ่</div>
+                        <ul class="tiktok-spot-list">
+                            <li>
+                                <span><b>Age.3</b> แซนด์วิชทอดเครมบรูเล่ (Asakusa)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_age3')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>BUTTER</b> แพนเค้กเนยก้อน (Tokyo Station)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_butter')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Marion Crêpes</b> เครปเย็นในตำนาน (Harajuku)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_marion_crepe')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>SWEET BOX</b> เครปเย็นฝั่งตรงข้าม (Harajuku)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_sweet_box')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>I'm donut ?</b> โดนัทแป้งสดคิวยาว (Shibuya)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_im_donut')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Shiopan Pain Maison</b> ปังเกลือเนยฉ่ำ</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_shiopan')">📍 ดูหมุด</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Cat 2: Matcha Ginza -->
+                    <div class="tiktok-cat-card">
+                        <div class="tiktok-cat-title">🍵 มัทฉะพรีเมียม (ย่าน Ginza)</div>
+                        <ul class="tiktok-spot-list">
+                            <li>
+                                <span><b>Craver Club Matcha</b> มัทฉะ 7g นัวจัด (Ginza)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_craver_matcha')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Nakamura Tokichi</b> ชาเขียว 170 ปี (GINZA SIX)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_nakamura_tokichi')">📍 ดูหมุด</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Cat 3: Beef, Hamburg, Gyukatsu -->
+                    <div class="tiktok-cat-card">
+                        <div class="tiktok-cat-title">🥩 เนื้อ, แฮมเบิร์ก & กิวคัตสึ</div>
+                        <ul class="tiktok-spot-list">
+                            <li>
+                                <span><b>Hamburg Yoshi</b> เตาถ่าน 10/10 (Harajuku)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_hamburg_yoshi')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Hamburg Kiwamiya</b> วากิวย่างเอง (Shibuya PARCO)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_kiwamiya')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Gyukatsu Motomura</b> เนื้อทอดเตาหิน (Ueno/Asakusa)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_motomura')">📍 ดูหมุด</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Cat 4: Sushi, Tempura, Ramen, Curry -->
+                    <div class="tiktok-cat-card">
+                        <div class="tiktok-cat-title">🍣 ซูชิ, เทมปุระ, ราเมง & ปลาย่าง</div>
+                        <ul class="tiktok-spot-list">
+                            <li>
+                                <span><b>Hakata Tempura Takao</b> เมนไทโกะไม่อั้น (Shibuya PARCO)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_takao')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Miura Misakiko</b> ซูชิสายพานหน้าล้น (Ueno)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_miura_misakiko')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Ramen Kamo to Negi</b> ราเมงเป็ดคิวยาว (Ueno)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_kamo_to_negi')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Hinoya Curry</b> แกงกะหรี่แชมป์โตเกียว (Akiba/Ueno)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_hinoya_curry')">📍 ดูหมุด</button>
+                            </li>
+                            <li>
+                                <span><b>Yoridocoro</b> ปลาย่าง+ไข่ขาวตีฟู (Kamakura)</span>
+                                <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_yoridocoro')">📍 ดูหมุด</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -392,6 +503,10 @@
                             <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_ameyoko')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Ameyoko+Shopping+District" target="_blank">📍 ตลาด Ameyoko</a>
                         </div>
+                        <div class="tiktok-timeline-tip">
+                            <span>✨ <b>ร้านเด็ด TikTok แนะนำใกล้ Ameyoko:</b> Miura Misakiko (ซูชิหน้าล้น) & Ramen Kamo to Negi (ราเมงเป็ด)</span>
+                            <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_miura_misakiko')">🗺️ แผนที่ร้านเด็ด TikTok</button>
+                        </div>
                     </div>
                 </div>
 
@@ -443,6 +558,10 @@
                             <a class="maps-btn" href="https://maps.google.com/?q=Sens%C5%8D-ji+Temple" target="_blank">📍 วัด Sensoji (Asakusa)</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Nakamise-dori+Street+Asakusa" target="_blank">📍 ถนน Nakamise-dori</a>
                         </div>
+                        <div class="tiktok-timeline-tip">
+                            <span>✨ <b>ร้านเด็ด TikTok ใกล้ Asakusa:</b> Age.3 แซนด์วิชทอดเครมบรูเล่ & Shiopan Pain Maison ปังเกลือเนยฉ่ำ</span>
+                            <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_age3')">🗺️ แผนที่ร้านเด็ด TikTok</button>
+                        </div>
                     </div>
                 </div>
 
@@ -483,6 +602,10 @@
                             <button type="button" class="view-map-spot-btn" onclick="openDayMap(3, 'd3_akihabara')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Yodobashi+Camera+Multimedia+Akiba" target="_blank">📍 Yodobashi Akiba</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Akihabara+Radio+Kaikan" target="_blank">📍 Radio Kaikan</a>
+                        </div>
+                        <div class="tiktok-timeline-tip">
+                            <span>✨ <b>ร้านเด็ด TikTok ใน Akihabara:</b> Hinoya Curry (ฮิโนยะ แกงกะหรี่แชมป์โตเกียว)</span>
+                            <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_hinoya_curry')">🗺️ แผนที่ร้านเด็ด TikTok</button>
                         </div>
                     </div>
                 </div>
@@ -535,6 +658,10 @@
                             <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_meiji')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Meiji+Jingu+Shrine" target="_blank">📍 ศาลเจ้า Meiji Jingu</a>
                         </div>
+                        <div class="tiktok-timeline-tip">
+                            <span>✨ <b>ร้านเด็ด TikTok ย่าน Harajuku:</b> Marion Crêpes & SWEET BOX (ถนน Takeshita) และ Hamburg Yoshi เตาถ่าน (10/10)</span>
+                            <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_marion_crepe')">🗺️ แผนที่ร้านเด็ด TikTok</button>
+                        </div>
                     </div>
                 </div>
 
@@ -564,6 +691,10 @@
                             <a class="maps-btn" href="https://maps.google.com/?q=Shibuya+Scramble+Crossing" target="_blank">📍 Shibuya Crossing</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Shibuya+PARCO" target="_blank">📍 Shibuya PARCO</a>
                         </div>
+                        <div class="tiktok-timeline-tip">
+                            <span>✨ <b>ร้านเด็ด TikTok ในห้าง Shibuya PARCO:</b> Hakata Tempura Takao (ชั้น 7 เมนไทโกะไม่อั้น) & Hamburg Kiwamiya (ชั้น B1 วากิวย่างเอง) & I'm donut ?</span>
+                            <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_takao')">🗺️ แผนที่ร้านเด็ด TikTok</button>
+                        </div>
                     </div>
                 </div>
                 <div class="timeline-item">
@@ -574,6 +705,10 @@
                         <div class="action-links">
                             <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_character_street')">🗺️ ปักหมุดแผนที่</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Tokyo+Character+Street" target="_blank">📍 Tokyo Character Street</a>
+                        </div>
+                        <div class="tiktok-timeline-tip">
+                            <span>✨ <b>ร้านเด็ด TikTok ใกล้สถานีโตเกียว:</b> BUTTER แพนเค้กเนยก้อน (ตึก Marunouchi Bldg B1) & คาเฟ่มัทฉะย่าน Ginza</span>
+                            <button type="button" class="tiktok-spot-link" onclick="openDayMap('tiktok', 'tt_butter')">🗺️ แผนที่ร้านเด็ด TikTok</button>
                         </div>
                     </div>
                 </div>
@@ -922,6 +1057,7 @@
                 <button type="button" class="map-tab-btn" data-day="3" onclick="switchMapDay(3)">Day 3 (อาซากุสะ-ชินจูกุ)</button>
                 <button type="button" class="map-tab-btn" data-day="4" onclick="switchMapDay(4)">Day 4 (ชิบูย่า-โตเกียว)</button>
                 <button type="button" class="map-tab-btn" data-day="5" onclick="switchMapDay(5)">Day 5 (อุเอโนะ-นาริตะ)</button>
+                <button type="button" class="map-tab-btn tiktok-tab-btn" data-day="tiktok" onclick="switchMapDay('tiktok')">🍴 ร้านเด็ด TikTok (I AM EAT)</button>
             </div>
 
             <!-- Map Engine Indicator Bar -->

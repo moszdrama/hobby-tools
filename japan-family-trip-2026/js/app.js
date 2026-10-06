@@ -615,6 +615,184 @@ const DAY_LOCATIONS = {
             desc: 'ทานมื้อกลางวันส่งท้ายที่ชั้น 4 T2 ก่อนโหลดกระเป๋าและขึ้นเครื่องกลับไทยเวลา 15:00 น.',
             mapsUrl: 'https://maps.google.com/?q=Narita+International+Airport+Terminal+2'
         }
+    ],
+    'tiktok': [
+        {
+            id: 'tt_age3',
+            name: 'Age.3 (อาเกะซัง) สาขา Asakusa',
+            time: '11:00 - 18:00',
+            category: 'แซนด์วิชทอด',
+            area: 'Asakusa',
+            lat: 35.7128,
+            lng: 139.7942,
+            desc: 'แซนด์วิชทอดแป้งกรอบนอกนุ่มใน ไส้ล้นทะลัก เมนูเด็ด: ไส้เครมบรูเล่ (Crème Brûlée) เบิร์นน้ำตาลไหม้กรุบกรอบ และไส้วิปครีมนัวๆ รอคิวไม่นาน',
+            mapsUrl: 'https://maps.google.com/?q=Age.3+Asakusa'
+        },
+        {
+            id: 'tt_butter',
+            name: 'BUTTER 美瑛放牧酪農場 (Marunouchi Bldg B1)',
+            time: '11:00 - 21:00',
+            category: 'แพนเค้กเนยก้อน',
+            area: 'Tokyo Station',
+            lat: 35.6811,
+            lng: 139.7635,
+            desc: 'คาเฟ่แพนเค้กเนยก้อน ครัวเปิดทำสด แพนเค้กเนื้อฟูท็อปด้วยเนยแท้ก้อนยักษ์จากฟาร์มบิเอะ ฮอกไกโด หอมมันเค็มหวานลงตัว เสิร์ฟคู่ไอศกรีมนมสดเข้มข้น',
+            mapsUrl: 'https://maps.google.com/?q=BUTTER+Marunouchi+Building'
+        },
+        {
+            id: 'tt_marion_crepe',
+            name: 'Marion Crêpes (มาริออน เครป) Harajuku',
+            time: '10:30 - 20:00',
+            category: 'เครปเย็น',
+            area: 'Harajuku',
+            lat: 35.6711,
+            lng: 139.7049,
+            desc: 'เครปเย็นในตำนานแห่งถนน Takeshita ฮาราจูกุ ไส้แน่นทะลัก แป้งหอมนุ่ม ทั้งสตรอว์เบอร์รี ชีสเค้ก บราวนี่ นูเทลล่า และไอศกรีม',
+            mapsUrl: 'https://maps.google.com/?q=Marion+Crepes+Harajuku'
+        },
+        {
+            id: 'tt_sweet_box',
+            name: 'SWEET BOX Harajuku',
+            time: '11:00 - 20:00',
+            category: 'เครปเย็น',
+            area: 'Harajuku',
+            lat: 35.6713,
+            lng: 139.7047,
+            desc: 'ร้านเครปเย็นฝั่งตรงข้าม Marion Crêpes แป้งนุ่มหอม วิปครีมแน่น ผลไม้สดและท็อปปิ้งล้นๆ สายเครปต้องลองเทียบกัน',
+            mapsUrl: 'https://maps.google.com/?q=SWEET+BOX+Harajuku'
+        },
+        {
+            id: 'tt_im_donut',
+            name: 'I\'m donut ? สาขา Shibuya',
+            time: '11:00 - 20:00',
+            category: 'โดนัทสด',
+            area: 'Shibuya',
+            lat: 35.6608,
+            lng: 139.7061,
+            desc: 'โดนัทสดแป้งสดคิวยาวสุดฮิต จุดเด่นคือแป้งนุ่มฟู เหนียวหนึบ ละลายในปาก ไม่อมน้ำมัน รสยอดนิยม: พิสตาชิโอครีม, มัทฉะ, ช็อกโกแลตสตรอว์เบอร์รี',
+            mapsUrl: 'https://maps.google.com/?q=I%27m+donut+Shibuya'
+        },
+        {
+            id: 'tt_shiopan',
+            name: 'Shiopan Pain Maison (ขนมปังเกลือเนยฉ่ำ)',
+            time: '08:30 - 19:00',
+            category: 'ขนมปังเกลือ',
+            area: 'Ginza & Asakusa',
+            lat: 35.6705,
+            lng: 139.7712,
+            desc: 'ต้นตำรับชิโอะปังอันดับ 1 ในโตเกียว กรอบนอกนุ่มหนึบใน กัดแล้วเนยฉ่ำทะลัก รสชาติ: ออริจินัลเค็มมัน, ไส้มันหวาน และรสทรัฟเฟิลหอมฟุ้ง (มีสาขา Ginza และ Asakusa)',
+            mapsUrl: 'https://maps.google.com/?q=Pain+Maison+Ginza'
+        },
+        {
+            id: 'tt_craver_matcha',
+            name: 'Craver Club Matcha Ginza',
+            time: '11:00 - 19:00',
+            category: 'มัทฉะพรีเมียม',
+            area: 'Ginza',
+            lat: 35.6719,
+            lng: 139.7658,
+            desc: 'ร้านมัทฉะไวรัลขนาด 1 คูหา ชงสดแก้วต่อแก้ว ใช้มัทฉะเข้มข้นถึง 7 กรัมต่อแก้ว เมนูแนะนำ: Premium Matcha Latte (1,296 เยน) หอมนัวเข้มข้นสะใจ',
+            mapsUrl: 'https://maps.google.com/?q=Craver+Club+Matcha+Ginza'
+        },
+        {
+            id: 'tt_nakamura_tokichi',
+            name: 'Nakamura Tokichi (นากามุระ โทคิจิ) GINZA SIX',
+            time: '10:30 - 20:30',
+            category: 'ชาเขียวในตำนาน',
+            area: 'Ginza',
+            lat: 35.6696,
+            lng: 139.7639,
+            desc: 'ร้านชาเขียวระดับตำนานจากเมืองอุจิ เกียวโต อายุกว่า 170 ปี สั่งเซตมัทฉะพรีเมียมพร้อมขนมหวาน วุ้นชาเขียว ไอศกรีมและพาร์เฟต์มัทฉะแบบจัดเต็ม (5,840 เยน)',
+            mapsUrl: 'https://maps.google.com/?q=Nakamura+Tokichi+GINZA+SIX'
+        },
+        {
+            id: 'tt_kiwamiya',
+            name: 'Hamburg Kiwamiya (คิวะมิยะ) Shibuya PARCO B1',
+            time: '11:00 - 22:00',
+            category: 'แฮมเบิร์กวากิว',
+            area: 'Shibuya PARCO',
+            lat: 35.6620,
+            lng: 139.6987,
+            desc: 'แฮมเบิร์กเนื้อวากิวปั้นสด นั่งหน้าเคาน์เตอร์บาร์ย่างเองบนเตาหินร้อนๆ สั่งเป็นเซตเติมข้าว ซุปมิโซะ สลัดฟรีไม่อั้น ตบท้ายด้วยซอฟต์เสิร์ฟไอศกรีมนม',
+            mapsUrl: 'https://maps.google.com/?q=Kiwamiya+Shibuya+PARCO'
+        },
+        {
+            id: 'tt_motomura',
+            name: 'Gyukatsu Motomura (กิวคัตสึ โมโตมุระ) สาขา Asakusa/Ueno',
+            time: '11:00 - 21:30',
+            category: 'กิวคัตสึ',
+            area: 'Asakusa & Ueno',
+            lat: 35.7118,
+            lng: 139.7748,
+            desc: 'เนื้อวัวชุบเกล็ดขนมปังทอดกรอบด้านนอก ด้านในยังแรร์ เสิร์ฟให้ย่างต่อบนเตาหินร้อนส่วนตัวตามชอบ นุ่มละลายในปาก ทานคู่ข้าวบาร์เลย์ ซุปมิโซะ และซอสสูตรเด็ด',
+            mapsUrl: 'https://maps.google.com/?q=Gyukatsu+Motomura+Ueno'
+        },
+        {
+            id: 'tt_hamburg_yoshi',
+            name: 'Hamburg Yoshi (แฮมเบิร์ก โยชิ) Harajuku',
+            time: '11:30 - 21:00',
+            category: 'แฮมเบิร์กเตาถ่าน',
+            area: 'Harajuku',
+            lat: 35.6691,
+            lng: 139.7067,
+            desc: 'เจ้าของคลิปให้คะแนน 10/10 แฮมเบิร์กเนื้อปั้นสดย่างเตาถ่านหอมกรุ่น เสิร์ฟทีละชิ้นร้อนๆ (เนื้อ, ลิ้นวัว, วากิว) ซอสเดมิเกลซรสเผ็ด ข้าวหม้อดินเติมไม่อั้น + ไข่ดิบฟรี 1 ฟอง',
+            mapsUrl: 'https://maps.google.com/?q=Hamburg+Yoshi+Harajuku'
+        },
+        {
+            id: 'tt_takao',
+            name: 'Hakata Tempura Takao (Shibuya PARCO 7F)',
+            time: '11:00 - 22:00',
+            category: 'เทมปุระ',
+            area: 'Shibuya PARCO',
+            lat: 35.6620,
+            lng: 139.6987,
+            desc: 'เทมปุระทอดสดใหม่ เสิร์ฟทีละชิ้นกรอบร้อนไม่อมน้ำมัน (กุ้ง, ไก่, ผัก) ไฮไลต์สุดคุ้ม: ตักไข่ปลาเมนไทโกะผสมสาหร่ายคอมบุและผักดองสูตรเด็ดฟรีไม่อั้น!',
+            mapsUrl: 'https://maps.google.com/?q=Hakata+Tempura+Takao+Shibuya+PARCO'
+        },
+        {
+            id: 'tt_miura_misakiko',
+            name: 'Miura Misakiko (มิอุระ มิซากิโค) ซูชิหน้าล้น Ueno',
+            time: '11:00 - 22:00',
+            category: 'ซูชิสายพาน',
+            area: 'Ueno (Ameyoko)',
+            lat: 35.7112,
+            lng: 139.7749,
+            desc: 'ซูชิสายพานหน้าล้นในตำนาน เชฟปั้นสดวางพูนท็อปปิ้งล้นทะลักพูนจาน ทั้งทูน่าสับพูนจาน แซลมอนสับ ไข่ปลาแซลมอนล้นๆ ราคาจับต้องได้ อยู่ติดตลาด Ameyoko',
+            mapsUrl: 'https://maps.google.com/?q=Miura+Misakiko+Ueno'
+        },
+        {
+            id: 'tt_kamo_to_negi',
+            name: 'Ramen Kamo to Negi (ราเมงเป็ด คาโมะ โตะ เนงิ)',
+            time: '09:00 - 22:30',
+            category: 'ราเมงเป็ด',
+            area: 'Ueno / Okachimachi',
+            lat: 35.7088,
+            lng: 139.7745,
+            desc: 'ราเมงซุปเป็ดชื่อดังคิวยาว น้ำซุปใสกลมกล่อมเคี่ยวจากเป็ดและน้ำธรรมชาติ ไม่ใส่ผงชูรส ท็อปด้วยเนื้อเป็ดกงฟีนุ่มละมุนและเลือกท็อปปิ้งต้นหอมญี่ปุ่นได้ 2 แบบ',
+            mapsUrl: 'https://maps.google.com/?q=Ramen+Kamo+to+Negi+Ueno'
+        },
+        {
+            id: 'tt_hinoya_curry',
+            name: 'Hinoya Curry (ฮิโนยะ แกงกะหรี่แชมป์โตเกียว)',
+            time: '11:00 - 21:00',
+            category: 'ข้าวแกงกะหรี่',
+            area: 'Akihabara',
+            lat: 35.7005,
+            lng: 139.7725,
+            desc: 'แกงกะหรี่ดีกรีแชมป์ Kanda Curry Grand Prix เอกลักษณ์ "คำแรกหวาน คำต่อไปเผ็ดร้อนกลมกล่อม" เมนูเด็ด: ข้าวแกงกะหรี่หมูทอดทงคัตสึชีสเยิ้มๆ',
+            mapsUrl: 'https://maps.google.com/?q=Hinoya+Curry+Akihabara'
+        },
+        {
+            id: 'tt_yoridocoro',
+            name: 'Yoridocoro (คาเฟ่ปลาย่างติดทางรถไฟ) - Kamakura',
+            time: '07:00 - 18:00',
+            category: 'ปลาย่าง / คาเฟ่ริมราง',
+            area: 'Kamakura',
+            lat: 35.3039,
+            lng: 139.5244,
+            desc: 'ร้านปลาย่างบรรยากาศโฮมมี่ในบ้านไม้ญี่ปุ่นโบราณ ติดริมรางรถไฟสาย Enoden ไฮไลต์: ปลาย่างหอมๆ ทานคู่ "ข้าวหน้าไข่ดิบตีฟู" ที่ให้ลูกค้าสนุกกับการตีไข่ขาวจนฟูฟ่องก่อนราดไข่แดง',
+            mapsUrl: 'https://maps.google.com/?q=Yoridocoro+Kamakura'
+        }
     ]
 };
 
@@ -700,7 +878,7 @@ function updateEngineBar() {
 }
 
 function openDayMap(day, spotId) {
-    if (!DAY_LOCATIONS[day]) day = 1;
+    if (day !== 'tiktok' && !DAY_LOCATIONS[day]) day = 1;
     currentMapDay = day;
     currentFocusedSpotId = spotId || null;
 
@@ -717,25 +895,32 @@ function switchMapDay(day, spotId) {
     // Update Day Tabs
     const tabs = document.querySelectorAll('.map-tab-btn');
     tabs.forEach(tab => {
-        const d = parseInt(tab.getAttribute('data-day'));
-        if (d === day) {
+        const d = tab.getAttribute('data-day');
+        if (String(d) === String(day)) {
             tab.classList.add('active');
         } else {
             tab.classList.remove('active');
         }
     });
 
-    // Update Title
+    // Update Title & Subtitle
     const titleEl = document.getElementById('map-modal-title');
+    const subtitleEl = document.getElementById('map-modal-subtitle');
     if (titleEl) {
-        const dayNames = {
-            1: 'Day 1: นาริตะ ➔ ทางด่วน E20 ➔ ฟูจิ คาวากุจิโกะ',
-            2: 'Day 2: โอชิโนะฮักไก ➔ ล่องเรือ ➔ คืนรถ Asakusa ➔ Ameyoko',
-            3: 'Day 3: วัดอาซากุสะ ➔ สวนอุเอโนะ ➔ Akihabara ➔ บุฟเฟต์ Rokkasen',
-            4: 'Day 4: ศาลเจ้าเมจิ ➔ Maisen Aoyama ➔ ชิบูย่า ➔ Tokyo Character Street',
-            5: 'Day 5: สถานี Keisei Ueno ➔ ตึกม่วง Takeya ➔ Narita Airport T2'
-        };
-        titleEl.textContent = `🗺️ แผนที่ ${dayNames[day] || 'Day ' + day}`;
+        if (day === 'tiktok') {
+            titleEl.textContent = '🍴 ลายแทง 16 ร้านเด็ดโตเกียว 2026 จาก TikTok ช่อง I AM EAT';
+            if (subtitleEl) subtitleEl.textContent = 'พิกัดร้านเด็ด คาเฟ่ & ของหวานยอดฮิตในโตเกียว แตะเพื่อซูมดูรายละเอียด (แตะซ้ำดูทั้งหมด)';
+        } else {
+            const dayNames = {
+                1: 'Day 1: นาริตะ ➔ ทางด่วน E20 ➔ ฟูจิ คาวากุจิโกะ',
+                2: 'Day 2: โอชิโนะฮักไก ➔ ล่องเรือ ➔ คืนรถ Asakusa ➔ Ameyoko',
+                3: 'Day 3: วัดอาซากุสะ ➔ สวนอุเอโนะ ➔ Akihabara ➔ บุฟเฟต์ Rokkasen',
+                4: 'Day 4: ศาลเจ้าเมจิ ➔ Maisen Aoyama ➔ ชิบูย่า ➔ Tokyo Character Street',
+                5: 'Day 5: สถานี Keisei Ueno ➔ ตึกม่วง Takeya ➔ Narita Airport T2'
+            };
+            titleEl.textContent = `🗺️ แผนที่ ${dayNames[day] || 'Day ' + day}`;
+            if (subtitleEl) subtitleEl.textContent = 'คลิกรายการเพื่อเลื่อนหาหมุด (คลิกซ้ำเพื่อดูภาพรวมทั้งหมด)';
+        }
     }
 
     // Render Places List
@@ -749,9 +934,14 @@ function renderMapPlaces(day) {
     const listEl = document.getElementById('map-places-list');
     const countEl = document.getElementById('map-places-count');
     const spots = DAY_LOCATIONS[day] || [];
+    const isTiktok = (day === 'tiktok');
 
     if (countEl) {
-        countEl.textContent = `📍 สถานที่ในวันนี้ (${spots.length} จุด)`;
+        if (isTiktok) {
+            countEl.textContent = `🍴 ร้านเด็ด TikTok (${spots.length} ร้าน)`;
+        } else {
+            countEl.textContent = `📍 สถานที่ในวันนี้ (${spots.length} จุด)`;
+        }
     }
 
     if (!listEl) return;
@@ -759,20 +949,22 @@ function renderMapPlaces(day) {
 
     spots.forEach((spot, idx) => {
         const card = document.createElement('div');
-        card.className = 'map-place-card';
+        card.className = `map-place-card ${isTiktok ? 'tiktok-card' : ''}`;
         card.setAttribute('data-id', spot.id);
         if (currentFocusedSpotId === spot.id) {
             card.classList.add('active');
         }
 
+        const timeOrArea = spot.area ? `📍 ${spot.area} • ⏱️ ${spot.time}` : `⏱️ ${spot.time}`;
+
         card.innerHTML = `
-            <div class="map-place-num">${idx + 1}</div>
+            <div class="map-place-num ${isTiktok ? 'tiktok-place-num' : ''}">${idx + 1}</div>
             <div class="map-place-info">
                 <div class="map-place-top">
-                    <span class="map-place-time">⏱️ ${spot.time}</span>
+                    <span class="map-place-time">${timeOrArea}</span>
                     <span class="map-place-cat">${spot.category}</span>
                 </div>
-                <div class="map-place-name">${spot.name}</div>
+                <div class="map-place-name">${spot.name} ${isTiktok ? '<span class="tiktok-badge-pill">TikTok Highlight</span>' : ''}</div>
                 <div class="map-place-desc">${spot.desc}</div>
                 <div class="map-place-actions">
                     <a class="map-place-glink" href="${spot.mapsUrl}" target="_blank" onclick="event.stopPropagation();">📍 เปิดใน Google Maps ↗</a>
@@ -847,11 +1039,14 @@ function focusPlace(spotId) {
         googleMap.panTo({ lat: spot.lat, lng: spot.lng });
         googleMap.setZoom(16);
 
+        const timeOrArea = spot.area ? `📍 <b>${spot.area}</b> • ⏱️ ${spot.time}` : `⏱️ <b>${spot.time}</b>`;
         const content = `
             <div class="custom-infowindow">
-                <h4>${spot.name}</h4>
-                <p>⏱️ <b>${spot.time}</b> (${spot.category})<br>${spot.desc}</p>
-                <a href="${spot.mapsUrl}" target="_blank">📍 นำทางใน Google Maps ↗</a>
+                <h4 style="margin: 0 0 6px 0; color: #1e3a8a; font-size: 0.95rem;">${spot.name}</h4>
+                <p style="margin: 0 0 6px 0; font-size: 0.85rem; color: #475569;">
+                    ${timeOrArea} (${spot.category})<br>${spot.desc}
+                </p>
+                <a href="${spot.mapsUrl}" target="_blank" style="color: #2563eb; font-weight: 600; text-decoration: none; font-size: 0.82rem;">📍 นำทางใน Google Maps ↗</a>
             </div>
         `;
         if (googleInfoWindow) {
@@ -928,6 +1123,7 @@ function initLeafletMap(day) {
 
     const spots = DAY_LOCATIONS[day] || [];
     if (!spots.length) return;
+    const isTiktok = (day === 'tiktok');
 
     if (!leafletMap) {
         leafletMap = L.map('map-canvas', {
@@ -953,16 +1149,17 @@ function initLeafletMap(day) {
 
         const icon = L.divIcon({
             className: 'custom-leaflet-marker-wrap',
-            html: `<div class="map-marker-pin"><span class="map-marker-text">${idx + 1}</span></div>`,
+            html: `<div class="map-marker-pin ${isTiktok ? 'tiktok-marker-pin' : ''}"><span class="map-marker-text">${idx + 1}</span></div>`,
             iconSize: [28, 28],
             iconAnchor: [14, 28],
             popupAnchor: [0, -28]
         });
 
+        const timeOrArea = spot.area ? `📍 <b>${spot.area}</b> • ⏱️ ${spot.time}` : `⏱️ <b>${spot.time}</b>`;
         const popupContent = `
-            <div class="custom-infowindow">
+            <div class="custom-infowindow ${isTiktok ? 'tiktok-popup' : ''}">
                 <h4>${idx + 1}. ${spot.name}</h4>
-                <p>⏱️ <b>${spot.time}</b> (${spot.category})<br>${spot.desc}</p>
+                <p>${timeOrArea} (${spot.category})<br>${spot.desc}</p>
                 <a href="${spot.mapsUrl}" target="_blank">📍 นำทางใน Google Maps ↗</a>
             </div>
         `;
@@ -1037,23 +1234,38 @@ function initGoogleMap(day) {
     }
     googleMarkers = {};
 
+    const isTiktok = (day === 'tiktok');
     const bounds = new google.maps.LatLngBounds();
 
     spots.forEach((spot, idx) => {
         const position = { lat: spot.lat, lng: spot.lng };
         bounds.extend(position);
 
-        const marker = new google.maps.Marker({
+        const markerOptions = {
             position: position,
             map: googleMap,
             label: {
                 text: String(idx + 1),
                 color: '#ffffff',
                 fontWeight: 'bold',
-                fontSize: '12px'
+                fontSize: '11px'
             },
             title: spot.name
-        });
+        };
+
+        if (isTiktok) {
+            markerOptions.icon = {
+                path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z',
+                fillColor: '#ea580c',
+                fillOpacity: 1,
+                strokeColor: '#ffffff',
+                strokeWeight: 2,
+                scale: 1.15,
+                labelOrigin: new google.maps.Point(0, -30)
+            };
+        }
+
+        const marker = new google.maps.Marker(markerOptions);
 
         marker.addListener('click', () => {
             togglePlaceFocus(spot.id);
