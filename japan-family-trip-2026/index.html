@@ -21,7 +21,7 @@
         <div class="progress-card" style="cursor: pointer;" onclick="openTaskModal('all')">
             <div class="progress-header">
                 <span>✅ ความคืบหน้าสิ่งที่ต้องทำ (Checklist Progress)</span>
-                <span id="progress-text">0 / 27 รายการ (0%)</span>
+                <span id="progress-text">0 / 28 รายการ (0%)</span>
             </div>
             <div class="progress-bar-bg">
                 <div id="progress-bar" class="progress-bar-fill"></div>
@@ -638,15 +638,34 @@
                 </div>
                 <div class="day-header-actions">
                     <button class="day-map-btn" onclick="openDayMap(4)">🗺️ แผนที่ ❯</button>
-                    <button class="day-task-btn" onclick="openTaskModal(4)">📋 Task (<span class="day-task-counter" data-day="4">0/2</span>) ❯</button>
+                    <button class="day-task-btn" onclick="openTaskModal(4)">📋 Task (<span class="day-task-counter" data-day="4">0/3</span>) ❯</button>
                 </div>
             </div>
             <div class="timeline">
                 
                 <!-- Day 4 Task Quick Banner -->
                 <div class="task-day-banner" onclick="openTaskModal(4)">
-                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 4:</b> <span class="day-task-summary" data-day="4">0/2 รายการ</span></span>
+                    <span class="task-banner-text">⚡ <b>สิ่งที่ต้องทำใน Day 4:</b> <span class="day-task-summary" data-day="4">0/3 รายการ</span></span>
                     <span class="task-banner-btn">เปิดดู / ตรวจสอบ / เพิ่ม Task ❯</span>
+                </div>
+
+                <!-- Day 4 Early Morning Running Activity -->
+                <div class="timeline-item">
+                    <div class="time-badge" style="background: #e0f2fe; color: #0369a1;">06:00 - 07:30</div>
+                    <div class="item-content">
+                        <div class="item-title">
+                            🏃 วิ่งเช้าตรู่: รอบพระราชวังอิมพีเรียลโตเกียว (Imperial Palace Loop)
+                            <span class="special-tag" style="background: #e0f2fe; color: #0284c7;">MORNING RUN</span>
+                        </div>
+                        <div class="item-desc">
+                            เส้นทางวิ่งยอดนิยมระดับโลกใจกลางโตเกียว ระยะทาง 1 รอบประมาณ 5.0 กม. วิ่งทวนเข็มนาฬิกาผ่านคูเมือง Sakuradamon, Chidorigafuchi อากาศสดชื่นยามเช้า ไม่มีไฟแดงขวางกั้น นั่งรถไฟใต้ดิน Hibiya Line จากสถานี Iriya ไปลงสถานี Hibiya / Sakuradamon เพียง 15-20 นาที
+                        </div>
+                        <div class="action-links">
+                            <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_imperial_palace_run')">🗺️ ปักหมุดแผนที่</button>
+                            <a class="maps-btn" href="https://maps.google.com/?q=Kokyo+Gaien+National+Garden" target="_blank">📍 สวนพระราชวัง Kokyo Gaien</a>
+                            <a class="maps-btn" href="https://maps.google.com/?q=Sakuradamon+Gate" target="_blank">📍 ประตูซากุราดะมง (จุดเริ่มวิ่ง)</a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="timeline-item">
@@ -1017,7 +1036,7 @@
             <div style="padding: 10px 20px 6px 20px; background: #ffffff; border-bottom: 1px solid #f1f5f9;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: var(--dark); margin-bottom: 4px;">
                     <span>ความคืบหน้ารวม</span>
-                    <span id="modal-progress-text">0 / 27 รายการ (0%)</span>
+                    <span id="modal-progress-text">0 / 28 รายการ (0%)</span>
                 </div>
                 <div class="progress-bar-bg" style="height: 8px;">
                     <div id="modal-progress-bar" class="progress-bar-fill"></div>
@@ -1148,7 +1167,7 @@
     <button id="fab-task" class="fab-task" onclick="openTaskModal('all')">
         <span>📋</span>
         <span>Tasks</span>
-        <span class="fab-badge" id="fab-task-count">0/27</span>
+        <span class="fab-badge" id="fab-task-count">0/28</span>
     </button>
 
     <!-- Leaflet & App Scripts -->

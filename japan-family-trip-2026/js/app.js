@@ -64,6 +64,7 @@ const DEFAULT_TASKS = {
         { id: 'task_d3_buffet_rokkasen', text: '<b>ไปทานมื้อพิเศษบุฟเฟต์วากิว Rokkasen Shinjuku</b> เวลา 19:00 น. (เตรียมชื่อผู้จอง)', critical: true }
     ],
     4: [
+        { id: 'task_d4_run', text: '<b>วิ่งเช้าตรู่รอบพระราชวังโตเกียว</b> (06:00 - 07:30 น. ระยะทาง ~5 กม. สัมผัสบรรยากาศเช้าตรู่)', critical: false },
         { id: 'task_d4_pack', text: 'จัดกระเป๋าเดินทาง 5 ใบและชั่งน้ำหนักสัมภาระเตรียมบินกลับ', critical: true },
         { id: 'task_d4_passport', text: 'เช็คพาสปอร์ตตัวจริง 5 เล่ม และเอกสารเดินทางให้พร้อม', critical: true }
     ],
@@ -533,6 +534,16 @@ const DAY_LOCATIONS = {
         }
     ],
     4: [
+        {
+            id: 'd4_imperial_palace_run',
+            name: 'วิ่งเช้าตรู่: รอบพระราชวังอิมพีเรียล (Imperial Palace Loop)',
+            time: '06:00 - 07:30',
+            category: 'กิจกรรมเช้า',
+            lat: 35.6798,
+            lng: 139.7565,
+            desc: 'รูทวิ่งชมวิวรอบพระราชวังโตเกียว 1 รอบ ~5.0 กม. ผ่านประตู Sakuradamon อากาศสดชื่นยามเช้า ไม่มีไฟแดง',
+            mapsUrl: 'https://maps.google.com/?q=Kokyo+Gaien+National+Garden'
+        },
         {
             id: 'd4_meiji',
             name: 'ศาลเจ้าเมจิ (Meiji Jingu)',
