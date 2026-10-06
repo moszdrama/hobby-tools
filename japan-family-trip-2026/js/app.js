@@ -811,6 +811,243 @@ let googleMapsAuthFailed = false;
 let leafletMap = null;
 let leafletMarkers = {};
 
+// User Geolocation objects
+let userLocation = null; // { lat, lng, accuracy, timestamp }
+let userLeafletMarker = null;
+let userLeafletCircle = null;
+let userGoogleMarker = null;
+let userGoogleCircle = null;
+let isLocatingUser = false;
+let gpsStatusTimer = null;
+
+// Calculate distance between two points in km (Haversine formula)
+function getDistanceKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+function formatDistance(km) {
+    if (km < 1) {
+        return `${Math.round(km * 1000)} ม.`;
+    } else if (km < 10) {
+        return `${km.toFixed(1)} กม.`;
+    } else {
+        return `${Math.round(km)} กม.`;
+    }
+}
+
+function showGpsStatus(message, duration = 3000) {
+    const statusEl = document.getElementById('map-gps-status');
+    if (!statusEl) return;
+    statusEl.innerHTML = message;
+    statusEl.classList.add('show');
+    if (gpsStatusTimer) clearTimeout(gpsStatusTimer);
+    gpsStatusTimer = setTimeout(() => {
+        statusEl.classList.remove('show');
+    }, duration);
+}
+
+function locateUserPosition(panToUser = true) {
+    if (!navigator.geolocation) {
+        showGpsStatus('❌ อุปกรณ์หรือเบราว์เซอร์ไม่รองรับ GPS');
+        return;
+    }
+
+    const gpsBtn = document.getElementById('map-gps-btn');
+    if (gpsBtn) {
+        gpsBtn.classList.add('loading');
+        gpsBtn.disabled = true;
+    }
+    showGpsStatus('📡 กำลังค้นหาตำแหน่งปัจจุบันของคุณ...');
+    isLocatingUser = true;
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            isLocatingUser = false;
+            if (gpsBtn) {
+                gpsBtn.classList.remove('loading');
+                gpsBtn.classList.add('active');
+                gpsBtn.disabled = false;
+            }
+
+            userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                accuracy: position.coords.accuracy || 20,
+                timestamp: Date.now()
+            };
+
+            const accuracyText = userLocation.accuracy < 1000 
+                ? `(ความแม่นยำ ±${Math.round(userLocation.accuracy)} ม.)` 
+                : '';
+            showGpsStatus(`✅ ระบุตำแหน่งสำเร็จ ${accuracyText}`, 3500);
+
+            // Render marker on current map mode
+            renderUserLocationOnMap(panToUser);
+
+            // Re-render place cards with updated distances
+            renderMapPlaces(currentMapDay);
+        },
+        (error) => {
+            isLocatingUser = false;
+            if (gpsBtn) {
+                gpsBtn.classList.remove('loading');
+                gpsBtn.disabled = false;
+            }
+
+            let msg = '⚠️ ไม่สามารถระบุตำแหน่งได้';
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    msg = '🔒 กรุณาอนุญาตสิทธิ์เข้าถึงพิกัด (Location Permission) ในเบราว์เซอร์';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    msg = '📡 ข้อมูลตำแหน่งไม่พร้อมใช้งานในขณะนี้';
+                    break;
+                case error.TIMEOUT:
+                    msg = '⏱️ หมดเวลาในการค้นหาสัญญาณ GPS';
+                    break;
+            }
+            showGpsStatus(msg, 4500);
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
+        }
+    );
+}
+
+function renderUserLocationOnMap(panToUser = false) {
+    if (!userLocation) return;
+
+    if (currentMapMode === 'leaflet' && leafletMap) {
+        renderUserLocationLeaflet(panToUser);
+    } else if (currentMapMode === 'google' && googleMap) {
+        renderUserLocationGoogle(panToUser);
+    }
+}
+
+function renderUserLocationLeaflet(panToUser = false) {
+    if (!leafletMap || !userLocation) return;
+
+    const latLng = [userLocation.lat, userLocation.lng];
+
+    if (userLeafletMarker) {
+        leafletMap.removeLayer(userLeafletMarker);
+    }
+    if (userLeafletCircle) {
+        leafletMap.removeLayer(userLeafletCircle);
+    }
+
+    // Accuracy circle
+    userLeafletCircle = L.circle(latLng, {
+        radius: Math.max(userLocation.accuracy, 30),
+        color: '#2563eb',
+        fillColor: '#3b82f6',
+        fillOpacity: 0.15,
+        weight: 1
+    }).addTo(leafletMap);
+
+    // Pulsing Blue Dot Marker
+    const userIcon = L.divIcon({
+        className: 'user-gps-marker-wrap',
+        html: `
+            <div class="user-gps-marker">
+                <div class="user-gps-pulse"></div>
+                <div class="user-gps-dot"></div>
+            </div>
+        `,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -12]
+    });
+
+    userLeafletMarker = L.marker(latLng, { icon: userIcon, zIndexOffset: 1000 }).addTo(leafletMap);
+    userLeafletMarker.bindPopup(`
+        <div class="custom-infowindow">
+            <h4 style="color: #2563eb; margin-bottom: 4px;">📍 ตำแหน่งปัจจุบันของคุณ</h4>
+            <p style="font-size: 0.8rem; margin: 0; color: #475569;">
+                พิกัด: ${userLocation.lat.toFixed(5)}, ${userLocation.lng.toFixed(5)}<br>
+                ความแม่นยำ: ±${Math.round(userLocation.accuracy)} เมตร
+            </p>
+        </div>
+    `);
+
+    if (panToUser) {
+        leafletMap.setView(latLng, Math.max(leafletMap.getZoom(), 15), { animate: true });
+        userLeafletMarker.openPopup();
+    }
+}
+
+function renderUserLocationGoogle(panToUser = false) {
+    if (!googleMap || !userLocation) return;
+
+    const position = { lat: userLocation.lat, lng: userLocation.lng };
+
+    if (userGoogleMarker) {
+        userGoogleMarker.setMap(null);
+    }
+    if (userGoogleCircle) {
+        userGoogleCircle.setMap(null);
+    }
+
+    // Accuracy circle
+    userGoogleCircle = new google.maps.Circle({
+        strokeColor: '#2563eb',
+        strokeOpacity: 0.6,
+        strokeWeight: 1,
+        fillColor: '#3b82f6',
+        fillOpacity: 0.15,
+        map: googleMap,
+        center: position,
+        radius: Math.max(userLocation.accuracy, 30)
+    });
+
+    // Pulsing Blue Dot Marker (Native Google Maps Circle Symbol)
+    userGoogleMarker = new google.maps.Marker({
+        position: position,
+        map: googleMap,
+        title: 'ตำแหน่งปัจจุบันของคุณ',
+        zIndex: 9999,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: '#2563eb',
+            fillOpacity: 1,
+            strokeColor: '#ffffff',
+            strokeWeight: 3,
+            scale: 8
+        }
+    });
+
+    userGoogleMarker.addListener('click', () => {
+        if (!googleInfoWindow) googleInfoWindow = new google.maps.InfoWindow();
+        googleInfoWindow.setContent(`
+            <div class="custom-infowindow">
+                <h4 style="color: #2563eb; margin-bottom: 4px;">📍 ตำแหน่งปัจจุบันของคุณ</h4>
+                <p style="font-size: 0.8rem; margin: 0; color: #475569;">
+                    พิกัด: ${userLocation.lat.toFixed(5)}, ${userLocation.lng.toFixed(5)}<br>
+                    ความแม่นยำ: ±${Math.round(userLocation.accuracy)} เมตร
+                </p>
+            </div>
+        `);
+        googleInfoWindow.open(googleMap, userGoogleMarker);
+    });
+
+    if (panToUser) {
+        googleMap.panTo(position);
+        googleMap.setZoom(Math.max(googleMap.getZoom() || 12, 15));
+        google.maps.event.trigger(userGoogleMarker, 'click');
+    }
+}
+
+
 function getApiKey() {
     return (localStorage.getItem(GMAPS_KEY_STORAGE) || '').trim();
 }
@@ -884,6 +1121,15 @@ function openDayMap(day, spotId) {
 
     openModal('modal-map');
     switchMapDay(day, spotId);
+
+    // If permission was already granted previously, update user location silently
+    if (navigator.permissions && navigator.permissions.query) {
+        navigator.permissions.query({ name: 'geolocation' }).then(result => {
+            if (result.state === 'granted' && !userLocation) {
+                locateUserPosition(false);
+            }
+        }).catch(() => {});
+    }
 }
 
 function switchMapDay(day, spotId) {
@@ -957,6 +1203,12 @@ function renderMapPlaces(day) {
 
         const timeOrArea = spot.area ? `📍 ${spot.area} • ⏱️ ${spot.time}` : `⏱️ ${spot.time}`;
 
+        let distanceBadgeHtml = '';
+        if (userLocation && spot.lat && spot.lng) {
+            const distKm = getDistanceKm(userLocation.lat, userLocation.lng, spot.lat, spot.lng);
+            distanceBadgeHtml = `<span class="map-place-distance" title="ระยะทางโดยประมาณจากตำแหน่งของคุณในปัจจุบัน">📏 ~${formatDistance(distKm)}</span>`;
+        }
+
         card.innerHTML = `
             <div class="map-place-num ${isTiktok ? 'tiktok-place-num' : ''}">${idx + 1}</div>
             <div class="map-place-info">
@@ -964,7 +1216,11 @@ function renderMapPlaces(day) {
                     <span class="map-place-time">${timeOrArea}</span>
                     <span class="map-place-cat">${spot.category}</span>
                 </div>
-                <div class="map-place-name">${spot.name} ${isTiktok ? '<span class="tiktok-badge-pill">TikTok Highlight</span>' : ''}</div>
+                <div class="map-place-name">
+                    ${spot.name} 
+                    ${isTiktok ? '<span class="tiktok-badge-pill">TikTok Highlight</span>' : ''}
+                    ${distanceBadgeHtml}
+                </div>
                 <div class="map-place-desc">${spot.desc}</div>
                 <div class="map-place-actions">
                     <a class="map-place-glink" href="${spot.mapsUrl}" target="_blank" onclick="event.stopPropagation();">📍 เปิดใน Google Maps ↗</a>
@@ -1186,6 +1442,11 @@ function initLeafletMap(day) {
         leafletMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 });
     }
 
+    // Re-render user location marker if available
+    if (userLocation) {
+        renderUserLocationLeaflet(false);
+    }
+
     setTimeout(() => {
         if (leafletMap) leafletMap.invalidateSize();
         if (currentFocusedSpotId) {
@@ -1275,6 +1536,11 @@ function initGoogleMap(day) {
     });
 
     googleMap.fitBounds(bounds);
+
+    // Re-render user location marker if available
+    if (userLocation) {
+        renderUserLocationGoogle(false);
+    }
 
     setTimeout(() => {
         if (googleMap) {

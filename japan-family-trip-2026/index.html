@@ -1071,6 +1071,13 @@
                 <!-- Map Viewport -->
                 <div class="map-canvas-wrapper">
                     <div id="map-canvas"></div>
+                    <!-- GPS Locate Button overlay on map -->
+                    <button type="button" id="map-gps-btn" class="map-gps-btn" onclick="locateUserPosition(true)" title="ค้นหาและแสดงตำแหน่งปัจจุบันของคุณ">
+                        <span class="gps-icon">🎯</span>
+                        <span class="gps-text">ตำแหน่งของฉัน</span>
+                    </button>
+                    <!-- GPS Status Toast -->
+                    <div id="map-gps-status" class="map-gps-status"></div>
                 </div>
 
                 <!-- Places Panel -->
