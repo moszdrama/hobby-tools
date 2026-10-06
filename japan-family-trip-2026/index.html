@@ -62,6 +62,7 @@
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-subway')">🚆 คู่มือ Tokyo Subway Ticket</button>
                 <button class="info-btn info-btn-pill" onclick="openModal('modal-skyliner')">🚄 คู่มือ Keisei Skyliner</button>
                 <button class="info-btn info-btn-pill" style="background: #ecfdf5; border-color: #10b981; color: #047857;" onclick="openTaskModal('all')">📋 เช็คลิสต์สิ่งที่ต้องทำ (Tasks)</button>
+                <button class="info-btn info-btn-pill" style="background: #eff6ff; border-color: #93c5fd; color: #1d4ed8;" onclick="openRouteMap('run_kawaguchiko')">🗺️ แผนที่เส้นทาง (วิ่ง & ขับรถ)</button>
                 <button class="info-btn info-btn-pill" style="background: #fff7ed; border-color: #fdba74; color: #ea580c;" onclick="openDayMap('tiktok')">🍴 แผนที่ 16 ร้านเด็ด TikTok (I AM EAT)</button>
             </div>
         </div>
@@ -313,6 +314,7 @@
                         </div>
                         <div class="action-links">
                             <button type="button" class="view-map-spot-btn" onclick="openDayMap(1, 'd1_narita')">🗺️ ปักหมุดแผนที่</button>
+                            <button type="button" class="view-route-btn" onclick="openRouteMap('drive_narita_fuji')">🛣️ ดูเส้นทางขับรถ นาริตะ ➔ ฟูจิ (175 กม.)</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Nippon+Rent-A-Car+Narita+Airport" target="_blank">📍 Nippon Rent-A-Car Narita</a>
                         </div>
                     </div>
@@ -329,6 +331,7 @@
                         <div class="item-desc">จุดพักรถขนาดใหญ่ที่สุดบนทางด่วนสาย <b>E20 (Chuo Expressway ขาออก / Downbound)</b> มีศูนย์อาหารครบครัน ข้าวหน้าเนื้อวัวโคชู (Koshu Beef), ข้าวหน้าหมูทอดทงคัตสึ, ราเมง, ร้านเบเกอรี่, คาเฟ่ Starbucks, ร้านขายผลไม้สด ยามานาชิ (องุ่นไซมัสคัส/พีช) ห้องน้ำใหญ่สะอาดมาก เหมาะสำหรับผู้สูงอายุแวะพักสบายๆ</div>
                         <div class="action-links">
                             <button type="button" class="view-map-spot-btn" onclick="openDayMap(1, 'd1_dangozaka')">🗺️ ปักหมุดแผนที่</button>
+                            <button type="button" class="view-route-btn" onclick="openRouteMap('drive_narita_fuji')">🛣️ ดูเส้นทางขับรถบน E20</button>
                             <a class="maps-btn food-btn" href="https://maps.google.com/?q=Dangozaka+Service+Area+Downbound" target="_blank">📍 EXPASA Dangozaka SA (E20)</a>
                         </div>
                     </div>
@@ -422,6 +425,7 @@
                         </div>
                         <div class="action-links">
                             <button type="button" class="view-map-spot-btn" onclick="openDayMap(2, 'd2_kawaguchiko_run')">🗺️ ปักหมุดแผนที่</button>
+                            <button type="button" class="view-route-btn" onclick="openRouteMap('run_kawaguchiko')">🏃 ดูเส้นทางวิ่ง Oishi Park (5.6 กม.)</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami" target="_blank">📍 จุดปล่อยตัว (หน้าบ้านพัก)</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Oishi+Park+Kawaguchiko" target="_blank">📍 สวน Oishi Park (จุดกลับตัว)</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Kawaguchiko+Ohashi+Bridge" target="_blank">📍 สะพาน Kawaguchiko Ohashi</a>
@@ -685,6 +689,7 @@
                         </div>
                         <div class="action-links">
                             <button type="button" class="view-map-spot-btn" onclick="openDayMap(4, 'd4_imperial_palace_run')">🗺️ ปักหมุดแผนที่</button>
+                            <button type="button" class="view-route-btn" onclick="openRouteMap('run_imperial_palace')">🏃 ดูเส้นทางวิ่งรอบพระราชวัง (5.0 กม.)</button>
                             <a class="maps-btn" href="https://maps.google.com/?q=Kokyo+Gaien+National+Garden" target="_blank">📍 สวนพระราชวัง Kokyo Gaien</a>
                             <a class="maps-btn" href="https://maps.google.com/?q=Sakuradamon+Gate" target="_blank">📍 ประตูซากุราดะมง (จุดเริ่มวิ่ง)</a>
                         </div>
@@ -1143,6 +1148,77 @@
             <div class="modal-footer map-modal-footer-fixed" style="display: flex; justify-content: space-between; align-items: center;">
                 <button type="button" class="info-btn map-footer-apikey-btn" onclick="openMapSettings()" title="กำหนด Google Maps API Key">⚙️ <span class="map-btn-text">กำหนด Google Maps API Key</span></button>
                 <button type="button" class="map-footer-close-btn" onclick="closeModal('modal-map')">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Interactive Route Map (Runs & Drives) -->
+    <div id="modal-route-map" class="modal-overlay" onclick="closeModalOnBackdrop(event, 'modal-route-map')">
+        <div class="modal-card route-modal-card">
+            <div class="modal-header route-modal-header">
+                <div style="min-width: 0; flex: 1;">
+                    <h3 id="route-modal-title" style="margin-bottom: 2px;">🗺️ แผนที่เส้นทางท่องเที่ยว (Route Map)</h3>
+                    <p id="route-modal-subtitle" class="route-modal-subtitle" style="font-size: 0.8rem; opacity: 0.9; margin: 0;">เส้นทางวิ่งและเส้นทางขับรถพร้อมจุดเช็คพอยต์</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                    <button type="button" class="map-settings-btn" onclick="openMapSettings()" title="ตั้งค่า Google Maps API Key">⚙️ API Key</button>
+                    <button type="button" class="modal-close-btn" onclick="closeModal('modal-route-map')">&times;</button>
+                </div>
+            </div>
+
+            <!-- Route Switcher Tabs -->
+            <div class="route-modal-tabs">
+                <button type="button" class="route-tab-btn active" data-route="run_kawaguchiko" onclick="switchRoute('run_kawaguchiko')">
+                    🏃 วิ่ง: ทะเลสาบฟูจิ-Oishi Park (5.6 กม.)
+                </button>
+                <button type="button" class="route-tab-btn" data-route="run_imperial_palace" onclick="switchRoute('run_imperial_palace')">
+                    🏃 วิ่ง: รอบพระราชวังโตเกียว (5.0 กม.)
+                </button>
+                <button type="button" class="route-tab-btn" data-route="drive_narita_fuji" onclick="switchRoute('drive_narita_fuji')">
+                    🚗 ขับรถ: นาริตะ ➔ ทางด่วน E20 ➔ ฟูจิ (175 กม.)
+                </button>
+            </div>
+
+            <!-- Route Stats & Highlights Bar -->
+            <div id="route-info-bar" class="route-info-bar">
+                <!-- Dynamically populated stats -->
+            </div>
+
+            <!-- Modal Content Split-View -->
+            <div class="route-modal-content">
+                <!-- Route Map Viewport -->
+                <div class="route-map-canvas-wrapper">
+                    <div id="route-map-canvas"></div>
+                    <!-- GPS Locate Button overlay on route map -->
+                    <button type="button" id="route-gps-btn" class="map-gps-btn" onclick="locateUserPosition(true)" title="ค้นหาและแสดงตำแหน่งปัจจุบันของคุณ">
+                        <span class="gps-icon">🎯</span>
+                        <span class="gps-text">ตำแหน่งของฉัน</span>
+                    </button>
+                </div>
+
+                <!-- Waypoints / Checkpoints Panel (Bottom Sheet on Mobile) -->
+                <div id="route-waypoints-panel" class="route-waypoints-panel">
+                    <div class="map-sheet-handle-bar" onclick="toggleRouteBottomSheet()">
+                        <div class="map-sheet-handle-pill"></div>
+                    </div>
+                    <div class="route-waypoints-header" onclick="toggleRouteBottomSheet()">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span id="route-waypoints-count">📍 จุดแวะ & เช็คพอยต์บนเส้นทาง</span>
+                            <span id="route-sheet-arrow" class="map-sheet-arrow">▲</span>
+                        </div>
+                        <span class="map-sheet-hint" style="font-size: 0.78rem; color: #64748b;">แตะเพื่อเปิด/ปิดรายการ</span>
+                    </div>
+                    <div id="route-waypoints-list" class="route-waypoints-list">
+                        <!-- Dynamically populated by renderRouteWaypoints() -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer route-modal-footer-fixed" style="display: flex; justify-content: space-between; align-items: center;">
+                <a id="route-external-gmaps-link" href="#" target="_blank" class="route-external-link">
+                    🗺️ นำทางเส้นทางนี้ใน Google Maps ↗
+                </a>
+                <button type="button" class="map-footer-close-btn" onclick="closeModal('modal-route-map')">ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>

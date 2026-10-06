@@ -1593,3 +1593,654 @@ function initGoogleMap(day) {
         }
     }, 200);
 }
+
+// ================= INTERACTIVE ROUTE MAP DATA & FUNCTIONS =================
+const ROUTE_DATA = {
+    'run_kawaguchiko': {
+        id: 'run_kawaguchiko',
+        title: '🏃 วิ่งเลียบทะเลสาบฟูจิ: Cottage Minami ⇄ Oishi Park',
+        subtitle: 'สูดโอโซนบริสุทธิ์ยามเช้า ชมวิวเงาฟูจิสะท้อนน้ำ (Sakasa Fuji) ริมทะเลสาบฝั่งเหนือ',
+        type: 'run',
+        typeName: '🏃 วิ่งเช้าตรู่ (Morning Run)',
+        distance: '5.6 กม. (ไป-กลับ)',
+        duration: '35 - 45 นาที',
+        elevation: 'ทางราบเรียบตลอดสาย (+18 ม.)',
+        surface: 'ทางเท้าคอนกรีตเรียบริมน้ำ & เลียบ Route 21',
+        highlight: 'วิวภูเขาไฟฟูจิเต็มตาตลอดเส้นทาง ไม่มีไฟแดงขวางกั้น',
+        color: '#0284c7',
+        gmapsDirUrl: 'https://www.google.com/maps/dir/Lake+Kawaguch+Cottage+Minami/Oishi+Park',
+        waypoints: [
+            {
+                name: 'จุดปล่อยตัว: บ้านพัก Lake Kawaguch Cottage Minami',
+                type: 'start',
+                lat: 35.5265,
+                lng: 138.7410,
+                desc: 'ออกสตาร์ทจากหน้าบ้านพัก เลี้ยวขวามุ่งหน้าทิศตะวันออกสู่ทางเดินเท้าเลียบทะเลสาบ',
+                mapsUrl: 'https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami'
+            },
+            {
+                name: 'จุดชมวิวแหลมนางาซากิ (Nagasaki Park)',
+                type: 'waypoint',
+                lat: 35.5245,
+                lng: 138.7490,
+                desc: 'แหลมยื่นริมทะเลสาบ จุดถ่ายรูปยอดนิยมอันดับ 1 ในการชมฟูจิสะท้อนผิวน้ำช่วงเช้าตรู่',
+                mapsUrl: 'https://maps.google.com/?q=Nagasaki+Park+Kawaguchiko'
+            },
+            {
+                name: 'จุดกลับตัว: สวน Oishi Park (ลานดอกไม้ริมฟูจิ)',
+                type: 'turn',
+                lat: 35.5230,
+                lng: 138.7450,
+                desc: 'จุดกลับตัวระยะ 2.8 กม. ลานดอกไม้ริมน้ำ มีห้องน้ำสะอาด ตู้กดน้ำ และศาลานั่งพัก',
+                mapsUrl: 'https://maps.google.com/?q=Oishi+Park+Kawaguchiko'
+            },
+            {
+                name: 'เส้นชัย: กลับสู่ Cottage Minami',
+                type: 'end',
+                lat: 35.5265,
+                lng: 138.7410,
+                desc: 'วิ่งย้อนกลับเส้นทางเดิมเลียบผิวน้ำ สิ้นสุดระยะ 5.6 กม. คลายกล้ามเนื้อและพักผ่อน',
+                mapsUrl: 'https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami'
+            }
+        ],
+        coordinates: [
+            [35.5265, 138.7410],
+            [35.5264, 138.7428],
+            [35.5260, 138.7445],
+            [35.5255, 138.7465],
+            [35.5250, 138.7480],
+            [35.5245, 138.7490],
+            [35.5240, 138.7485],
+            [35.5235, 138.7472],
+            [35.5231, 138.7460],
+            [35.5230, 138.7450],
+            [35.5231, 138.7460],
+            [35.5235, 138.7472],
+            [35.5240, 138.7485],
+            [35.5245, 138.7490],
+            [35.5250, 138.7480],
+            [35.5255, 138.7465],
+            [35.5260, 138.7445],
+            [35.5264, 138.7428],
+            [35.5265, 138.7410]
+        ]
+    },
+    'run_imperial_palace': {
+        id: 'run_imperial_palace',
+        title: '🏃 วิ่งรอบพระราชวังอิมพีเรียลโตเกียว (Imperial Palace Loop)',
+        subtitle: 'รูทวิ่งยอดนิยมระดับโลกใจกลางมหานครโตเกียว 1 รอบ 5.0 กม. วิ่งวนทวนเข็มนาฬิกา',
+        type: 'run',
+        typeName: '🏃 วิ่งรอบพระราชวัง (Palace Loop)',
+        distance: '5.0 กม. (1 รอบ)',
+        duration: '28 - 38 นาที',
+        elevation: 'เนินลาดช่วง Chidorigafuchi เล็กน้อย (+32 ม.)',
+        surface: 'ทางเท้าคอนกรีตเรียบ & ทางเดินสวนสาธารณะกว้างขวาง',
+        highlight: 'ไม่มีสัญญาณไฟแดงขวางกั้น ลมพัดเย็นสบายผ่านคูเมืองโบราณและป่าไม้ร่มรื่น',
+        color: '#16a34a',
+        gmapsDirUrl: 'https://www.google.com/maps/dir/Sakuradamon+Gate/Kokyo+Gaien+National+Garden',
+        waypoints: [
+            {
+                name: 'จุดเริ่มต้น: ประตูซากุราดะมง (Sakuradamon Gate)',
+                type: 'start',
+                lat: 35.6780,
+                lng: 139.7533,
+                desc: 'ประตูเมืองโบราณ จุดนัดพบยอดนิยมของนักวิ่งโตเกียว ใกล้สถานีใต้ดิน Sakuradamon / Hibiya',
+                mapsUrl: 'https://maps.google.com/?q=Sakuradamon+Gate'
+            },
+            {
+                name: 'ลานสวน Kokyo Gaien & วิวสะพานแว่นตา Nijubashi',
+                type: 'waypoint',
+                lat: 35.6815,
+                lng: 139.7580,
+                desc: 'ทางวิ่งกว้างขวาง วิวสวนต้นสนโบราณและสะพานคู่สัญลักษณ์ของพระราชวัง',
+                mapsUrl: 'https://maps.google.com/?q=Kokyo+Gaien+National+Garden'
+            },
+            {
+                name: 'ประตูโอเตมง (Otemon) & ทางเดินริมคูน้ำตะวันออก',
+                type: 'waypoint',
+                lat: 35.6865,
+                lng: 139.7600,
+                desc: 'วิ่งเลียบคูน้ำฝั่งตะวันออกผ่านประตูทางเข้าหลักของปราสาทเอโดะเดิม',
+                mapsUrl: 'https://maps.google.com/?q=Otemon+Gate+Tokyo'
+            },
+            {
+                name: 'สะพานทาเคบาชิ (Takebashi) & สวน Kitanomaru',
+                type: 'waypoint',
+                lat: 35.6908,
+                lng: 139.7558,
+                desc: 'ช่วงเริ่มสโลปขึ้นเนินเบาๆ สัมผัสความร่มรื่นของแมกไม้เลียบคูเมืองตอนเหนือ',
+                mapsUrl: 'https://maps.google.com/?q=Takebashi+Station'
+            },
+            {
+                name: 'จุดชมวิวคูเมืองจิโดริกะฟุจิ (Chidorigafuchi) & ประตูฮันโซมง',
+                type: 'waypoint',
+                lat: 35.6848,
+                lng: 139.7437,
+                desc: 'จุดสูงสุดของเส้นทาง มองเห็นคูเมืองและตึกระฟ้าฝั่ง Marunouchi จากนั้นวิ่งลงเนินยาวสบายๆ',
+                mapsUrl: 'https://maps.google.com/?q=Chidorigafuchi+Moat'
+            },
+            {
+                name: 'เส้นชัย: ครบรอบ 5.0 กม. ที่ประตูซากุราดะมง',
+                type: 'end',
+                lat: 35.6780,
+                lng: 139.7533,
+                desc: 'วิ่งวนกลับมาบรรจบที่ประตู Sakuradamon ครบ 1 รอบ 5.0 กม. พอดี คูลดาวน์และขึ้นรถไฟใต้ดิน',
+                mapsUrl: 'https://maps.google.com/?q=Sakuradamon+Gate'
+            }
+        ],
+        coordinates: [
+            [35.6780, 139.7533],
+            [35.6795, 139.7555],
+            [35.6815, 139.7580],
+            [35.6838, 139.7595],
+            [35.6865, 139.7600],
+            [35.6888, 139.7585],
+            [35.6908, 139.7558],
+            [35.6918, 139.7525],
+            [35.6914, 139.7495],
+            [35.6903, 139.7460],
+            [35.6875, 139.7445],
+            [35.6848, 139.7437],
+            [35.6818, 139.7452],
+            [35.6795, 139.7475],
+            [35.6780, 139.7510],
+            [35.6780, 139.7533]
+        ]
+    },
+    'drive_narita_fuji': {
+        id: 'drive_narita_fuji',
+        title: '🚗 ขับรถข้ามจังหวัด: สนามบินนาริตะ ➔ ทางด่วน E20 ➔ ฟูจิ คาวากุจิโกะ',
+        subtitle: 'เส้นทางขับรถรับรถวันแรก ผ่านโครงข่ายทางด่วนข้ามโตเกียว สู่ทะเลสาบคาวากุจิโกะ',
+        type: 'drive',
+        typeName: '🚗 ทางด่วนข้ามจังหวัด (Expressway Drive)',
+        distance: '175 กม.',
+        duration: '2 ชม. 30 นาที - 3 ชม.',
+        elevation: 'ไต่ระดับจากระดับน้ำทะเล (NRT) สู่ความสูง ~850 ม. (ฟูจิ)',
+        surface: 'ทางด่วนชำระเงินอัตโนมัติ (บัตร ETC ช่องม่วง)',
+        highlight: 'แวะศูนย์อาหารยักษ์ EXPASA Dangozaka SA ชิมเนื้อโคชู & วิวฟูจิตลอดทาง',
+        color: '#ea580c',
+        gmapsDirUrl: 'https://www.google.com/maps/dir/Narita+International+Airport/EXPASA+Dangozaka+(Downbound)/Lake+Kawaguch+Cottage+Minami',
+        waypoints: [
+            {
+                name: 'จุดเริ่มต้น: Nippon Rent-A-Car สนามบินนาริตะ (T2)',
+                type: 'start',
+                lat: 35.7720,
+                lng: 140.3878,
+                desc: 'รับรถ Toyota Sienta เสียบบัตร ETC เข้าช่องทางด่วน Higashi-Kanto Expressway มุ่งหน้าทิศตะวันตก',
+                mapsUrl: 'https://maps.google.com/?q=Nippon+Rent-A-Car+Narita+Airport'
+            },
+            {
+                name: 'เข้า Shuto Expressway ➔ เชื่อมต่อ Chuo Expressway (E20)',
+                type: 'waypoint',
+                lat: 35.6680,
+                lng: 139.6100,
+                desc: 'ผ่านทางด่วนชูโตะ เข้าสู่ด่าน Takaido IC จุดเริ่มต้นทางด่วนสายหลัก Chuo Expwy E20 มุ่งหน้า จ.ยามานาชิ',
+                mapsUrl: 'https://maps.google.com/?q=Takaido+IC+Tokyo'
+            },
+            {
+                name: 'จุดพักรถครึ่งทาง: EXPASA Dangozaka SA (E20 ขาออก)',
+                type: 'rest',
+                lat: 35.6178,
+                lng: 139.0664,
+                desc: 'จุดแวะพักทานมื้อกลางวัน ข้าวหน้าเนื้อวัวโคชู ซื้อผลไม้สด ยามานาชิ เข้าห้องน้ำ พักผ่อน 1 ชั่วโมง',
+                mapsUrl: 'https://maps.google.com/?q=Dangozaka+Service+Area+Downbound'
+            },
+            {
+                name: 'ชุมทาง Otsuki JCT ➔ เบี่ยงเข้าทางด่วน Fujiyoshida Line',
+                type: 'waypoint',
+                lat: 35.6120,
+                lng: 138.9400,
+                desc: 'ชิดซ้ายที่ Otsuki JCT เข้าสู่ทางด่วนสายฟูจิโยชิดะ มองเห็นยอดภูเขาไฟฟูจิเบื้องหน้าชัดเจน',
+                mapsUrl: 'https://maps.google.com/?q=Otsuki+Junction'
+            },
+            {
+                name: 'ด่านเก็บเงิน Kawaguchiko IC ➔ ถนน Route 139 / 21',
+                type: 'waypoint',
+                lat: 35.4850,
+                lng: 138.7620,
+                desc: 'ออกจากทางด่วนผ่านช่อง ETC อัตโนมัติ วิ่งเข้าสู่ถนนเลียบทะเลสาบฝั่งเหนือ Route 21',
+                mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+IC'
+            },
+            {
+                name: 'ปลายทาง: บ้านพัก Lake Kawaguch Cottage Minami',
+                type: 'end',
+                lat: 35.5265,
+                lng: 138.7410,
+                desc: 'ถึงบ้านพักตากอากาศริมทะเลสาบ เช็คอิน จอดรถหน้าบ้าน พักผ่อนพร้อมวิวฟูจิส่วนตัว',
+                mapsUrl: 'https://maps.google.com/?q=Lake+Kawaguch+Cottage+Minami'
+            }
+        ],
+        coordinates: [
+            [35.7720, 140.3878],
+            [35.7640, 140.3800],
+            [35.7280, 140.3200],
+            [35.6980, 140.2350],
+            [35.6650, 140.1250],
+            [35.6700, 140.0150],
+            [35.6550, 139.9100],
+            [35.6450, 139.8600],
+            [35.6350, 139.7900],
+            [35.6550, 139.7450],
+            [35.6750, 139.7150],
+            [35.6820, 139.6850],
+            [35.6680, 139.6100],
+            [35.6600, 139.5350],
+            [35.6700, 139.4500],
+            [35.6680, 139.3700],
+            [35.6550, 139.2700],
+            [35.6320, 139.2100],
+            [35.6150, 139.1800],
+            [35.6178, 139.0664],
+            [35.6120, 138.9400],
+            [35.5500, 138.9050],
+            [35.4850, 138.7620],
+            [35.5050, 138.7600],
+            [35.5180, 138.7620],
+            [35.5240, 138.7500],
+            [35.5265, 138.7410]
+        ]
+    }
+};
+
+let currentRouteId = 'run_kawaguchiko';
+let currentFocusedWaypointIdx = null;
+
+// Route Leaflet Map instances
+let leafletRouteMap = null;
+let leafletRoutePolyline = null;
+let leafletRouteMarkers = [];
+
+// Route Google Map instances
+let googleRouteMap = null;
+let googleRoutePolyline = null;
+let googleRouteMarkers = [];
+let googleRouteInfoWindow = null;
+
+function openRouteMap(routeId = 'run_kawaguchiko') {
+    if (!ROUTE_DATA[routeId]) routeId = 'run_kawaguchiko';
+    currentRouteId = routeId;
+    currentFocusedWaypointIdx = null;
+
+    setRouteBottomSheet(false);
+    openModal('modal-route-map');
+    switchRoute(routeId);
+
+    if (navigator.permissions && navigator.permissions.query) {
+        navigator.permissions.query({ name: 'geolocation' }).then(result => {
+            if (result.state === 'granted' && !userLocation) {
+                locateUserPosition(false);
+            }
+        }).catch(() => {});
+    }
+}
+
+function switchRoute(routeId) {
+    if (!ROUTE_DATA[routeId]) return;
+    currentRouteId = routeId;
+    currentFocusedWaypointIdx = null;
+    const route = ROUTE_DATA[routeId];
+
+    // Update Tabs
+    const tabs = document.querySelectorAll('.route-tab-btn');
+    tabs.forEach(tab => {
+        if (tab.getAttribute('data-route') === routeId) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+
+    // Update Header
+    const titleEl = document.getElementById('route-modal-title');
+    const subtitleEl = document.getElementById('route-modal-subtitle');
+    if (titleEl) titleEl.textContent = route.title;
+    if (subtitleEl) subtitleEl.textContent = route.subtitle;
+
+    // Update Stats Bar
+    const infoBar = document.getElementById('route-info-bar');
+    if (infoBar) {
+        infoBar.innerHTML = `
+            <div class="route-stat-pill"><b>ประเภท:</b> ${route.typeName}</div>
+            <div class="route-stat-pill">📏 <b>ระยะทาง:</b> ${route.distance}</div>
+            <div class="route-stat-pill">⏱️ <b>เวลาโดยประมาณ:</b> ${route.duration}</div>
+            <div class="route-stat-pill">⛰️ <b>ระดับความสูง:</b> ${route.elevation}</div>
+            <div class="route-stat-pill">🛣️ <b>สภาพเส้นทาง:</b> ${route.surface}</div>
+            <div class="route-overview-text">💡 <b>ไฮไลต์เส้นทาง:</b> ${route.highlight}</div>
+        `;
+    }
+
+    // Update External Navigation Link in Footer
+    const gmapsLink = document.getElementById('route-external-gmaps-link');
+    if (gmapsLink) {
+        gmapsLink.href = route.gmapsDirUrl;
+        gmapsLink.innerHTML = `🗺️ เปิดเส้นทาง "${route.typeName}" ใน Google Maps ↗`;
+    }
+
+    // Render Waypoints
+    renderRouteWaypoints(route);
+
+    // Render on Map
+    initRouteMap(route);
+}
+
+function toggleRouteBottomSheet() {
+    const panel = document.getElementById('route-waypoints-panel');
+    if (!panel) return;
+    panel.classList.toggle('sheet-expanded');
+}
+
+function setRouteBottomSheet(expanded = false) {
+    const panel = document.getElementById('route-waypoints-panel');
+    if (!panel) return;
+    if (expanded) {
+        panel.classList.add('sheet-expanded');
+    } else {
+        panel.classList.remove('sheet-expanded');
+    }
+}
+
+function renderRouteWaypoints(route) {
+    const listEl = document.getElementById('route-waypoints-list');
+    const countEl = document.getElementById('route-waypoints-count');
+    if (countEl) {
+        countEl.textContent = `📍 จุดเช็คพอยต์ (${route.waypoints.length} จุด)`;
+    }
+    if (!listEl) return;
+    listEl.innerHTML = '';
+
+    route.waypoints.forEach((wp, idx) => {
+        const card = document.createElement('div');
+        card.className = 'route-waypoint-card';
+        card.setAttribute('data-idx', idx);
+
+        let badgeClass = 'waypoint';
+        let badgeIcon = idx + 1;
+        if (wp.type === 'start') {
+            badgeClass = 'start';
+            badgeIcon = '🚩';
+        } else if (wp.type === 'end') {
+            badgeClass = 'end';
+            badgeIcon = '🏁';
+        } else if (wp.type === 'turn') {
+            badgeClass = 'turn';
+            badgeIcon = '🔄';
+        } else if (wp.type === 'rest') {
+            badgeClass = 'rest';
+            badgeIcon = '🍱';
+        }
+
+        let distBadge = '';
+        if (userLocation && wp.lat && wp.lng) {
+            const distKm = getDistanceKm(userLocation.lat, userLocation.lng, wp.lat, wp.lng);
+            distBadge = `<span class="map-place-distance">📏 ~${formatDistance(distKm)}</span>`;
+        }
+
+        card.innerHTML = `
+            <div class="route-waypoint-num ${badgeClass}">${badgeIcon}</div>
+            <div class="route-waypoint-info">
+                <div class="route-waypoint-title">
+                    <span>${wp.name}</span>
+                    ${distBadge}
+                </div>
+                <div class="route-waypoint-desc">${wp.desc}</div>
+                <a class="route-waypoint-glink" href="${wp.mapsUrl}" target="_blank" onclick="event.stopPropagation();">📍 นำทางใน Google Maps ↗</a>
+            </div>
+        `;
+
+        card.addEventListener('click', () => {
+            focusRouteWaypoint(idx);
+        });
+
+        listEl.appendChild(card);
+    });
+}
+
+function focusRouteWaypoint(idx) {
+    const route = ROUTE_DATA[currentRouteId];
+    if (!route || !route.waypoints[idx]) return;
+    const wp = route.waypoints[idx];
+    currentFocusedWaypointIdx = idx;
+
+    // Highlight card
+    const cards = document.querySelectorAll('.route-waypoint-card');
+    cards.forEach((c, i) => {
+        if (i === idx) {
+            c.classList.add('active');
+            c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+            c.classList.remove('active');
+        }
+    });
+
+    if (currentMapMode === 'google' && googleRouteMap && googleRouteMarkers[idx]) {
+        googleRouteMap.panTo({ lat: wp.lat, lng: wp.lng });
+        googleRouteMap.setZoom(16);
+        if (googleRouteInfoWindow) {
+            googleRouteInfoWindow.setContent(`
+                <div class="custom-infowindow">
+                    <h4 style="margin: 0 0 6px 0; color: #1e3a8a; font-size: 0.95rem;">${wp.name}</h4>
+                    <p style="margin: 0 0 6px 0; font-size: 0.85rem; color: #475569;">${wp.desc}</p>
+                    <a href="${wp.mapsUrl}" target="_blank" style="color: #2563eb; font-weight: 600; text-decoration: none; font-size: 0.82rem;">📍 นำทางใน Google Maps ↗</a>
+                </div>
+            `);
+            googleRouteInfoWindow.open(googleRouteMap, googleRouteMarkers[idx]);
+        }
+    } else if (currentMapMode === 'leaflet' && leafletRouteMap && leafletRouteMarkers[idx]) {
+        leafletRouteMap.setView([wp.lat, wp.lng], 16, { animate: true });
+        leafletRouteMarkers[idx].openPopup();
+    }
+}
+
+function resetRouteFocus() {
+    currentFocusedWaypointIdx = null;
+    const cards = document.querySelectorAll('.route-waypoint-card');
+    cards.forEach(c => c.classList.remove('active'));
+
+    const route = ROUTE_DATA[currentRouteId];
+    if (!route) return;
+
+    if (currentMapMode === 'google' && googleRouteMap && googleRoutePolyline) {
+        if (googleRouteInfoWindow) googleRouteInfoWindow.close();
+        const bounds = new google.maps.LatLngBounds();
+        route.coordinates.forEach(pt => bounds.extend({ lat: pt[0], lng: pt[1] }));
+        googleRouteMap.fitBounds(bounds);
+    } else if (currentMapMode === 'leaflet' && leafletRouteMap && leafletRoutePolyline) {
+        leafletRouteMap.closePopup();
+        leafletRouteMap.fitBounds(leafletRoutePolyline.getBounds(), { padding: [35, 35] });
+    }
+}
+
+function initRouteMap(route) {
+    const key = getApiKey();
+    if (key && !googleMapsAuthFailed) {
+        if (window.google && window.google.maps) {
+            renderRouteGoogle(route);
+        } else {
+            loadGoogleMapsScript(key, () => {
+                renderRouteGoogle(route);
+            });
+        }
+    } else {
+        renderRouteLeaflet(route);
+    }
+}
+
+function renderRouteLeaflet(route) {
+    const container = document.getElementById('route-map-canvas');
+    if (!container) return;
+
+    if (googleRouteMap) {
+        googleRouteMap = null;
+        googleRouteMarkers = [];
+        googleRoutePolyline = null;
+        container.innerHTML = '';
+    }
+
+    if (!leafletRouteMap) {
+        leafletRouteMap = L.map('route-map-canvas', {
+            zoomControl: true,
+            scrollWheelZoom: true
+        });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(leafletRouteMap);
+    }
+
+    // Clear previous polyline
+    if (leafletRoutePolyline) {
+        leafletRouteMap.removeLayer(leafletRoutePolyline);
+        leafletRoutePolyline = null;
+    }
+
+    // Clear previous markers
+    leafletRouteMarkers.forEach(m => leafletRouteMap.removeLayer(m));
+    leafletRouteMarkers = [];
+
+    // Draw route polyline
+    leafletRoutePolyline = L.polyline(route.coordinates, {
+        color: route.color,
+        weight: 6,
+        opacity: 0.85,
+        lineJoin: 'round',
+        lineCap: 'round'
+    }).addTo(leafletRouteMap);
+
+    // Add Waypoint markers
+    route.waypoints.forEach((wp, idx) => {
+        let badgeClass = 'waypoint';
+        let badgeIcon = idx + 1;
+        if (wp.type === 'start') { badgeClass = 'start'; badgeIcon = '🚩'; }
+        else if (wp.type === 'end') { badgeClass = 'end'; badgeIcon = '🏁'; }
+        else if (wp.type === 'turn') { badgeClass = 'turn'; badgeIcon = '🔄'; }
+        else if (wp.type === 'rest') { badgeClass = 'rest'; badgeIcon = '🍱'; }
+
+        const icon = L.divIcon({
+            className: 'custom-leaflet-marker-wrap',
+            html: `<div class="route-pin ${badgeClass}"><span>${badgeIcon}</span></div>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 28],
+            popupAnchor: [0, -28]
+        });
+
+        const popupContent = `
+            <div class="custom-infowindow">
+                <h4 style="margin: 0 0 6px 0; color: #1e3a8a; font-size: 0.95rem;">${wp.name}</h4>
+                <p style="margin: 0 0 6px 0; font-size: 0.85rem; color: #475569;">${wp.desc}</p>
+                <a href="${wp.mapsUrl}" target="_blank" style="color: #2563eb; font-weight: 600; font-size: 0.82rem;">📍 นำทางใน Google Maps ↗</a>
+            </div>
+        `;
+
+        const marker = L.marker([wp.lat, wp.lng], { icon: icon }).addTo(leafletRouteMap);
+        marker.bindPopup(popupContent);
+
+        marker.on('click', (e) => {
+            L.DomEvent.stopPropagation(e);
+            focusRouteWaypoint(idx);
+        });
+
+        leafletRouteMarkers.push(marker);
+    });
+
+    leafletRouteMap.off('click');
+    leafletRouteMap.on('click', () => {
+        resetRouteFocus();
+    });
+
+    leafletRouteMap.fitBounds(leafletRoutePolyline.getBounds(), { padding: [35, 35] });
+
+    setTimeout(() => {
+        if (leafletRouteMap) leafletRouteMap.invalidateSize();
+    }, 200);
+}
+
+function renderRouteGoogle(route) {
+    const container = document.getElementById('route-map-canvas');
+    if (!container) return;
+
+    if (leafletRouteMap) {
+        leafletRouteMap.remove();
+        leafletRouteMap = null;
+        leafletRouteMarkers = [];
+        leafletRoutePolyline = null;
+        container.innerHTML = '';
+    }
+
+    if (!googleRouteMap) {
+        googleRouteMap = new google.maps.Map(container, {
+            zoom: 13,
+            center: { lat: route.coordinates[0][0], lng: route.coordinates[0][1] },
+            mapTypeControl: false,
+            streetViewControl: false,
+            fullscreenControl: true
+        });
+        googleRouteInfoWindow = new google.maps.InfoWindow();
+        googleRouteInfoWindow.addListener('closeclick', () => {
+            resetRouteFocus();
+        });
+        googleRouteMap.addListener('click', () => {
+            resetRouteFocus();
+        });
+    }
+
+    // Clear previous polyline
+    if (googleRoutePolyline) {
+        googleRoutePolyline.setMap(null);
+        googleRoutePolyline = null;
+    }
+
+    // Clear previous markers
+    googleRouteMarkers.forEach(m => m.setMap(null));
+    googleRouteMarkers = [];
+
+    // Draw Google Polyline
+    const path = route.coordinates.map(pt => ({ lat: pt[0], lng: pt[1] }));
+    googleRoutePolyline = new google.maps.Polyline({
+        path: path,
+        geodesic: true,
+        strokeColor: route.color,
+        strokeOpacity: 0.85,
+        strokeWeight: 6,
+        map: googleRouteMap
+    });
+
+    const bounds = new google.maps.LatLngBounds();
+    path.forEach(pt => bounds.extend(pt));
+
+    // Add Waypoint markers
+    route.waypoints.forEach((wp, idx) => {
+        let labelText = String(idx + 1);
+        if (wp.type === 'start') labelText = 'S';
+        else if (wp.type === 'end') labelText = 'E';
+        else if (wp.type === 'turn') labelText = 'T';
+        else if (wp.type === 'rest') labelText = 'R';
+
+        const marker = new google.maps.Marker({
+            position: { lat: wp.lat, lng: wp.lng },
+            map: googleRouteMap,
+            title: wp.name,
+            label: {
+                text: labelText,
+                color: '#ffffff',
+                fontWeight: 'bold',
+                fontSize: '11px'
+            }
+        });
+
+        marker.addListener('click', () => {
+            focusRouteWaypoint(idx);
+        });
+
+        googleRouteMarkers.push(marker);
+    });
+
+    googleRouteMap.fitBounds(bounds);
+
+    setTimeout(() => {
+        if (googleRouteMap) {
+            google.maps.event.trigger(googleRouteMap, 'resize');
+            googleRouteMap.fitBounds(bounds);
+        }
+    }, 200);
+}
+
